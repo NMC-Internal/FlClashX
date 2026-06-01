@@ -43,7 +43,14 @@ dependencies:
   dio: ^5.9.0
   win32: ^5.15.0
   ffi: ^2.1.5
-  re_editor: 0.8.0
+  # pub's re_editor 0.8.0 (latest) doesn't implement TextInputClient.onFocusReceived,
+  # an abstract member added in Flutter 3.44 — so it fails to compile. Use the same
+  # fork upstream FlClash uses; its `Fix onFocusReceived Missing` commit adds it.
+  # The exact commit is pinned by pubspec.lock.
+  re_editor:
+    git:
+      url: https://github.com/chen08209/re-editor
+      ref: main
   re_highlight: ^0.0.3
   archive: ^4.0.7
   lpinyin: ^2.0.3
@@ -76,6 +83,18 @@ dev_dependencies:
   riverpod_lint: ^2.3.13
   custom_lint: ^0.7.3
   flutter_launcher_icons: ^0.14.4
+
+# Load-bearing: removing this re-breaks `dart run build_runner` on any fresh resolve.
+# The custom_lint 0.7.3 stack (via riverpod_lint 2.x) splits across two analyzer eras:
+#   - analyzer_plugin 0.12.0 calls publiclyExporting2, removed in analyzer 7.6.0 (needs < 7.6.0)
+#   - custom_lint_visitor's top build (1.0.0+7.7.0) needs analyzer >= 7.7.0 (DotShorthand* nodes)
+# A fresh resolve lands on analyzer 7.6.0 + analyzer_plugin 0.12.0 and fails to compile the
+# build_runner entrypoint. Pin BOTH to the matching 7.3.0 build. The proper fix is migrating
+# to riverpod 3.x (riverpod_generator ^4 / riverpod_lint ^3, as upstream FlClash does), which
+# drops this whole stack — until then, keep this override.
+dependency_overrides:
+  analyzer: 7.3.0
+  custom_lint_visitor: 1.0.0+7.3.0
 
 flutter:
   uses-material-design: true

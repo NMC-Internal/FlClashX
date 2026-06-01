@@ -78,7 +78,7 @@ final currentNavigationsStateProvider =
 // ignore: unused_element
 typedef CurrentNavigationsStateRef
     = AutoDisposeProviderRef<NavigationItemsState>;
-String _$coreStateHash() => r'33f01ee9173525862c89522bf73b3174beb63daa';
+String _$coreStateHash() => r'f9ded8de0c0c935a0324853ce13c35d806a70126';
 
 /// See also [coreState].
 @ProviderFor(coreState)
@@ -110,7 +110,7 @@ final updateParamsProvider = AutoDisposeProvider<UpdateParams>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UpdateParamsRef = AutoDisposeProviderRef<UpdateParams>;
-String _$proxyStateHash() => r'22478fb593aaca11dfe2cf64472013190475a5bc';
+String _$proxyStateHash() => r'1a6d27cc45d0ce29b0e969f5563d6302a1364ed0';
 
 /// See also [proxyState].
 @ProviderFor(proxyState)
@@ -1602,7 +1602,7 @@ class _GetSelectedProxyNameProviderElement
   String get groupName => (origin as GetSelectedProxyNameProvider).groupName;
 }
 
-String _$getProxyDescHash() => r'dd1aa9efd5ba1f9f15105bba010a3677fc4bec7c';
+String _$getProxyDescHash() => r'0856c238988f8b1f98573bf4d0e2e38fb2950678';
 
 /// See also [getProxyDesc].
 @ProviderFor(getProxyDesc)

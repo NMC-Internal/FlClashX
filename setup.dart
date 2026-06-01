@@ -170,6 +170,16 @@ class Build {
 
   static get tags => "with_gvisor,cmfa";
 
+  /// Absolute path to the `bin` dir of the fvm-pinned Flutter SDK (the
+  /// `.fvm/flutter_sdk` symlink created by `fvm use`/`fvm install`), or null when
+  /// the project isn't fvm-managed (e.g. CI that provisions Flutter itself).
+  static String? get fvmSdkBin {
+    final bin = join(current, ".fvm", "flutter_sdk", "bin");
+    final flutterExe =
+        join(bin, Platform.isWindows ? "flutter.bat" : "flutter");
+    return File(flutterExe).existsSync() ? bin : null;
+  }
+
   static Future<void> exec(
     List<String> executable, {
     String? name,
@@ -178,10 +188,22 @@ class Build {
     bool runInShell = true,
   }) async {
     if (name != null) print("run $name");
+    // Prepend the fvm-pinned SDK to PATH so every flutter/dart call — and nested
+    // tools like flutter_distributor that shell out to `flutter` — use the version
+    // in .fvmrc instead of whatever is on PATH. No-op when the project isn't
+    // fvm-managed, leaving CI (which provisions Flutter itself) untouched.
+    final sdkBin = fvmSdkBin;
+    final env = <String, String>{...?environment};
+    if (sdkBin != null) {
+      final sep = Platform.isWindows ? ";" : ":";
+      final basePath =
+          environment?["PATH"] ?? Platform.environment["PATH"] ?? "";
+      env["PATH"] = "$sdkBin$sep$basePath";
+    }
     final process = await Process.start(
       executable[0],
       executable.sublist(1),
-      environment: environment,
+      environment: env.isEmpty ? null : env,
       workingDirectory: workingDirectory,
       runInShell: runInShell,
     );
