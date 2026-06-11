@@ -461,5 +461,19 @@
   "subscriptionExpiresToday": "Your subscription expires today",
   "subscriptionExpired": "Your subscription has expired",
   "renew": "Renew",
-  "announcement": "Announcement"
+  "announcement": "Announcement",
+  "email": "Email",
+  "login": "Log in",
+  "register": "Sign up",
+  "noAccountRegister": "Don't have an account? Sign up",
+  "haveAccountLogin": "Already have an account? Log in",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordTooShort": "Password must be at least 8 characters",
+  "authErrorInvalidCredentials": "Invalid email or password",
+  "authErrorEmailTaken": "This email is already registered",
+  "authErrorNetwork": "Network error. Please check your connection and try again",
+  "authErrorServer": "Server error. Please try again later",
+  "authErrorUnknown": "Something went wrong. Please try again"
 }

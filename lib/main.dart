@@ -13,12 +13,12 @@ import 'package:flclashx/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'application.dart';
 import 'clash/core.dart';
 import 'clash/lib.dart';
 import 'common/common.dart';
 import 'models/core.dart' as core_models show Action;
 import 'models/models.dart';
+import 'pages/auth/auth_gate.dart';
 
 Future<void> main() async {
   globalState.isService = false;
@@ -41,7 +41,7 @@ Future<void> main() async {
   }
   HttpOverrides.global = FlClashHttpOverrides();
   runApp(const ProviderScope(
-    child: Application(),
+    child: AuthGate(),
   ));
 }
 

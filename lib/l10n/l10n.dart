@@ -1359,10 +1359,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Once enabled, the Clash kernel can be controlled via API`
+  /// `Once enabled, the Clash kernel can be controlled on port 9090`
   String get externalControllerDesc {
     return Intl.message(
-      'Once enabled, the Clash kernel can be controlled via API',
+      'Once enabled, the Clash kernel can be controlled on port 9090',
       name: 'externalControllerDesc',
       desc: '',
       args: [],
@@ -3550,7 +3550,7 @@ class AppLocalizations {
   }
 
   /// `Your subscription expires in {days} day(s)`
-  String subscriptionExpiresInDays(String days) {
+  String subscriptionExpiresInDays(Object days) {
     return Intl.message(
       'Your subscription expires in $days day(s)',
       name: 'subscriptionExpiresInDays',
@@ -3581,18 +3581,139 @@ class AppLocalizations {
 
   /// `Renew`
   String get renew {
+    return Intl.message('Renew', name: 'renew', desc: '', args: []);
+  }
+
+  /// `Announcement`
+  String get announcement {
     return Intl.message(
-      'Renew',
-      name: 'renew',
+      'Announcement',
+      name: 'announcement',
       desc: '',
       args: [],
     );
   }
 
-  String get announcement {
+  /// `Email`
+  String get email {
+    return Intl.message('Email', name: 'email', desc: '', args: []);
+  }
+
+  /// `Log in`
+  String get login {
+    return Intl.message('Log in', name: 'login', desc: '', args: []);
+  }
+
+  /// `Sign up`
+  String get register {
+    return Intl.message('Sign up', name: 'register', desc: '', args: []);
+  }
+
+  /// `Don't have an account? Sign up`
+  String get noAccountRegister {
     return Intl.message(
-      'Announcement',
-      name: 'announcement',
+      'Don\'t have an account? Sign up',
+      name: 'noAccountRegister',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already have an account? Log in`
+  String get haveAccountLogin {
+    return Intl.message(
+      'Already have an account? Log in',
+      name: 'haveAccountLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your email`
+  String get authEmailRequired {
+    return Intl.message(
+      'Please enter your email',
+      name: 'authEmailRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid email`
+  String get authEmailInvalid {
+    return Intl.message(
+      'Please enter a valid email',
+      name: 'authEmailInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your password`
+  String get authPasswordRequired {
+    return Intl.message(
+      'Please enter your password',
+      name: 'authPasswordRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 8 characters`
+  String get authPasswordTooShort {
+    return Intl.message(
+      'Password must be at least 8 characters',
+      name: 'authPasswordTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email or password`
+  String get authErrorInvalidCredentials {
+    return Intl.message(
+      'Invalid email or password',
+      name: 'authErrorInvalidCredentials',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This email is already registered`
+  String get authErrorEmailTaken {
+    return Intl.message(
+      'This email is already registered',
+      name: 'authErrorEmailTaken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network error. Please check your connection and try again`
+  String get authErrorNetwork {
+    return Intl.message(
+      'Network error. Please check your connection and try again',
+      name: 'authErrorNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server error. Please try again later`
+  String get authErrorServer {
+    return Intl.message(
+      'Server error. Please try again later',
+      name: 'authErrorServer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong. Please try again`
+  String get authErrorUnknown {
+    return Intl.message(
+      'Something went wrong. Please try again',
+      name: 'authErrorUnknown',
       desc: '',
       args: [],
     );

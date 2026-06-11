@@ -462,5 +462,19 @@
   "subscriptionExpiresToday": "Ваша подписка истекает сегодня",
   "subscriptionExpired": "Ваша подписка истекла",
   "renew": "Продлить",
-  "announcement": "Объявление"
+  "announcement": "Объявление",
+  "email": "Эл. почта",
+  "login": "Войти",
+  "register": "Регистрация",
+  "noAccountRegister": "Нет аккаунта? Зарегистрируйтесь",
+  "haveAccountLogin": "Уже есть аккаунт? Войдите",
+  "authEmailRequired": "Введите эл. почту",
+  "authEmailInvalid": "Введите корректный адрес эл. почты",
+  "authPasswordRequired": "Введите пароль",
+  "authPasswordTooShort": "Пароль должен содержать минимум 8 символов",
+  "authErrorInvalidCredentials": "Неверная почта или пароль",
+  "authErrorEmailTaken": "Эта почта уже зарегистрирована",
+  "authErrorNetwork": "Ошибка сети. Проверьте подключение и повторите попытку",
+  "authErrorServer": "Ошибка сервера. Повторите попытку позже",
+  "authErrorUnknown": "Что-то пошло не так. Повторите попытку"
 }
