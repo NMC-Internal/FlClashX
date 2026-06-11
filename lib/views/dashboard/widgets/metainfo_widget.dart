@@ -1,7 +1,6 @@
 import 'package:flclashx/common/common.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/providers/providers.dart';
-import 'package:flclashx/state.dart';
 import 'package:flclashx/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +66,6 @@ class MetainfoWidget extends ConsumerWidget {
 
     final isUnlimitedTraffic = subscriptionInfo.total == 0;
     final isPerpetual = subscriptionInfo.expire == 0;
-    final supportUrl = currentProfile.providerHeaders['support-url'];
 
     var timeLeftValue = '';
     var timeLeftUnit = '';
@@ -109,43 +107,8 @@ class MetainfoWidget extends ConsumerWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            currentProfile.label ?? appLocalizations.profile,
-                            style: theme.textTheme.headlineSmall,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (supportUrl != null && supportUrl.isNotEmpty)
-                          IconButton(
-                            icon: Icon(
-                              supportUrl.toLowerCase().contains('t.me')
-                                  ? Icons.telegram
-                                  : Icons.launch,
-                            ),
-                            iconSize: 34,
-                            color: theme.colorScheme.primary,
-                            onPressed: () {
-                              globalState.openUrl(supportUrl);
-                            },
-                          ),
-                        IconButton(
-                          icon: const Icon(Icons.sync),
-                          iconSize: 34,
-                          color: theme.colorScheme.primary,
-                          onPressed: () {
-                            globalState.appController
-                                .updateProfile(currentProfile);
-                          },
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
                     if (!isUnlimitedTraffic)
                       Builder(builder: (context) {
                         final totalTraffic =
