@@ -80,7 +80,7 @@ Uses **Riverpod** (`flutter_riverpod`) with code-generated providers (`riverpod_
 
 ### Subscription header customization
 
-A major fork-specific feature: subscription endpoints can return `flclashx-*` HTTP headers (`flclashx-widgets`, `flclashx-view`, `flclashx-settings`, `flclashx-background`, `flclashx-servicename`, `flclashx-serverinfo`, etc.) that drive UI layout, server selection widgets, and which settings the subscription is allowed to override. Logic for parsing/applying these headers lives in the profile and dashboard view layers (`lib/views/profiles/`, `lib/views/dashboard/`). See `README_EN.md` for the full header reference before changing this behavior — these are part of the public contract with panel providers (Remnawave).
+A major fork-specific feature: subscription endpoints can return `flclashx-*` HTTP headers (`flclashx-widgets`, `flclashx-view`, `flclashx-settings`, `flclashx-background`, `flclashx-servicename`, `flclashx-serverinfo`, etc.) that drive UI layout, server selection widgets, and which settings the subscription is allowed to override. Logic for parsing/applying these headers lives in the profile and dashboard view layers (`lib/views/profiles/`, `lib/views/dashboard/`). See `../vault/30-resources/wiki/flclashx-subscription-headers.md` for the full header reference before changing this behavior — these are part of the public contract with panel providers (Remnawave), and a branding lever our own backend can drive.
 
 ### Plugins / FFI bridges
 
