@@ -44,6 +44,12 @@ const List<DashboardWidget> defaultDashboardWidgets = [
   DashboardWidget.announce,
   DashboardWidget.metainfo,
   DashboardWidget.outboundModeV2,
+  // TUN toggle (tunButton on desktop, vpnButton on Android — the dashboard
+  // filters by platform) and the "your IP"/location widget are shown by default
+  // so the user doesn't have to add them manually.
+  DashboardWidget.tunButton,
+  DashboardWidget.vpnButton,
+  DashboardWidget.networkDetection,
 ];
 
 List<DashboardWidget> dashboardWidgetsSafeFormJson(
