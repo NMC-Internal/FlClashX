@@ -476,5 +476,11 @@
   "authErrorEmailTaken": "Эта почта уже зарегистрирована",
   "authErrorNetwork": "Ошибка сети. Проверьте подключение и повторите попытку",
   "authErrorServer": "Ошибка сервера. Повторите попытку позже",
-  "authErrorUnknown": "Что-то пошло не так. Повторите попытку"
+  "authErrorUnknown": "Что-то пошло не так. Повторите попытку",
+  "subscription": "Подписка",
+  "logout": "Выйти",
+  "logoutConfirm": "Выйти из аккаунта? Подписка будет удалена с этого устройства.",
+  "accountEmailUnknown": "Email неизвестен",
+  "accountNoSubscription": "Активная подписка пока отсутствует",
+  "accountTrafficRemaining": "Использовано {used} из {total}"
 }

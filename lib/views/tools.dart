@@ -6,18 +6,13 @@ import 'package:flclashx/models/models.dart';
 import 'package:flclashx/providers/providers.dart';
 import 'package:flclashx/state.dart';
 import 'package:flclashx/views/about.dart';
-import 'package:flclashx/views/access.dart';
 import 'package:flclashx/views/application_setting.dart';
-import 'package:flclashx/views/config/config.dart';
-import 'package:flclashx/views/hotkey.dart';
 import 'package:flclashx/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' show dirname, join;
 
-import 'backup_and_recovery.dart';
-import 'developer.dart';
 import 'theme.dart';
 
 class ToolsView extends ConsumerStatefulWidget {
@@ -53,11 +48,10 @@ class _ToolboxViewState extends ConsumerState<ToolsView> {
       ],
     );
 
-  List<Widget> _getOtherList(BuildContext context, bool enableDeveloperMode) => generateSection(
+  List<Widget> _getOtherList(BuildContext context) => generateSection(
       title: AppLocalizations.of(context).other,
       items: [
         const _DisclaimerItem(),
-        if (enableDeveloperMode) const _DeveloperItem(),
         const _InfoItem(),
       ],
     );
@@ -67,22 +61,16 @@ class _ToolboxViewState extends ConsumerState<ToolsView> {
       items: [
         const _LocaleItem(),
         const _ThemeItem(),
-        const _BackupItem(),
-        if (system.isDesktop) const _HotkeyItem(),
         if (Platform.isWindows) const _LoopbackItem(),
-        if (Platform.isAndroid) const _AccessItem(),
-        const _ConfigItem(),
         const _SettingItem(),
       ],
     );
 
   @override
   Widget build(BuildContext context) {
-    final vm2 = ref.watch(
-      appSettingProvider.select(
-        (state) => VM2(a: state.locale, b: state.developerMode),
-      ),
-    );
+    // Watch the app locale so the settings list rebuilds when the user changes
+    // the language from within this page.
+    ref.watch(appSettingProvider.select((state) => state.locale));
     final appLocale = AppLocalizations.of(context);
     final items = [
       Consumer(
@@ -100,7 +88,7 @@ class _ToolboxViewState extends ConsumerState<ToolsView> {
         },
       ),
       ..._getSettingList(context),
-      ..._getOtherList(context, vm2.b),
+      ..._getOtherList(context),
     ];
     return ListView.builder(
       itemCount: items.length,
@@ -162,42 +150,6 @@ class _ThemeItem extends StatelessWidget {
   }
 }
 
-class _BackupItem extends StatelessWidget {
-  const _BackupItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocale = AppLocalizations.of(context);
-    return ListItem.open(
-      leading: const Icon(Icons.cloud_sync),
-      title: Text(appLocale.backupAndRecovery),
-      subtitle: Text(appLocale.backupAndRecoveryDesc),
-      delegate: OpenDelegate(
-        title: appLocale.backupAndRecovery,
-        widget: const BackupAndRecovery(),
-      ),
-    );
-  }
-}
-
-class _HotkeyItem extends StatelessWidget {
-  const _HotkeyItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocale = AppLocalizations.of(context);
-    return ListItem.open(
-      leading: const Icon(Icons.keyboard),
-      title: Text(appLocale.hotkeyManagement),
-      subtitle: Text(appLocale.hotkeyManagementDesc),
-      delegate: OpenDelegate(
-        title: appLocale.hotkeyManagement,
-        widget: const HotKeyView(),
-      ),
-    );
-  }
-}
-
 class _LoopbackItem extends StatelessWidget {
   const _LoopbackItem();
 
@@ -214,42 +166,6 @@ class _LoopbackItem extends StatelessWidget {
           "",
         );
       },
-    );
-  }
-}
-
-class _AccessItem extends StatelessWidget {
-  const _AccessItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocale = AppLocalizations.of(context);
-    return ListItem.open(
-      leading: const Icon(Icons.view_list),
-      title: Text(appLocale.accessControl),
-      subtitle: Text(appLocale.accessControlDesc),
-      delegate: OpenDelegate(
-        title: appLocale.appAccessControl,
-        widget: const AccessView(),
-      ),
-    );
-  }
-}
-
-class _ConfigItem extends StatelessWidget {
-  const _ConfigItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocale = AppLocalizations.of(context);
-    return ListItem.open(
-      leading: const Icon(Icons.edit),
-      title: Text(appLocale.basicConfig),
-      subtitle: Text(appLocale.basicConfigDesc),
-      delegate: OpenDelegate(
-        title: appLocale.override,
-        widget: const ConfigView(),
-      ),
     );
   }
 }
@@ -304,23 +220,6 @@ class _InfoItem extends StatelessWidget {
       delegate: OpenDelegate(
         title: appLocale.about,
         widget: const AboutView(),
-      ),
-    );
-  }
-}
-
-class _DeveloperItem extends StatelessWidget {
-  const _DeveloperItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocale = AppLocalizations.of(context);
-    return ListItem.open(
-      leading: const Icon(Icons.developer_board),
-      title: Text(appLocale.developerMode),
-      delegate: OpenDelegate(
-        title: appLocale.developerMode,
-        widget: const DeveloperView(),
       ),
     );
   }

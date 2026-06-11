@@ -72,6 +72,21 @@ class Preferences {
     await preferences?.remove(authTokenKey);
   }
 
+  Future<String?> getUserEmail() async {
+    final preferences = await sharedPreferencesCompleter.future;
+    return preferences?.getString(userEmailKey);
+  }
+
+  Future<bool> setUserEmail(String email) async {
+    final preferences = await sharedPreferencesCompleter.future;
+    return await preferences?.setString(userEmailKey, email) ?? false;
+  }
+
+  Future<void> clearUserEmail() async {
+    final preferences = await sharedPreferencesCompleter.future;
+    await preferences?.remove(userEmailKey);
+  }
+
   Future<void> clearPreferences() async {
     final sharedPreferencesIns = await sharedPreferencesCompleter.future;
     sharedPreferencesIns?.clear();

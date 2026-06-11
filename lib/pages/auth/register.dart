@@ -27,6 +27,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       final token = await authApi.register(email, password);
       final me = await authApi.getMe(token);
       await preferences.setAuthToken(token);
+      if (me.email.isNotEmpty) {
+        await preferences.setUserEmail(me.email);
+      } else {
+        await preferences.setUserEmail(email);
+      }
       ref.read(pendingSubscriptionUrlProvider.notifier).state =
           me.subscriptionUrl;
       ref.read(authTokenProvider.notifier).state = token;

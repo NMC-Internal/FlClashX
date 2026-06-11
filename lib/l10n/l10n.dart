@@ -3718,6 +3718,61 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Subscription`
+  String get subscription {
+    return Intl.message(
+      'Subscription',
+      name: 'subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log out`
+  String get logout {
+    return Intl.message('Log out', name: 'logout', desc: '', args: []);
+  }
+
+  /// `Log out of your account? The subscription will be removed from this device.`
+  String get logoutConfirm {
+    return Intl.message(
+      'Log out of your account? The subscription will be removed from this device.',
+      name: 'logoutConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown email`
+  String get accountEmailUnknown {
+    return Intl.message(
+      'Unknown email',
+      name: 'accountEmailUnknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active subscription yet`
+  String get accountNoSubscription {
+    return Intl.message(
+      'No active subscription yet',
+      name: 'accountNoSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{used} of {total} used`
+  String accountTrafficRemaining(Object used, Object total) {
+    return Intl.message(
+      '$used of $total used',
+      name: 'accountTrafficRemaining',
+      desc: '',
+      args: [used, total],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,6 +1,10 @@
 import 'package:flclashx/common/common.dart';
 import 'package:flutter/material.dart';
 
+/// Product display name shown on the auth screens. Kept separate from
+/// [appName]/bundle id (branding is a follow-up task); placeholder for now.
+const _authBrandName = 'NMC VPN';
+
 /// Shared scaffold for the login and register forms: an email field, a
 /// password field with validation (valid email, password >= 8 chars), a
 /// submit button with a loading indicator, an inline error message, and a
@@ -90,6 +94,8 @@ class _AuthFormScaffoldState extends State<AuthFormScaffold> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const _AppBranding(),
+                    const SizedBox(height: 32),
                     Text(
                       widget.title,
                       style: theme.textTheme.headlineSmall,
@@ -170,6 +176,42 @@ class _AuthFormScaffoldState extends State<AuthFormScaffold> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// App logo + product name shown at the top of the login/register forms.
+class _AppBranding extends StatelessWidget {
+  const _AppBranding();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/images/icon.png',
+            width: 72,
+            height: 72,
+            errorBuilder: (_, __, ___) => Icon(
+              Icons.vpn_lock,
+              size: 72,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          _authBrandName,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

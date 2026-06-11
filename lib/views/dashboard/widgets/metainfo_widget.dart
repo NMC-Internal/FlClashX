@@ -2,7 +2,6 @@ import 'package:flclashx/common/common.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/providers/providers.dart';
 import 'package:flclashx/state.dart';
-import 'package:flclashx/views/profiles/add_profile.dart';
 import 'package:flclashx/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,32 +56,7 @@ class MetainfoWidget extends ConsumerWidget {
     final theme = Theme.of(context);
 
     if (allProfiles.isEmpty) {
-      return CommonCard(
-        onPressed: () async {
-          final url = await globalState.showCommonDialog<String>(
-            child: const URLFormDialog(),
-          );
-          if (url != null) {
-            globalState.appController.addProfileFormURL(url);
-          }
-        },
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.add_circle_outline,
-                  size: 48,
-                ),
-                const SizedBox(height: 8),
-                Text(appLocalizations.addProfile),
-              ],
-            ),
-          ),
-        ),
-      );
+      return const SizedBox.shrink();
     }
 
     final subscriptionInfo = currentProfile?.subscriptionInfo;

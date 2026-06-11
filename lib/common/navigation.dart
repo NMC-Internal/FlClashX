@@ -38,11 +38,11 @@ class Navigation {
             : [],
       ),
       const NavigationItem(
-        icon: Icon(Icons.folder),
-        label: PageLabel.profiles,
-        view: ProfilesView(
+        icon: Icon(Icons.account_circle),
+        label: PageLabel.account,
+        view: AccountView(
           key: GlobalObjectKey(
-            PageLabel.profiles,
+            PageLabel.account,
           ),
         ),
       ),
@@ -67,17 +67,6 @@ class Navigation {
         ),
         description: "connectionsDesc",
         modes: [NavigationItemMode.desktop, NavigationItemMode.more],
-      ),
-      const NavigationItem(
-        icon: Icon(Icons.storage),
-        label: PageLabel.resources,
-        description: "resourcesDesc",
-        view: ResourcesView(
-          key: GlobalObjectKey(
-            PageLabel.resources,
-          ),
-        ),
-        modes: [NavigationItemMode.more],
       ),
       NavigationItem(
         icon: const Icon(Icons.adb),

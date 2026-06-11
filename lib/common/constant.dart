@@ -51,6 +51,7 @@ const localhost = "127.0.0.1";
 const clashConfigKey = "clash_config";
 const configKey = "config";
 const authTokenKey = "auth_token";
+const userEmailKey = "user_email";
 const double dialogCommonWidth = 300;
 const repository = "pluralplay/FlClashX";
 const defaultExternalController = "127.0.0.1:9090";

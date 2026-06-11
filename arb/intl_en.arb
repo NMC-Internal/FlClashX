@@ -475,5 +475,11 @@
   "authErrorEmailTaken": "This email is already registered",
   "authErrorNetwork": "Network error. Please check your connection and try again",
   "authErrorServer": "Server error. Please try again later",
-  "authErrorUnknown": "Something went wrong. Please try again"
+  "authErrorUnknown": "Something went wrong. Please try again",
+  "subscription": "Subscription",
+  "logout": "Log out",
+  "logoutConfirm": "Log out of your account? The subscription will be removed from this device.",
+  "accountEmailUnknown": "Unknown email",
+  "accountNoSubscription": "No active subscription yet",
+  "accountTrafficRemaining": "{used} of {total} used"
 }

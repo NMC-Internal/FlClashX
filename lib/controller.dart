@@ -199,16 +199,21 @@ class AppController {
     _ref.read(profilesProvider.notifier).deleteProfileById(id);
     clearEffect(id);
     if (globalState.config.currentProfileId == id) {
-      final profiles = globalState.config.profiles;
-      final currentProfileId = _ref.read(currentProfileIdProvider.notifier);
-      if (profiles.isNotEmpty) {
-        final updateId = profiles.first.id;
-        currentProfileId.value = updateId;
-      } else {
-        currentProfileId.value = null;
-        updateStatus(false);
-      }
+      _ref.read(currentProfileIdProvider.notifier).value = null;
+      await updateStatus(false);
     }
+  }
+
+  /// Removes every profile and stops the proxy. Used by the account logout flow
+  /// so a fresh login provisions the subscription from scratch.
+  Future<void> clearProfiles() async {
+    final profiles = List<Profile>.from(_ref.read(profilesProvider));
+    for (final profile in profiles) {
+      _ref.read(profilesProvider.notifier).deleteProfileById(profile.id);
+      unawaited(clearEffect(profile.id));
+    }
+    _ref.read(currentProfileIdProvider.notifier).value = null;
+    await updateStatus(false);
   }
 
   Future<void> updateProviders() async {
@@ -646,10 +651,6 @@ class AppController {
     if (profile.id == _ref.read(currentProfileIdProvider)) {
       applyProfileDebounce(silence: true);
     }
-  }
-
-  void setProfiles(List<Profile> profiles) {
-    _ref.read(profilesProvider.notifier).value = profiles;
   }
 
   void addLog(Log log) {
@@ -1236,36 +1237,14 @@ class AppController {
     _ref.read(currentPageLabelProvider.notifier).value = pageLabel;
   }
 
-  void toProfiles() {
-    toPage(PageLabel.profiles);
-  }
-
   void initLink() {
-    linkManager.initAppLinksListen(
-      (url) async {
-        final res = await globalState.showMessage(
-          title: "${appLocalizations.add} ${appLocalizations.profile}",
-          message: TextSpan(
-            children: [
-              TextSpan(text: appLocalizations.doYouWantToPass),
-              TextSpan(
-                text: " $url",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  decoration: TextDecoration.underline,
-                  decorationColor: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-        );
-
-        if (res != true) {
-          return;
-        }
-        addProfileFormURL(url);
-      },
-    );
+    // Deep links are intentionally inert in this single-subscription product:
+    // the subscription is provisioned programmatically after login
+    // (see provisionSubscription), so importing arbitrary subscription URLs
+    // via `install-config?url=` is disabled for safety. The listener is still
+    // installed so the platform channel is consumed and future safe deep links
+    // can be handled here.
+    linkManager.initAppLinksListen();
   }
 
   Future<bool> showDisclaimer() async =>
@@ -1308,43 +1287,6 @@ class AppController {
     return;
   }
 
-  Future<void> addProfileFormURL(String url) async {
-    if (globalState.navigatorKey.currentState?.canPop() ?? false) {
-      globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    }
-    toPage(PageLabel.dashboard);
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-
-    try {
-      final profile = await commonScaffoldState?.loadingRun<Profile>(
-        () async {
-          final prefs = await SharedPreferences.getInstance();
-          final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
-          return Profile.normal(url: url).update(shouldSendHeaders: shouldSend);
-        },
-        title: "${appLocalizations.add}${appLocalizations.profile}",
-      );
-
-      if (profile != null) {
-        _applyAllHeaderSettings(profile, isNewProfile: true);
-
-        final headers = profile.providerHeaders;
-        final showHwidLimit = headers['x-hwid-limit']?.toLowerCase() == 'true';
-        final announceText = headers['announce'];
-        if (showHwidLimit && announceText != null && announceText.isNotEmpty) {
-          _showHwidLimitNotice(announceText, headers['support-url']);
-        }
-
-        await addProfile(profile);
-      }
-    } catch (err) {
-      commonPrint.log('Add Profile Failed: $err');
-      unawaited(
-          globalState.showMessage(message: TextSpan(text: err.toString())));
-    }
-  }
-
   /// Provisions the account's subscription as the single profile.
   ///
   /// Auth flow (ADR 0008): after login/register and `GET /v1/me`, the returned
@@ -1384,35 +1326,6 @@ class AppController {
 
     _applyAllHeaderSettings(profile, isNewProfile: true);
     await addProfile(profile);
-  }
-
-  Future<Null> addProfileFormFile() async {
-    final platformFile = await globalState.safeRun(picker.pickerFile);
-    final bytes = platformFile?.bytes;
-    if (bytes == null) {
-      return null;
-    }
-    if (!context.mounted) return;
-    globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    toPage(PageLabel.dashboard);
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-    final profile = await commonScaffoldState?.loadingRun<Profile?>(
-      () async {
-        await Future.delayed(const Duration(milliseconds: 300));
-        return Profile.normal(label: platformFile?.name).saveFile(bytes);
-      },
-      title: "${appLocalizations.add}${appLocalizations.profile}",
-    );
-    if (profile != null) {
-      await addProfile(profile);
-    }
-  }
-
-  Future<void> addProfileFormQrCode() async {
-    final url = await globalState.safeRun(picker.pickerConfigQRCode);
-    if (url == null) return;
-    addProfileFormURL(url);
   }
 
   void updateViewSize(Size size) {

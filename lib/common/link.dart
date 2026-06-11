@@ -4,8 +4,13 @@ import 'package:app_links/app_links.dart';
 
 import 'print.dart';
 
-typedef InstallConfigCallBack = void Function(String url);
-
+/// Listens to inbound app links.
+///
+/// In this single-subscription product the old `install-config?url=` deep link
+/// (which imported an arbitrary subscription URL) is intentionally removed: the
+/// subscription is provisioned programmatically after login. The listener is
+/// kept so the platform link stream is consumed and a place exists to handle
+/// future, trusted deep links.
 class LinkManager {
 
   factory LinkManager() {
@@ -20,19 +25,13 @@ class LinkManager {
   late AppLinks _appLinks;
   StreamSubscription? subscription;
 
-  Future<void> initAppLinksListen(installConfigCallBack) async {
+  Future<void> initAppLinksListen() async {
     commonPrint.log("initAppLinksListen");
     destroy();
     subscription = _appLinks.uriLinkStream.listen(
       (uri) {
         commonPrint.log('onAppLink: $uri');
-        if (uri.host == 'install-config') {
-          final parameters = uri.queryParameters;
-          final url = parameters['url'];
-          if (url != null) {
-            installConfigCallBack(url);
-          }
-        }
+        // No deep-link actions are handled in this build.
       },
     );
   }

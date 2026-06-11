@@ -28,6 +28,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       final token = await authApi.login(email, password);
       final me = await authApi.getMe(token);
       await preferences.setAuthToken(token);
+      if (me.email.isNotEmpty) {
+        await preferences.setUserEmail(me.email);
+      }
       ref.read(pendingSubscriptionUrlProvider.notifier).state =
           me.subscriptionUrl;
       ref.read(authTokenProvider.notifier).state = token;
