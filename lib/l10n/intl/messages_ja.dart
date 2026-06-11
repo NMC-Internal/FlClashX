@@ -579,6 +579,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションは本日期限切れになります",
     ),
+    "subscriptionPreparing": MessageLookupByLibrary.simpleMessage(
+      "Your subscription is still being prepared. Please try again in a minute",
+    ),
     "support": MessageLookupByLibrary.simpleMessage("サポート"),
     "sync": MessageLookupByLibrary.simpleMessage("同期"),
     "system": MessageLookupByLibrary.simpleMessage("システム"),

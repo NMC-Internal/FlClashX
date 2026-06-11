@@ -482,5 +482,6 @@
   "logoutConfirm": "Выйти из аккаунта? Подписка будет удалена с этого устройства.",
   "accountEmailUnknown": "Email неизвестен",
   "accountNoSubscription": "Активная подписка пока отсутствует",
+  "subscriptionPreparing": "Подписка ещё готовится. Попробуйте снова через минуту",
   "accountTrafficRemaining": "Использовано {used} из {total}"
 }

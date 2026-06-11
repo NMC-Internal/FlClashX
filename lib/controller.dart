@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:archive/archive.dart';
+import 'package:dio/dio.dart';
 import 'package:flclashx/clash/clash.dart';
 import 'package:flclashx/common/archive.dart';
 import 'package:flclashx/services/subscription_notification_service.dart';
@@ -32,24 +33,35 @@ class AppController {
   final BuildContext context;
   final WidgetRef _ref;
 
+  /// Schedules [func] on the global [debouncer], dropping the call if this
+  /// controller's widget tree is gone by the time the timer fires — e.g. the
+  /// auth gate unmounted `Application` on logout, after which [_ref] reads
+  /// would throw "Looking up a deactivated widget's ancestor is unsafe".
+  void _debounce(FunctionTag tag, Function func, {List<dynamic>? args}) {
+    debouncer.call(tag, () {
+      if (!context.mounted) return;
+      Function.apply(func, args);
+    });
+  }
+
   void setupClashConfigDebounce() {
-    debouncer.call(FunctionTag.setupClashConfig, () async {
+    _debounce(FunctionTag.setupClashConfig, () async {
       await setupClashConfig();
     });
   }
 
   void updateClashConfigDebounce() {
-    debouncer.call(FunctionTag.updateClashConfig, () async {
+    _debounce(FunctionTag.updateClashConfig, () async {
       await updateClashConfig();
     });
   }
 
   void updateGroupsDebounce() {
-    debouncer.call(FunctionTag.updateGroups, updateGroups);
+    _debounce(FunctionTag.updateGroups, updateGroups);
   }
 
   void addCheckIpNumDebounce() {
-    debouncer.call(FunctionTag.addCheckIpNum, () {
+    _debounce(FunctionTag.addCheckIpNum, () {
       _ref.read(checkIpNumProvider.notifier).add();
     });
   }
@@ -57,17 +69,17 @@ class AppController {
   void applyProfileDebounce({
     bool silence = false,
   }) {
-    debouncer.call(FunctionTag.applyProfile, (silence) {
+    _debounce(FunctionTag.applyProfile, (silence) {
       applyProfile(silence: silence);
     }, args: [silence]);
   }
 
   void savePreferencesDebounce() {
-    debouncer.call(FunctionTag.savePreferences, savePreferences);
+    _debounce(FunctionTag.savePreferences, savePreferences);
   }
 
   void changeProxyDebounce(String groupName, String proxyName) {
-    debouncer.call(FunctionTag.changeProxy,
+    _debounce(FunctionTag.changeProxy,
         (String groupName, String proxyName) async {
       await changeProxy(
         groupName: groupName,
@@ -1275,6 +1287,33 @@ class AppController {
       ) ??
       false;
 
+  /// Downloads the subscription profile, retrying while the backend reports
+  /// it as not ready: right after registration the subscription may still be
+  /// `provisioning` (ADR 0009) — `/v1/sub/{token}` answers 409 until the
+  /// panel user exists, and 502 while the panel itself is unavailable. The
+  /// window is normally a few seconds, so a bounded poll hides it.
+  Future<Profile> _fetchProvisionedProfile(String url) async {
+    const maxAttempts = 15;
+    const retryDelay = Duration(seconds: 2);
+    final prefs = await SharedPreferences.getInstance();
+    final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
+    for (var attempt = 1; ; attempt++) {
+      try {
+        return await Profile.normal(url: url)
+            .update(shouldSendHeaders: shouldSend);
+      } on DioException catch (e) {
+        final status = e.response?.statusCode;
+        final notReady = status == HttpStatus.conflict ||
+            status == HttpStatus.badGateway;
+        if (!notReady) rethrow;
+        if (attempt >= maxAttempts) {
+          throw appLocalizations.subscriptionPreparing;
+        }
+        await Future.delayed(retryDelay);
+      }
+    }
+  }
+
   /// Provisions the account's subscription as the single profile.
   ///
   /// Auth flow (ADR 0008): after login/register and `GET /v1/me`, the returned
@@ -1302,11 +1341,7 @@ class AppController {
 
     final commonScaffoldState = globalState.homeScaffoldKey.currentState;
     final profile = await commonScaffoldState?.loadingRun<Profile>(
-      () async {
-        final prefs = await SharedPreferences.getInstance();
-        final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
-        return Profile.normal(url: url).update(shouldSendHeaders: shouldSend);
-      },
+      () => _fetchProvisionedProfile(url),
       title: "${appLocalizations.add}${appLocalizations.profile}",
     );
 

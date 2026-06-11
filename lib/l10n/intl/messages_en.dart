@@ -765,6 +765,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "Your subscription expires today",
     ),
+    "subscriptionPreparing": MessageLookupByLibrary.simpleMessage(
+      "Your subscription is still being prepared. Please try again in a minute",
+    ),
     "subscriptionUnlimited": MessageLookupByLibrary.simpleMessage(
       "Lifetime Subscription",
     ),

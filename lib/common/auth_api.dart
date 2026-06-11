@@ -25,13 +25,24 @@ class AuthException implements Exception {
   String toString() => 'AuthException($kind): $message';
 }
 
-/// Thin client for the auth/me backend contract (ADR 0008).
+/// Subscription provisioning lifecycle as reported by `GET /v1/me`
+/// (ADR 0009). While [provisioning] the subscription URL itself answers
+/// 409 "subscription not ready".
+abstract final class SubscriptionStatus {
+  static const provisioning = 'provisioning';
+  static const active = 'active';
+  static const failed = 'failed';
+}
+
+/// Thin client for the auth/me backend contract (ADR 0008, ADR 0009).
 ///
 /// Endpoints (base = [backendBaseUrl]):
 /// - `POST /v1/auth/register {email,password}` -> `201 {"token":"<jwt>"}`
+///   (201 even when the panel is down — the subscription provisions later)
 /// - `POST /v1/auth/login    {email,password}` -> `200 {"token":"<jwt>"}`
 /// - `GET  /v1/me  (Authorization: Bearer <jwt>)` ->
-///       `200 {"email":"...","subscription_url":"<url>"}`
+///       `200 {"email":"...","subscription_url":"<url>"`
+///       `      "subscription_status":"provisioning|active|failed"}`
 class AuthApi {
   AuthApi({Dio? dio, String? baseUrl})
       : _dio = dio ??
@@ -102,8 +113,10 @@ class AuthApi {
     throw _mapStatus(status);
   }
 
-  /// Fetches the current user's email and subscription URL using the token.
-  Future<({String email, String subscriptionUrl})> getMe(String token) async {
+  /// Fetches the current user's email, subscription URL and provisioning
+  /// status using the token.
+  Future<({String email, String subscriptionUrl, String subscriptionStatus})>
+      getMe(String token) async {
     final Response<dynamic> response;
     try {
       response = await _dio.get<dynamic>(
@@ -144,6 +157,9 @@ class AuthApi {
     return (
       email: (data['email'] as String?) ?? '',
       subscriptionUrl: subscriptionUrl,
+      // Older backends predate ADR 0009 and only ever expose ready URLs.
+      subscriptionStatus: (data['subscription_status'] as String?) ??
+          SubscriptionStatus.active,
     );
   }
 

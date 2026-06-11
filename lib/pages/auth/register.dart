@@ -25,15 +25,25 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     });
     try {
       final token = await authApi.register(email, password);
-      final me = await authApi.getMe(token);
+      // The account exists from here on: persist the session before any
+      // follow-up call, otherwise a transient /v1/me failure leaves the user
+      // stuck on this screen with an already-taken email.
       await preferences.setAuthToken(token);
-      if (me.email.isNotEmpty) {
-        await preferences.setUserEmail(me.email);
-      } else {
-        await preferences.setUserEmail(email);
+      await preferences.setUserEmail(email);
+      String? subscriptionUrl;
+      try {
+        final me = await authApi.getMe(token);
+        if (me.email.isNotEmpty) {
+          await preferences.setUserEmail(me.email);
+        }
+        subscriptionUrl = me.subscriptionUrl;
+      } on AuthException {
+        // Application re-fetches /v1/me and provisions the subscription once
+        // the gate flips (see _provisionPendingSubscription).
       }
+      if (!mounted) return;
       ref.read(pendingSubscriptionUrlProvider.notifier).state =
-          me.subscriptionUrl;
+          subscriptionUrl;
       ref.read(authTokenProvider.notifier).state = token;
       // Gate rebuilds into Application; this page (and the login page below it
       // in the stack) are disposed with it.

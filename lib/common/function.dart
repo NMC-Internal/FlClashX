@@ -32,6 +32,13 @@ class Debouncer {
     _operations[tag]?.cancel();
     _operations[tag] = null;
   }
+
+  void cancelAll() {
+    for (final timer in _operations.values) {
+      timer?.cancel();
+    }
+    _operations.clear();
+  }
 }
 
 class Throttler {

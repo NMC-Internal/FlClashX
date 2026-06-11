@@ -481,5 +481,6 @@
   "logoutConfirm": "Log out of your account? The subscription will be removed from this device.",
   "accountEmailUnknown": "Unknown email",
   "accountNoSubscription": "No active subscription yet",
+  "subscriptionPreparing": "Your subscription is still being prepared. Please try again in a minute",
   "accountTrafficRemaining": "{used} of {total} used"
 }

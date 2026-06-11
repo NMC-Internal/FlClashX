@@ -798,6 +798,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "Ваша подписка истекает сегодня",
     ),
+    "subscriptionPreparing": MessageLookupByLibrary.simpleMessage(
+      "Подписка ещё готовится. Попробуйте снова через минуту",
+    ),
     "subscriptionUnlimited": MessageLookupByLibrary.simpleMessage(
       "Бессрочная подписка",
     ),

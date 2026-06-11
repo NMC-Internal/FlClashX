@@ -3764,6 +3764,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Your subscription is still being prepared. Please try again in a minute`
+  String get subscriptionPreparing {
+    return Intl.message(
+      'Your subscription is still being prepared. Please try again in a minute',
+      name: 'subscriptionPreparing',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{used} of {total} used`
   String accountTrafficRemaining(Object used, Object total) {
     return Intl.message(

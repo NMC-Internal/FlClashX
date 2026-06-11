@@ -87,10 +87,25 @@ class ApplicationState extends ConsumerState<Application> {
 
   /// Consumes a subscription URL captured during login/register (see
   /// [pendingSubscriptionUrlProvider]) and registers it as the single profile.
+  ///
+  /// When there is no pending URL but the account has no profile either —
+  /// `/v1/me` failed during login, or a previous provisioning attempt never
+  /// completed (e.g. the subscription was still `provisioning`, ADR 0009) —
+  /// the URL is re-fetched from `/v1/me` so the app heals itself on start.
   Future<void> _provisionPendingSubscription() async {
-    final url = ref.read(pendingSubscriptionUrlProvider);
-    if (url == null || url.isEmpty) return;
+    var url = ref.read(pendingSubscriptionUrlProvider);
     ref.read(pendingSubscriptionUrlProvider.notifier).state = null;
+    if (url == null || url.isEmpty) {
+      if (ref.read(profilesProvider).isNotEmpty) return;
+      final token = ref.read(authTokenProvider);
+      if (token == null || token.isEmpty) return;
+      try {
+        url = (await authApi.getMe(token)).subscriptionUrl;
+      } catch (e) {
+        commonPrint.log("Fetch subscription URL for provisioning failed: $e");
+        return;
+      }
+    }
     try {
       await globalState.appController.provisionSubscription(url);
     } catch (e) {
@@ -225,6 +240,9 @@ class ApplicationState extends ConsumerState<Application> {
 
   @override
   Future<void> dispose() async {
+    // Pending debounced callbacks capture this state's WidgetRef; once the
+    // auth gate unmounts us (logout) they would read a defunct element.
+    debouncer.cancelAll();
     linkManager.destroy();
     _autoUpdateGroupTaskTimer?.cancel();
     _autoUpdateProfilesTaskTimer?.cancel();
