@@ -54,6 +54,24 @@ class Preferences {
     preferences?.remove(clashConfigKey);
   }
 
+  // TODO(auth): the auth token is currently stored in SharedPreferences for
+  // simplicity. Migrate to flutter_secure_storage (Keychain/Keystore) once that
+  // dependency is added, since a JWT is a sensitive credential.
+  Future<String?> getAuthToken() async {
+    final preferences = await sharedPreferencesCompleter.future;
+    return preferences?.getString(authTokenKey);
+  }
+
+  Future<bool> setAuthToken(String token) async {
+    final preferences = await sharedPreferencesCompleter.future;
+    return await preferences?.setString(authTokenKey, token) ?? false;
+  }
+
+  Future<void> clearAuthToken() async {
+    final preferences = await sharedPreferencesCompleter.future;
+    await preferences?.remove(authTokenKey);
+  }
+
   Future<void> clearPreferences() async {
     final sharedPreferencesIns = await sharedPreferencesCompleter.future;
     sharedPreferencesIns?.clear();

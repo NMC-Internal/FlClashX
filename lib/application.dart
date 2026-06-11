@@ -15,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'controller.dart';
+import 'pages/auth/auth_state.dart';
 import 'pages/pages.dart';
 
 class Application extends ConsumerStatefulWidget {
@@ -64,6 +65,7 @@ class ApplicationState extends ConsumerState<Application> {
       await globalState.appController.init();
       globalState.appController.initLink();
       app?.initShortcuts();
+      await _provisionPendingSubscription();
     });
   }
 
@@ -81,6 +83,19 @@ class ApplicationState extends ConsumerState<Application> {
       await globalState.appController.autoUpdateProfiles();
       _autoUpdateProfilesTask();
     });
+  }
+
+  /// Consumes a subscription URL captured during login/register (see
+  /// [pendingSubscriptionUrlProvider]) and registers it as the single profile.
+  Future<void> _provisionPendingSubscription() async {
+    final url = ref.read(pendingSubscriptionUrlProvider);
+    if (url == null || url.isEmpty) return;
+    ref.read(pendingSubscriptionUrlProvider.notifier).state = null;
+    try {
+      await globalState.appController.provisionSubscription(url);
+    } catch (e) {
+      commonPrint.log("Provision subscription failed: $e");
+    }
   }
 
   Widget _buildPlatformState(Widget child) {

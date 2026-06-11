@@ -1345,6 +1345,47 @@ class AppController {
     }
   }
 
+  /// Provisions the account's subscription as the single profile.
+  ///
+  /// Auth flow (ADR 0008): after login/register and `GET /v1/me`, the returned
+  /// `subscription_url` is registered as the one and only [Profile]
+  /// (autoUpdate=true) and applied. If a profile with this URL already exists it
+  /// is refreshed in place instead of being duplicated.
+  Future<void> provisionSubscription(String subscriptionUrl) async {
+    final url = subscriptionUrl.trim();
+    if (url.isEmpty) return;
+
+    final profiles = _ref.read(profilesProvider);
+    Profile? existing;
+    for (final profile in profiles) {
+      if (profile.url == url) {
+        existing = profile;
+        break;
+      }
+    }
+    if (existing != null) {
+      await updateProfile(existing.copyWith(autoUpdate: true));
+      _ref.read(currentProfileIdProvider.notifier).value = existing.id;
+      applyProfileDebounce(silence: true);
+      return;
+    }
+
+    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
+    final profile = await commonScaffoldState?.loadingRun<Profile>(
+      () async {
+        final prefs = await SharedPreferences.getInstance();
+        final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
+        return Profile.normal(url: url).update(shouldSendHeaders: shouldSend);
+      },
+      title: "${appLocalizations.add}${appLocalizations.profile}",
+    );
+
+    if (profile == null) return;
+
+    _applyAllHeaderSettings(profile, isNewProfile: true);
+    await addProfile(profile);
+  }
+
   Future<Null> addProfileFormFile() async {
     final platformFile = await globalState.safeRun(picker.pickerFile);
     final bytes = platformFile?.bytes;

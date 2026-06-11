@@ -1,5 +1,6 @@
 export 'android.dart';
 export 'app_localizations.dart';
+export 'auth_api.dart';
 export 'color.dart';
 export 'constant.dart';
 export 'context.dart';

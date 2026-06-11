@@ -38,9 +38,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} items have been selected";
 
-  static String m8(label) => "${label} must be a url";
+  static String m8(days) => "Your subscription expires in ${days} day(s)";
 
-  static String m9(days) => "Your subscription expires in ${days} day(s)";
+  static String m9(label) => "${label} must be a url";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -98,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLanDesc": MessageLookupByLibrary.simpleMessage(
       "Allow access proxy through the LAN",
     ),
+    "announcement": MessageLookupByLibrary.simpleMessage("Announcement"),
     "app": MessageLookupByLibrary.simpleMessage("App"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
       "App access control",
@@ -108,6 +109,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "application": MessageLookupByLibrary.simpleMessage("Application Settings"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage(
       "Standard application settings",
+    ),
+    "authEmailInvalid": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid email",
+    ),
+    "authEmailRequired": MessageLookupByLibrary.simpleMessage(
+      "Please enter your email",
+    ),
+    "authErrorEmailTaken": MessageLookupByLibrary.simpleMessage(
+      "This email is already registered",
+    ),
+    "authErrorInvalidCredentials": MessageLookupByLibrary.simpleMessage(
+      "Invalid email or password",
+    ),
+    "authErrorNetwork": MessageLookupByLibrary.simpleMessage(
+      "Network error. Please check your connection and try again",
+    ),
+    "authErrorServer": MessageLookupByLibrary.simpleMessage(
+      "Server error. Please try again later",
+    ),
+    "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
+      "Something went wrong. Please try again",
+    ),
+    "authPasswordRequired": MessageLookupByLibrary.simpleMessage(
+      "Please enter your password",
+    ),
+    "authPasswordTooShort": MessageLookupByLibrary.simpleMessage(
+      "Password must be at least 8 characters",
     ),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage(
@@ -255,6 +283,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "domain": MessageLookupByLibrary.simpleMessage("Domain"),
     "download": MessageLookupByLibrary.simpleMessage("Download"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
+    "email": MessageLookupByLibrary.simpleMessage("Email"),
     "emptyTip": m2,
     "en": MessageLookupByLibrary.simpleMessage("English"),
     "enableOverride": MessageLookupByLibrary.simpleMessage("Enable override"),
@@ -277,7 +306,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ExternalController",
     ),
     "externalControllerDesc": MessageLookupByLibrary.simpleMessage(
-      "Once enabled, the Clash kernel can be controlled via API",
+      "Once enabled, the Clash kernel can be controlled on port 9090",
     ),
     "externalLink": MessageLookupByLibrary.simpleMessage("External link"),
     "externalResources": MessageLookupByLibrary.simpleMessage(
@@ -327,6 +356,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "gratitude": MessageLookupByLibrary.simpleMessage("Gratitude"),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage(
       "Do you want to cache the changes?",
+    ),
+    "haveAccountLogin": MessageLookupByLibrary.simpleMessage(
+      "Already have an account? Log in",
     ),
     "hostsDesc": MessageLookupByLibrary.simpleMessage("Add Hosts"),
     "hotkeyConflict": MessageLookupByLibrary.simpleMessage("Hotkey conflict"),
@@ -391,6 +423,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
       "Disabling will hide the log entry",
     ),
+    "login": MessageLookupByLibrary.simpleMessage("Log in"),
     "logs": MessageLookupByLibrary.simpleMessage("Logs"),
     "logsDesc": MessageLookupByLibrary.simpleMessage("Log capture records"),
     "logsTest": MessageLookupByLibrary.simpleMessage("Logs test"),
@@ -440,6 +473,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkDetection": MessageLookupByLibrary.simpleMessage("Your IP Address"),
     "networkSpeed": MessageLookupByLibrary.simpleMessage("Network speed"),
     "neutralScheme": MessageLookupByLibrary.simpleMessage("Neutral"),
+    "noAccountRegister": MessageLookupByLibrary.simpleMessage(
+      "Don\'t have an account? Sign up",
+    ),
     "noData": MessageLookupByLibrary.simpleMessage("No data"),
     "noHotKey": MessageLookupByLibrary.simpleMessage("No HotKey"),
     "noIcon": MessageLookupByLibrary.simpleMessage("None"),
@@ -607,6 +643,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir Port"),
     "redo": MessageLookupByLibrary.simpleMessage("redo"),
     "regExp": MessageLookupByLibrary.simpleMessage("RegExp"),
+    "register": MessageLookupByLibrary.simpleMessage("Sign up"),
     "remaining": MessageLookupByLibrary.simpleMessage("Remaining"),
     "remainingPlural": MessageLookupByLibrary.simpleMessage("Remaining"),
     "remainingSingular": MessageLookupByLibrary.simpleMessage("Remaining"),
@@ -619,6 +656,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "remove": MessageLookupByLibrary.simpleMessage("Remove"),
     "rename": MessageLookupByLibrary.simpleMessage("Rename"),
+    "renew": MessageLookupByLibrary.simpleMessage("Renew"),
     "requests": MessageLookupByLibrary.simpleMessage("Requests"),
     "requestsDesc": MessageLookupByLibrary.simpleMessage(
       "View recently request records",
@@ -648,6 +686,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ruleName": MessageLookupByLibrary.simpleMessage("Rule name"),
     "ruleProviders": MessageLookupByLibrary.simpleMessage("Rule providers"),
     "ruleTarget": MessageLookupByLibrary.simpleMessage("Rule target"),
+    "running": MessageLookupByLibrary.simpleMessage("Running"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "saveChanges": MessageLookupByLibrary.simpleMessage(
       "Do you want to save the changes?",
@@ -688,20 +727,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "stackMode": MessageLookupByLibrary.simpleMessage("Stack mode"),
     "standard": MessageLookupByLibrary.simpleMessage("Standard"),
     "start": MessageLookupByLibrary.simpleMessage("Start"),
-    "running": MessageLookupByLibrary.simpleMessage("Running"),
     "startVpn": MessageLookupByLibrary.simpleMessage("Starting VPN..."),
     "status": MessageLookupByLibrary.simpleMessage("Status"),
     "statusDesc": MessageLookupByLibrary.simpleMessage(
       "System DNS will be used when turned off",
     ),
     "stop": MessageLookupByLibrary.simpleMessage("Stop"),
-    "stopped": MessageLookupByLibrary.simpleMessage("Stopped"),
     "stopVpn": MessageLookupByLibrary.simpleMessage("Stopping VPN..."),
+    "stopped": MessageLookupByLibrary.simpleMessage("Stopped"),
     "style": MessageLookupByLibrary.simpleMessage("Style"),
     "subRule": MessageLookupByLibrary.simpleMessage("Sub rule"),
     "submit": MessageLookupByLibrary.simpleMessage("Submit"),
     "subscriptionEternal": MessageLookupByLibrary.simpleMessage(
       "Lifetime Subscription",
+    ),
+    "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
+      "Your subscription has expired",
+    ),
+    "subscriptionExpiresInDays": m8,
+    "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
+      "Subscription expires soon",
+    ),
+    "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
+      "Your subscription expires today",
     ),
     "subscriptionUnlimited": MessageLookupByLibrary.simpleMessage(
       "Lifetime Subscription",
@@ -775,7 +823,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain profile through URL",
     ),
-    "urlTip": m8,
+    "urlTip": m9,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),
@@ -799,17 +847,5 @@ class MessageLookup extends MessageLookupByLibrary {
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
     "years": MessageLookupByLibrary.simpleMessage("Years"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
-    "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
-      "Subscription expires soon",
-    ),
-    "subscriptionExpiresInDays": m9,
-    "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
-      "Your subscription expires today",
-    ),
-    "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
-      "Your subscription has expired",
-    ),
-    "renew": MessageLookupByLibrary.simpleMessage("Renew"),
-    "announcement": MessageLookupByLibrary.simpleMessage("Announcement"),
   };
 }
