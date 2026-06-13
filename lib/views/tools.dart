@@ -4,7 +4,6 @@ import 'package:flclashx/common/common.dart';
 import 'package:flclashx/l10n/l10n.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/providers/providers.dart';
-import 'package:flclashx/state.dart';
 import 'package:flclashx/views/about.dart';
 import 'package:flclashx/views/application_setting.dart';
 import 'package:flclashx/widgets/widgets.dart';
@@ -51,7 +50,6 @@ class _ToolboxViewState extends ConsumerState<ToolsView> {
   List<Widget> _getOtherList(BuildContext context) => generateSection(
       title: AppLocalizations.of(context).other,
       items: [
-        const _DisclaimerItem(),
         const _InfoItem(),
       ],
     );
@@ -184,26 +182,6 @@ class _SettingItem extends StatelessWidget {
         title: appLocale.application,
         widget: const ApplicationSettingView(),
       ),
-    );
-  }
-}
-
-class _DisclaimerItem extends StatelessWidget {
-  const _DisclaimerItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocale = AppLocalizations.of(context);
-    return ListItem(
-      leading: const Icon(Icons.gavel),
-      title: Text(appLocale.disclaimer),
-      onTap: () async {
-        final isDisclaimerAccepted =
-            await globalState.appController.showDisclaimer();
-        if (!isDisclaimerAccepted) {
-          globalState.appController.handleExit();
-        }
-      },
     );
   }
 }

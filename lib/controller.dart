@@ -1258,35 +1258,6 @@ class AppController {
     linkManager.initAppLinksListen();
   }
 
-  Future<bool> showDisclaimer() async =>
-      await globalState.showCommonDialog<bool>(
-        dismissible: false,
-        child: CommonDialog(
-          title: appLocalizations.disclaimer,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop<bool>(false);
-              },
-              child: Text(appLocalizations.exit),
-            ),
-            TextButton(
-              onPressed: () {
-                _ref.read(appSettingProvider.notifier).updateState(
-                      (state) => state.copyWith(disclaimerAccepted: true),
-                    );
-                Navigator.of(context).pop<bool>(true);
-              },
-              child: Text(appLocalizations.agree),
-            )
-          ],
-          child: SelectableText(
-            appLocalizations.disclaimerDesc,
-          ),
-        ),
-      ) ??
-      false;
-
   /// Downloads the subscription profile, retrying while the backend reports
   /// it as not ready: right after registration the subscription may still be
   /// `provisioning` (ADR 0009) — `/v1/sub/{token}` answers 409 until the

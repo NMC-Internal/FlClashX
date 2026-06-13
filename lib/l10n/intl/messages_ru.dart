@@ -279,12 +279,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Режим разработчика активирован.",
     ),
     "direct": MessageLookupByLibrary.simpleMessage("Прямой"),
-    "disclaimer": MessageLookupByLibrary.simpleMessage(
-      "Отказ от ответственности",
-    ),
-    "disclaimerDesc": MessageLookupByLibrary.simpleMessage(
-      "Данное программное обеспечение предназначено исключительно для некоммерческого использования в образовательных и исследовательских целях. Коммерческое использование запрещено. Разработчики не несут ответственности за любую коммерческую деятельность с использованием данного ПО.",
-    ),
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "Обнаружена новая версия",
     ),
