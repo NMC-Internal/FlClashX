@@ -666,7 +666,14 @@ class AppController {
   }
 
   void addLog(Log log) {
-    _ref.read(logsProvider).add(log);
+    // Logging must never crash the app. During teardown (e.g. logout, when the
+    // ConsumerStatefulElement backing [_ref] is being deactivated) reading a
+    // provider throws "Looking up a deactivated widget's ancestor is unsafe".
+    // The entry is already persisted by the file logger (CommonPrint.log), so
+    // drop the in-memory UI log silently rather than re-entering FlutterError.
+    try {
+      _ref.read(logsProvider).add(log);
+    } catch (_) {}
   }
 
   void updateOrAddHotKeyAction(HotKeyAction hotKeyAction) {

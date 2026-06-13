@@ -654,19 +654,48 @@ ColorScheme genColorScheme(
     // if (globalState.corePalette != null) {
     //   return globalState.corePalette!.toColorScheme(brightness: brightness);
     // }
-    return ColorScheme.fromSeed(
-      seedColor: globalState.corePalette
-              ?.toColorScheme(brightness: brightness)
-              .primary ??
-          globalState.accentColor,
-      brightness: brightness,
-      dynamicSchemeVariant: vm2.b,
+    return _applyBrandSurfaces(
+      ColorScheme.fromSeed(
+        seedColor: globalState.corePalette
+                ?.toColorScheme(brightness: brightness)
+                .primary ??
+            globalState.accentColor,
+        brightness: brightness,
+        dynamicSchemeVariant: vm2.b,
+      ),
     );
   }
-  return ColorScheme.fromSeed(
-    seedColor: color ?? Color(vm2.a!),
-    brightness: brightness,
-    dynamicSchemeVariant: vm2.b,
+  return _applyBrandSurfaces(
+    ColorScheme.fromSeed(
+      seedColor: color ?? Color(vm2.a!),
+      brightness: brightness,
+      dynamicSchemeVariant: vm2.b,
+    ),
+  );
+}
+
+/// Fantomask VPN brand palette ("Stealth", see vault `brand` note). In dark
+/// mode the Material 3 surface family is overridden with navy tones so the UI
+/// reads as the brand regardless of the seed colour; the green seed still
+/// drives primary/accent roles. Light mode keeps the seed-derived scheme.
+ColorScheme _applyBrandSurfaces(ColorScheme scheme) {
+  if (scheme.brightness != Brightness.dark) {
+    return scheme;
+  }
+  return scheme.copyWith(
+    surface: const Color(0xFF0F1B2A),
+    onSurface: const Color(0xFFE6ECF2),
+    onSurfaceVariant: const Color(0xFF9DA8B7),
+    surfaceContainerLowest: const Color(0xFF0B1420),
+    surfaceContainerLow: const Color(0xFF15243A),
+    surfaceContainer: const Color(0xFF18293D),
+    surfaceContainerHigh: const Color(0xFF1F3349),
+    surfaceContainerHighest: const Color(0xFF243B54),
+    surfaceDim: const Color(0xFF0B1420),
+    surfaceBright: const Color(0xFF243B54),
+    outline: const Color(0xFF3A4D63),
+    outlineVariant: const Color(0xFF233347),
+    surfaceTint: scheme.primary,
   );
 }
 

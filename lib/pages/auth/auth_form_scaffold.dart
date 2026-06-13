@@ -1,9 +1,8 @@
 import 'package:flclashx/common/common.dart';
 import 'package:flutter/material.dart';
 
-/// Product display name shown on the auth screens. Kept separate from
-/// [appName]/bundle id (branding is a follow-up task); placeholder for now.
-const _authBrandName = 'NMC VPN';
+/// Product display name shown on the auth screens.
+const _authBrandName = 'Fantomask VPN';
 
 /// Shared scaffold for the login and register forms: an email field, a
 /// password field with validation (valid email, password >= 8 chars), a
