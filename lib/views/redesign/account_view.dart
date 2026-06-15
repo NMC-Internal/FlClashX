@@ -45,7 +45,7 @@ class RAccountView extends ConsumerWidget {
 
     return Column(
       children: [
-        const RAppBar('Account'),
+        RAppBar(appLocalizations.account),
         Expanded(child: content),
       ],
     );
@@ -70,11 +70,11 @@ class _AccountBody extends StatelessWidget {
         if (sub != null) _SubCard(sub: sub) else const _NoSubCard(),
         if (history.isNotEmpty) ...[
           const SizedBox(height: 20),
-          const RSectionLabel('Subscription history'),
+          RSectionLabel(appLocalizations.subscriptionHistory),
           for (final s in history) _HistoryRow(sub: s),
         ],
         const SizedBox(height: 20),
-        RSecondaryButton(label: 'Log out', onPressed: onLogout, destructive: true),
+        RSecondaryButton(label: appLocalizations.logout, onPressed: onLogout, destructive: true),
       ],
     );
   }
@@ -108,7 +108,7 @@ class _Identity extends StatelessWidget {
             children: [
               Text(email, style: const TextStyle(color: AppTokens.text, fontSize: 15), overflow: TextOverflow.ellipsis),
               const SizedBox(height: 2),
-              const Text('Signed in', style: TextStyle(color: AppTokens.muted, fontSize: 13)),
+              Text(appLocalizations.accountSignedIn, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
             ],
           ),
         ),
@@ -131,7 +131,8 @@ class _SubCard extends StatelessWidget {
     final expires = sub.expiresAt;
     final expiresStr = expires == null
         ? '—'
-        : 'Expires in ${expires.difference(DateTime.now()).inDays} days · ${formatShortDate(expires)}';
+        : appLocalizations.accountExpiresInDays(
+            expires.difference(DateTime.now()).inDays, formatShortDate(expires));
     return RCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +172,7 @@ class _SubCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(used, style: const TextStyle(color: AppTokens.text, fontSize: 22, fontWeight: FontWeight.w600)),
-                      Text('of $limitStr', style: const TextStyle(color: AppTokens.muted, fontSize: 12)),
+                      Text(appLocalizations.accountOfLimit(limitStr), style: const TextStyle(color: AppTokens.muted, fontSize: 12)),
                     ],
                   ),
                 ],
@@ -182,7 +183,7 @@ class _SubCard extends StatelessWidget {
           Text(expiresStr, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
           const SizedBox(height: 16),
           RPrimaryButton(
-            label: 'Upgrade plan',
+            label: appLocalizations.upgradePlan,
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => const RPlansView()),
             ),
@@ -193,10 +194,12 @@ class _SubCard extends StatelessWidget {
   }
 
   String _planTitle(String code) => switch (code) {
-        'trial' => 'Trial plan',
-        'monthly' => 'Monthly plan',
-        'yearly' => 'Yearly plan',
-        _ => code.isEmpty ? 'Subscription' : '${code[0].toUpperCase()}${code.substring(1)} plan',
+        'trial' => appLocalizations.planTrial,
+        'monthly' => appLocalizations.planMonthly,
+        'yearly' => appLocalizations.planYearly,
+        _ => code.isEmpty
+            ? appLocalizations.planGeneric
+            : appLocalizations.planNamed('${code[0].toUpperCase()}${code.substring(1)}'),
       };
 }
 
@@ -208,9 +211,9 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color) = switch (status) {
-      'active' => ('Active', AppTokens.accent),
-      'provisioning' => ('Setting up', AppTokens.amber),
-      'failed' => ('Failed', AppTokens.amber),
+      'active' => (appLocalizations.statusActive, AppTokens.accent),
+      'provisioning' => (appLocalizations.statusProvisioning, AppTokens.amber),
+      'failed' => (appLocalizations.statusFailed, AppTokens.amber),
       _ => (status, AppTokens.muted),
     };
     return Container(
@@ -252,7 +255,7 @@ class _HistoryRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    sub.plan.isEmpty ? 'Subscription' : sub.plan,
+                    sub.plan.isEmpty ? appLocalizations.planGeneric : sub.plan,
                     style: const TextStyle(color: AppTokens.text, fontSize: 14),
                   ),
                   if (range.isNotEmpty) ...[
@@ -274,15 +277,15 @@ class _NoSubCard extends StatelessWidget {
   const _NoSubCard();
 
   @override
-  Widget build(BuildContext context) => const RCard(
+  Widget build(BuildContext context) => RCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('No active subscription',
-                style: TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600)),
-            SizedBox(height: 6),
-            Text('Claim your free trial or choose a plan to get started.',
-                style: TextStyle(color: AppTokens.muted, fontSize: 13)),
+            Text(appLocalizations.noActiveSubscription,
+                style: const TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 6),
+            Text(appLocalizations.noSubHint,
+                style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
           ],
         ),
       );
@@ -300,14 +303,14 @@ class _GuestAccount extends StatelessWidget {
             children: [
               const Icon(Icons.person_outline, color: AppTokens.muted, size: 56),
               const SizedBox(height: 16),
-              const Text('Not signed in',
-                  style: TextStyle(color: AppTokens.text, fontSize: 18, fontWeight: FontWeight.w600)),
+              Text(appLocalizations.notSignedIn,
+                  style: const TextStyle(color: AppTokens.text, fontSize: 18, fontWeight: FontWeight.w600)),
               const SizedBox(height: 6),
-              const Text('Sign in to manage your subscription.',
-                  textAlign: TextAlign.center, style: TextStyle(color: AppTokens.muted, fontSize: 14)),
+              Text(appLocalizations.signInToManage,
+                  textAlign: TextAlign.center, style: const TextStyle(color: AppTokens.muted, fontSize: 14)),
               const SizedBox(height: 24),
               RPrimaryButton(
-                label: 'Sign in',
+                label: appLocalizations.signIn,
                 onPressed: () => showAuthSheet(context, register: false),
               ),
             ],
@@ -320,7 +323,7 @@ class _AccountError extends StatelessWidget {
   const _AccountError();
 
   @override
-  Widget build(BuildContext context) => const Center(
-        child: Text('Could not load your account.', style: TextStyle(color: AppTokens.muted)),
+  Widget build(BuildContext context) => Center(
+        child: Text(appLocalizations.accountLoadError, style: const TextStyle(color: AppTokens.muted)),
       );
 }

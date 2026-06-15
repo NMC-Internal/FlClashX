@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/pages/auth/auth_state.dart';
@@ -39,15 +40,15 @@ class RPlansView extends ConsumerWidget {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 4, 20, 4),
-              child: Text('Choose a plan',
-                  style: TextStyle(color: AppTokens.text, fontSize: 26, fontWeight: FontWeight.w700)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
+              child: Text(appLocalizations.chooseAPlan,
+                  style: const TextStyle(color: AppTokens.text, fontSize: 26, fontWeight: FontWeight.w700)),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
-              child: Text('Protect your traffic. Cancel anytime.',
-                  style: TextStyle(color: AppTokens.muted, fontSize: 14)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+              child: Text(appLocalizations.plansSubtitle,
+                  style: const TextStyle(color: AppTokens.muted, fontSize: 14)),
             ),
             Expanded(
               child: plansAsync.when(
@@ -55,8 +56,8 @@ class RPlansView extends ConsumerWidget {
                 error: (_, __) => Center(
                   child: TextButton(
                     onPressed: () => ref.invalidate(plansProvider),
-                    child: const Text('Could not load plans. Tap to retry.',
-                        style: TextStyle(color: AppTokens.muted)),
+                    child: Text(appLocalizations.plansLoadError,
+                        style: const TextStyle(color: AppTokens.muted)),
                   ),
                 ),
                 data: (plans) {
@@ -68,10 +69,10 @@ class RPlansView extends ConsumerWidget {
                         _PlanCard(plan: p),
                         const SizedBox(height: 16),
                       ],
-                      const Text(
-                        'Prices shown for reference — billing is not yet active.',
+                      Text(
+                        appLocalizations.plansBillingNote,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppTokens.muted, fontSize: 12),
+                        style: const TextStyle(color: AppTokens.muted, fontSize: 12),
                       ),
                     ],
                   );
@@ -91,23 +92,27 @@ class _PlanCard extends ConsumerWidget {
   final Plan plan;
 
   String get _price {
-    if (plan.priceCents == 0) return 'Free';
+    if (plan.priceCents == 0) return appLocalizations.planFree;
     final dollars = plan.priceCents / 100;
     final str = dollars == dollars.roundToDouble() ? dollars.toStringAsFixed(0) : dollars.toStringAsFixed(2);
     return '\$$str';
   }
 
   String get _period => switch (plan.durationDays) {
-        7 => 'One-time',
-        30 => '/month',
-        365 => '/year',
+        7 => appLocalizations.planOneTime,
+        30 => appLocalizations.planPerMonth,
+        365 => appLocalizations.planPerYear,
         _ => '',
       };
 
   List<String> get _features => [
-        '${plan.durationDays} days access',
-        plan.isUnlimited ? 'Unlimited traffic' : '${formatBytes(plan.trafficLimitBytes)} traffic',
-        '${plan.deviceLimit} ${plan.deviceLimit == 1 ? 'device' : 'devices'}',
+        appLocalizations.planDaysAccess(plan.durationDays),
+        plan.isUnlimited
+            ? appLocalizations.planUnlimitedTraffic
+            : appLocalizations.planTrafficAmount(formatBytes(plan.trafficLimitBytes)),
+        plan.deviceLimit == 1
+            ? appLocalizations.planDevice(plan.deviceLimit)
+            : appLocalizations.planDevices(plan.deviceLimit),
       ];
 
   Future<void> _onCta(BuildContext context, WidgetRef ref) async {
@@ -116,7 +121,7 @@ class _PlanCard extends ConsumerWidget {
       if (ok && context.mounted) unawaited(Navigator.of(context).maybePop());
       return;
     }
-    showFToast(context: context, title: const Text('Billing is not active yet'));
+    showFToast(context: context, title: Text(appLocalizations.billingNotActive));
   }
 
   @override
@@ -141,8 +146,8 @@ class _PlanCard extends ConsumerWidget {
                 child: Text(plan.name,
                     style: const TextStyle(color: AppTokens.text, fontSize: 18, fontWeight: FontWeight.w700)),
               ),
-              if (plan.isTrial) const _Tag('One-time'),
-              if (plan.durationDays == 365) const _Tag('Best value'),
+              if (plan.isTrial) _Tag(appLocalizations.planOneTime),
+              if (plan.durationDays == 365) _Tag(appLocalizations.planBestValue),
             ],
           ),
           const SizedBox(height: 14),
@@ -169,7 +174,7 @@ class _PlanCard extends ConsumerWidget {
           ),
           const SizedBox(height: 14),
           RPrimaryButton(
-            label: plan.isTrial ? 'Start free trial' : 'Choose',
+            label: plan.isTrial ? appLocalizations.startFreeTrial : appLocalizations.planChoose,
             onPressed: () => unawaited(_onCta(context, ref)),
           ),
         ],

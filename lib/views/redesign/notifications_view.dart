@@ -1,3 +1,4 @@
+import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 class RNotificationsView extends StatelessWidget {
   const RNotificationsView({super.key});
 
+  // Mock content — localized once wired to the notifications backend.
   static const _items = <_Notif>[
     _Notif(
       icon: Icons.access_time,
@@ -60,13 +62,13 @@ class RNotificationsView extends StatelessWidget {
                       onPressed: () => Navigator.of(context).maybePop(),
                       icon: const Icon(Icons.arrow_back, color: AppTokens.text),
                     ),
-                    const Text('Notifications',
-                        style: TextStyle(color: AppTokens.text, fontSize: 20, fontWeight: FontWeight.w600)),
+                    Text(appLocalizations.notifications,
+                        style: const TextStyle(color: AppTokens.text, fontSize: 20, fontWeight: FontWeight.w600)),
                     const Spacer(),
                     TextButton(
                       onPressed: () {},
-                      child: const Text('Mark all read',
-                          style: TextStyle(color: AppTokens.accent, fontSize: 13, fontWeight: FontWeight.w500)),
+                      child: Text(appLocalizations.markAllRead,
+                          style: const TextStyle(color: AppTokens.accent, fontSize: 13, fontWeight: FontWeight.w500)),
                     ),
                   ],
                 ),

@@ -158,23 +158,34 @@ class _Body extends StatelessWidget {
 
   ({String title, String subtitle}) get _labels => switch (phase) {
         _Phase.connected => (
-            title: 'Protected',
-            subtitle: runTime != null ? 'Connected · ${utils.getTimeText(runTime)}' : 'Connected',
+            title: appLocalizations.connectProtected,
+            subtitle: runTime != null
+                ? appLocalizations.connectConnectedFor(utils.getTimeText(runTime))
+                : appLocalizations.connectConnected,
           ),
-        _Phase.disconnected => (title: 'Tap to connect', subtitle: 'Not protected'),
+        _Phase.disconnected => (
+            title: appLocalizations.connectTapToConnect,
+            subtitle: appLocalizations.connectNotProtected,
+          ),
         _Phase.provisioning => (
-            title: 'Setting up your subscription…',
-            subtitle: 'This usually takes a few seconds',
+            title: appLocalizations.connectProvisioning,
+            subtitle: appLocalizations.connectProvisioningHint,
           ),
-        _Phase.expired => (title: 'Subscription expired', subtitle: 'Renew to keep protecting your traffic'),
-        _Phase.failed => (title: 'Provisioning failed', subtitle: 'Something went wrong. Please try again.'),
+        _Phase.expired => (
+            title: appLocalizations.connectExpiredTitle,
+            subtitle: appLocalizations.connectExpiredHint,
+          ),
+        _Phase.failed => (
+            title: appLocalizations.connectFailedTitle,
+            subtitle: appLocalizations.connectFailedHint,
+          ),
         _Phase.noSubscription => (
-            title: 'Not protected',
-            subtitle: 'Get a plan to start protecting your traffic',
+            title: appLocalizations.connectNotProtected,
+            subtitle: appLocalizations.connectGetPlanHint,
           ),
         _Phase.guest => (
-            title: 'Not protected',
-            subtitle: 'Get a plan to start protecting your traffic',
+            title: appLocalizations.connectNotProtected,
+            subtitle: appLocalizations.connectGetPlanHint,
           ),
       };
 
@@ -224,24 +235,24 @@ class _Body extends StatelessWidget {
         return [
           pad([
             if (trialEligible) ...[
-              RPrimaryButton(label: 'Start free trial', onPressed: onClaimTrial),
+              RPrimaryButton(label: appLocalizations.startFreeTrial, onPressed: onClaimTrial),
               const SizedBox(height: 12),
             ],
-            RSecondaryButton(label: 'View plans', onPressed: onViewPlans),
+            RSecondaryButton(label: appLocalizations.viewPlans, onPressed: onViewPlans),
           ]),
         ];
       case _Phase.expired:
         return [
           pad([
-            RPrimaryButton(label: 'Renew', onPressed: onViewPlans),
+            RPrimaryButton(label: appLocalizations.renew, onPressed: onViewPlans),
             const SizedBox(height: 12),
-            RSecondaryButton(label: 'Choose plan', onPressed: onViewPlans),
+            RSecondaryButton(label: appLocalizations.choosePlan, onPressed: onViewPlans),
           ]),
         ];
       case _Phase.failed:
         return [
           pad([
-            RPrimaryButton(label: 'Retry', onPressed: onRetry),
+            RPrimaryButton(label: appLocalizations.retry, onPressed: onRetry),
           ]),
         ];
       case _Phase.disconnected:
@@ -319,7 +330,7 @@ class _ServerChip extends ConsumerWidget {
       return _Pill(
         onTap: open,
         leading: const Icon(Icons.public, size: 15, color: AppTokens.accent),
-        label: 'Choose server',
+        label: appLocalizations.chooseServer,
       );
     }
 
@@ -427,9 +438,9 @@ class _Glance extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _stat('$used / $limit', 'Traffic'),
+          _stat('$used / $limit', appLocalizations.traffic),
           const SizedBox(width: 40),
-          _stat(daysLeft, 'Expires'),
+          _stat(daysLeft, appLocalizations.connectExpiresLabel),
         ],
       ),
     );

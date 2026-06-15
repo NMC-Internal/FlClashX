@@ -16,17 +16,17 @@ class RActivityView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => Column(
         children: [
-          const RAppBar('Activity'),
+          RAppBar(appLocalizations.navActivity),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-              children: const [
-                _ThroughputCard(),
-                SizedBox(height: 16),
-                _SessionCard(),
-                SizedBox(height: 20),
-                RSectionLabel('Usage · last 7 days'),
-                _UsageCard(),
+              children: [
+                const _ThroughputCard(),
+                const SizedBox(height: 16),
+                const _SessionCard(),
+                const SizedBox(height: 20),
+                RSectionLabel(appLocalizations.activityUsageWeek),
+                const _UsageCard(),
               ],
             ),
           ),
@@ -48,7 +48,7 @@ class _ThroughputCard extends ConsumerWidget {
         children: [
           Row(
             children: [
-              const RSectionLabel('Throughput'),
+              RSectionLabel(appLocalizations.activityThroughput),
               const Spacer(),
               if (connected) const _LiveDot(),
             ],
@@ -77,12 +77,13 @@ class _LiveDot extends StatelessWidget {
   const _LiveDot();
 
   @override
-  Widget build(BuildContext context) => const Row(
+  Widget build(BuildContext context) => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _Dot(color: AppTokens.accent, size: 7),
-          SizedBox(width: 6),
-          Text('Live', style: TextStyle(color: AppTokens.muted, fontSize: 11, fontWeight: FontWeight.w500)),
+          const _Dot(color: AppTokens.accent, size: 7),
+          const SizedBox(width: 6),
+          Text(appLocalizations.activityLive,
+              style: const TextStyle(color: AppTokens.muted, fontSize: 11, fontWeight: FontWeight.w500)),
         ],
       );
 }
@@ -109,7 +110,7 @@ class _Speed extends StatelessWidget {
                   Text('$value/s',
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: AppTokens.text, fontSize: 20, fontWeight: FontWeight.w600)),
-                  Text(accent ? 'Download' : 'Upload',
+                  Text(accent ? appLocalizations.download : appLocalizations.upload,
                       style: const TextStyle(color: AppTokens.muted, fontSize: 11)),
                 ],
               ),
@@ -167,11 +168,11 @@ class _SessionCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       child: Row(
         children: [
-          Expanded(child: _Stat(value: duration, label: 'Duration')),
+          Expanded(child: _Stat(value: duration, label: appLocalizations.activityDuration)),
           const _VDiv(),
-          Expanded(child: _Stat(value: total.down.show, label: 'Downloaded')),
+          Expanded(child: _Stat(value: total.down.show, label: appLocalizations.activityDownloaded)),
           const _VDiv(),
-          Expanded(child: _Stat(value: total.up.show, label: 'Uploaded')),
+          Expanded(child: _Stat(value: total.up.show, label: appLocalizations.activityUploaded)),
         ],
       ),
     );
@@ -219,11 +220,12 @@ class _UsageCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Text('Daily traffic', style: TextStyle(color: AppTokens.text, fontSize: 14, fontWeight: FontWeight.w600)),
-              Spacer(),
-              Text('demo', style: TextStyle(color: AppTokens.muted, fontSize: 12)),
+              Text(appLocalizations.activityDailyTraffic,
+                  style: const TextStyle(color: AppTokens.text, fontSize: 14, fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Text(appLocalizations.activityDemo, style: const TextStyle(color: AppTokens.muted, fontSize: 12)),
             ],
           ),
           const SizedBox(height: 18),

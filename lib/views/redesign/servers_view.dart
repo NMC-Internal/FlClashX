@@ -1,4 +1,5 @@
 import 'package:flclashx/clash/clash.dart';
+import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/providers/providers.dart';
@@ -33,7 +34,7 @@ class _RServersViewState extends ConsumerState<RServersView> {
 
     return Column(
       children: [
-        const RAppBar('Servers'),
+        RAppBar(appLocalizations.navServers),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
           child: _SearchField(onChanged: (v) => setState(() => _query = v.trim().toLowerCase())),
@@ -101,7 +102,7 @@ class _ServerRow extends ConsumerWidget {
     final delay = ref.watch(getDelayProvider(proxyName: proxyName));
     final (delayText, delayColor) = switch (delay) {
       null => ('—', AppTokens.muted),
-      <= 0 => ('timeout', AppTokens.muted),
+      <= 0 => (appLocalizations.serverTimeout, AppTokens.muted),
       < 80 => ('$delay ms', AppTokens.accent),
       < 150 => ('$delay ms', AppTokens.amber),
       _ => ('$delay ms', AppTokens.muted),
@@ -215,7 +216,7 @@ class _GroupTestButtonState extends ConsumerState<_GroupTestButton> {
                   const Icon(Icons.bolt, size: 15, color: AppTokens.accent),
                 const SizedBox(width: 4),
                 Text(
-                  _testing ? 'Testing…' : 'Test',
+                  _testing ? appLocalizations.serversTesting : appLocalizations.serversTest,
                   style: const TextStyle(color: AppTokens.accent, fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ],
@@ -238,7 +239,7 @@ class _SearchField extends StatelessWidget {
           style: const TextStyle(color: AppTokens.text, fontSize: 15),
           cursorColor: AppTokens.accent,
           decoration: InputDecoration(
-            hintText: 'Search servers',
+            hintText: appLocalizations.searchServers,
             hintStyle: const TextStyle(color: AppTokens.muted, fontSize: 15),
             prefixIcon: const Icon(Icons.search, color: AppTokens.muted, size: 18),
             filled: true,
@@ -262,19 +263,19 @@ class _Empty extends StatelessWidget {
   const _Empty();
 
   @override
-  Widget build(BuildContext context) => const Center(
+  Widget build(BuildContext context) => Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.public_off, color: AppTokens.muted, size: 48),
-              SizedBox(height: 14),
-              Text('No servers yet',
-                  style: TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600)),
-              SizedBox(height: 6),
-              Text('Claim a subscription to load your servers.',
-                  textAlign: TextAlign.center, style: TextStyle(color: AppTokens.muted, fontSize: 14)),
+              const Icon(Icons.public_off, color: AppTokens.muted, size: 48),
+              const SizedBox(height: 14),
+              Text(appLocalizations.serversEmptyTitle,
+                  style: const TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600)),
+              const SizedBox(height: 6),
+              Text(appLocalizations.serversEmptyHint,
+                  textAlign: TextAlign.center, style: const TextStyle(color: AppTokens.muted, fontSize: 14)),
             ],
           ),
         ),

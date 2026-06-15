@@ -1,3 +1,4 @@
+import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/common/constant.dart';
 import 'package:flclashx/core_version.dart';
 import 'package:flclashx/design/tokens.dart';
@@ -28,74 +29,74 @@ class RSettingsView extends ConsumerWidget {
 
     return Column(
       children: [
-        const RAppBar('Settings'),
+        RAppBar(appLocalizations.settings),
         Expanded(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
             children: [
-              const RSectionLabel('Appearance'),
+              RSectionLabel(appLocalizations.settingsAppearance),
               _Group(children: [
                 _NavRow(
                   icon: Icons.dark_mode_outlined,
-                  title: 'Theme',
+                  title: appLocalizations.theme,
                   subtitle: _themeLabel(themeMode),
                   onTap: () => _showSheet(context, const _ThemeSheet()),
                 ),
                 const _Divider(),
                 _NavRow(
                   icon: Icons.language,
-                  title: 'Language',
+                  title: appLocalizations.language,
                   subtitle: _localeLabel(locale),
                   onTap: () => _showSheet(context, const _LanguageSheet()),
                 ),
               ]),
               const SizedBox(height: 22),
-              const RSectionLabel('Connection'),
+              RSectionLabel(appLocalizations.settingsConnection),
               _Group(children: [
                 _NavRow(
                   icon: Icons.tune,
-                  title: 'Connection settings',
-                  subtitle: 'General · Network · DNS',
+                  title: appLocalizations.connectionSettings,
+                  subtitle: appLocalizations.connectionSettingsSub,
                   onTap: () => _push(context, 'Connection', const ConfigView()),
                 ),
               ]),
               const SizedBox(height: 22),
-              const RSectionLabel('App'),
+              RSectionLabel(appLocalizations.settingsApp),
               _Group(children: [
                 _SwitchRow(
                   icon: Icons.rocket_launch_outlined,
-                  title: 'Launch at startup',
+                  title: appLocalizations.launchAtStartup,
                   value: autoLaunch,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(autoLaunch: v)),
                 ),
                 const _Divider(),
                 _SwitchRow(
                   icon: Icons.minimize,
-                  title: 'Minimize on exit',
+                  title: appLocalizations.minimizeOnExit,
                   value: minimizeOnExit,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(minimizeOnExit: v)),
                 ),
                 const _Divider(),
                 _SwitchRow(
                   icon: Icons.article_outlined,
-                  title: 'Enable logs',
+                  title: appLocalizations.enableLogs,
                   value: openLogs,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(openLogs: v)),
                 ),
                 const _Divider(),
                 _SwitchRow(
                   icon: Icons.edit_outlined,
-                  title: 'Override provider settings',
+                  title: appLocalizations.overrideProviderSettingsFull,
                   value: override,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(overrideProviderSettings: v)),
                 ),
               ]),
               const SizedBox(height: 22),
-              const RSectionLabel('About'),
+              RSectionLabel(appLocalizations.about),
               _Group(children: [
                 _NavRow(
                   icon: Icons.shield_outlined,
-                  title: 'About $appName',
+                  title: appLocalizations.aboutApp(appName),
                   subtitle: 'v${globalState.packageInfo.version} · core $kCoreVersionFromSource',
                   onTap: () => _push(context, 'About', const AboutView()),
                 ),
@@ -108,13 +109,13 @@ class RSettingsView extends ConsumerWidget {
   }
 
   String _themeLabel(ThemeMode m) => switch (m) {
-        ThemeMode.system => 'System',
-        ThemeMode.light => 'Light',
-        ThemeMode.dark => 'Dark',
+        ThemeMode.system => appLocalizations.themeSystem,
+        ThemeMode.light => appLocalizations.themeLight,
+        ThemeMode.dark => appLocalizations.themeDark,
       };
 
   String _localeLabel(String? code) => switch (code) {
-        null || '' => 'System',
+        null || '' => appLocalizations.langSystem,
         'en' => 'English',
         'ru' => 'Русский',
         'zh_CN' || 'zh' => '简体中文',
@@ -302,14 +303,14 @@ class _ThemeSheet extends ConsumerWidget {
     final theme = ref.watch(themeSettingProvider);
     final notifier = ref.read(themeSettingProvider.notifier);
     return _SheetShell(
-      title: 'Theme',
+      title: appLocalizations.theme,
       children: [
         for (final m in ThemeMode.values)
           _OptionRow(
             label: switch (m) {
-              ThemeMode.system => 'System',
-              ThemeMode.light => 'Light',
-              ThemeMode.dark => 'Dark',
+              ThemeMode.system => appLocalizations.themeSystem,
+              ThemeMode.light => appLocalizations.themeLight,
+              ThemeMode.dark => appLocalizations.themeDark,
             },
             selected: theme.themeMode == m,
             onTap: () => notifier.updateState((s) => s.copyWith(themeMode: m)),
@@ -319,8 +320,9 @@ class _ThemeSheet extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 6),
           child: Row(
             children: [
-              const Expanded(
-                child: Text('Pure black', style: TextStyle(color: AppTokens.text, fontSize: 15)),
+              Expanded(
+                child: Text(appLocalizations.pureBlack,
+                    style: const TextStyle(color: AppTokens.text, fontSize: 15)),
               ),
               Switch(
                 value: theme.pureBlack,
@@ -353,7 +355,7 @@ class _LanguageSheet extends ConsumerWidget {
     final current = ref.watch(appSettingProvider.select((s) => s.locale));
     final notifier = ref.read(appSettingProvider.notifier);
     return _SheetShell(
-      title: 'Language',
+      title: appLocalizations.language,
       children: [
         for (final (code, label) in _langs)
           _OptionRow(

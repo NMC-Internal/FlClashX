@@ -130,7 +130,9 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
               ),
               const SizedBox(height: 20),
               Text(
-                _register ? 'Create your account' : 'Welcome back',
+                _register
+                    ? appLocalizations.authCreateTitle
+                    : appLocalizations.authWelcomeTitle,
                 style: const TextStyle(
                     color: AppTokens.text,
                     fontSize: 22,
@@ -139,8 +141,8 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
               const SizedBox(height: 6),
               Text(
                 _register
-                    ? 'Sign in to claim your free trial.'
-                    : 'Sign in to manage your subscription.',
+                    ? appLocalizations.authCreateSubtitle
+                    : appLocalizations.signInToManage,
                 style: const TextStyle(color: AppTokens.muted, fontSize: 14),
               ),
               const SizedBox(height: 20),
@@ -150,14 +152,14 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
                     _loading ? null : (v) => setState(() => _register = v),
               ),
               const SizedBox(height: 20),
-              const RSectionLabel('Email'),
+              RSectionLabel(appLocalizations.email),
               _Field(
                   controller: _email,
                   hint: 'you@email.com',
                   icon: Icons.mail_outline,
                   keyboard: TextInputType.emailAddress),
               const SizedBox(height: 14),
-              const RSectionLabel('Password'),
+              RSectionLabel(appLocalizations.password),
               _Field(
                 controller: _password,
                 hint: '••••••••',
@@ -181,15 +183,19 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
               ],
               const SizedBox(height: 20),
               RPrimaryButton(
-                label:
-                    _loading ? '…' : (_register ? 'Create account' : 'Sign in'),
+                label: _loading
+                    ? '…'
+                    : (_register
+                        ? appLocalizations.createAccount
+                        : appLocalizations.signIn),
                 onPressed: _loading ? null : _submit,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'By continuing you agree to our Terms of Service and Privacy Policy.',
+              Text(
+                appLocalizations.authLegal,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppTokens.muted, fontSize: 12, height: 1.4),
+                style: const TextStyle(
+                    color: AppTokens.muted, fontSize: 12, height: 1.4),
               ),
             ],
           ),
@@ -213,8 +219,10 @@ class _Toggle extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _seg('Sign in', !register, () => onChanged?.call(false)),
-            _seg('Create account', register, () => onChanged?.call(true)),
+            _seg(appLocalizations.signIn, !register,
+                () => onChanged?.call(false)),
+            _seg(appLocalizations.createAccount, register,
+                () => onChanged?.call(true)),
           ],
         ),
       );

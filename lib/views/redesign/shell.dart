@@ -40,13 +40,15 @@ class RedesignShell extends ConsumerStatefulWidget {
 class _RedesignShellState extends ConsumerState<RedesignShell> {
   bool _provisioning = false;
 
-  static const _dests = <_Dest>[
-    _Dest('Connect', Icons.shield_outlined, Icons.shield, RConnectView()),
-    _Dest('Servers', Icons.public_outlined, Icons.public, RServersView()),
-    _Dest('Activity', Icons.show_chart, Icons.show_chart, RActivityView()),
-    _Dest('Account', Icons.person_outline, Icons.person, RAccountView()),
-    _Dest('Settings', Icons.tune_outlined, Icons.tune, RSettingsView()),
-  ];
+  // Built per-build so the labels re-localize on locale change. The view
+  // widgets are const (canonical instances) so the IndexedStack keeps state.
+  List<_Dest> get _dests => <_Dest>[
+        _Dest(appLocalizations.navConnect, Icons.shield_outlined, Icons.shield, const RConnectView()),
+        _Dest(appLocalizations.navServers, Icons.public_outlined, Icons.public, const RServersView()),
+        _Dest(appLocalizations.navActivity, Icons.show_chart, Icons.show_chart, const RActivityView()),
+        _Dest(appLocalizations.account, Icons.person_outline, Icons.person, const RAccountView()),
+        _Dest(appLocalizations.settings, Icons.tune_outlined, Icons.tune, const RSettingsView()),
+      ];
 
   // ignore: use_setters_to_change_properties — passed as an onSelect callback.
   void _select(int i) => ref.read(shellTabProvider.notifier).state = i;
@@ -111,9 +113,10 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
     // here after the legacy CommonScaffold (which used to paint it) was removed.
     final bgUrl = ref.watch(backgroundUrlProvider);
     final hasBg = bgUrl != null && bgUrl.isNotEmpty;
+    final dests = _dests;
     final body = IndexedStack(
       index: index,
-      children: [for (final d in _dests) d.view],
+      children: [for (final d in dests) d.view],
     );
 
     final scaffold = Scaffold(
@@ -123,7 +126,7 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
           if (constraints.maxWidth >= _kRailBreakpoint) {
             return Row(
               children: [
-                _Rail(index: index, onSelect: _select),
+                _Rail(dests: dests, index: index, onSelect: _select),
                 const VerticalDivider(width: 1, thickness: 1, color: AppTokens.border),
                 Expanded(child: SafeArea(left: false, child: body)),
               ],
@@ -132,7 +135,7 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
           return Column(
             children: [
               Expanded(child: SafeArea(bottom: false, child: body)),
-              _BottomBar(index: index, onSelect: _select),
+              _BottomBar(dests: dests, index: index, onSelect: _select),
             ],
           );
         },
@@ -159,8 +162,9 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
 }
 
 class _BottomBar extends StatelessWidget {
-  const _BottomBar({required this.index, required this.onSelect});
+  const _BottomBar({required this.dests, required this.index, required this.onSelect});
 
+  final List<_Dest> dests;
   final int index;
   final ValueChanged<int> onSelect;
 
@@ -176,10 +180,10 @@ class _BottomBar extends StatelessWidget {
             height: 62,
             child: Row(
               children: [
-                for (var i = 0; i < _RedesignShellState._dests.length; i++)
+                for (var i = 0; i < dests.length; i++)
                   Expanded(
                     child: _BarItem(
-                      dest: _RedesignShellState._dests[i],
+                      dest: dests[i],
                       selected: i == index,
                       onTap: () => onSelect(i),
                     ),
@@ -223,8 +227,9 @@ class _BarItem extends StatelessWidget {
 }
 
 class _Rail extends StatelessWidget {
-  const _Rail({required this.index, required this.onSelect});
+  const _Rail({required this.dests, required this.index, required this.onSelect});
 
+  final List<_Dest> dests;
   final int index;
   final ValueChanged<int> onSelect;
 
@@ -255,9 +260,9 @@ class _Rail extends StatelessWidget {
                   ],
                 ),
               ),
-              for (var i = 0; i < _RedesignShellState._dests.length; i++)
+              for (var i = 0; i < dests.length; i++)
                 _RailItem(
-                  dest: _RedesignShellState._dests[i],
+                  dest: dests[i],
                   selected: i == index,
                   onTap: () => onSelect(i),
                 ),

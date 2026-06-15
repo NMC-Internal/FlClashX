@@ -425,7 +425,6 @@
   "importUrl": "Import from URL",
   "autoSetSystemDns": "Auto set system DNS",
   "changeServer": "Change Server",
-  "addProfile": "Add Profile",
   "traffic": "Traffic",
   "trafficUnlimited": "Unlimited Traffic",
   "subscriptionEternal": "Lifetime Subscription",
@@ -433,25 +432,15 @@
   "remaining": "Remaining",
   "remainingSingular": "Remaining",
   "remainingPlural": "Remaining",
-  "qrNotFound": "QR code not found",
   "successTitle": "Success",
-  "sentSuccessfullyMessage": "Sent successfully",
   "errorTitle": "Error",
-  "invalidQrMessage": "Invalid QR code",
-  "sendToTvTitle": "Send to TV",
-  "addFromPhoneTitle": "Add from Phone",
-  "addFromPhoneSubtitle": "Scan QR code with phone",
-  "pasteFromClipboard": "Paste",
   "subscriptionUnlimited": "Lifetime Subscription",
   "updated": "Updated",
-  "selectProfile": "Select Profile",
-  "sendToTv": "Send to TV",
   "support": "Support",
   "thanks": "Thanks for contribution",
   "gratitude": "Gratitude",
   "originalRepository": "Original Repository",
   "openLogsFolder": "Open logs folder",
-  "receiveSubscriptionTitle": "Receive Subscription",
   "settingsSendDeviceDataTitle": "Send HWID",
   "settingsSendDeviceDataSubtitle": "Send device identifier, app version and device name to proxy provider server",
   "subscriptionExpiresSoon": "Subscription expires soon",
@@ -481,5 +470,151 @@
   "accountEmailUnknown": "Unknown email",
   "accountNoSubscription": "No active subscription yet",
   "subscriptionPreparing": "Your subscription is still being prepared. Please try again in a minute",
-  "accountTrafficRemaining": "{used} of {total} used"
+  "accountTrafficRemaining": "{used} of {total} used",
+  "navConnect": "Connect",
+  "navServers": "Servers",
+  "navActivity": "Activity",
+  "connectProtected": "Protected",
+  "connectConnected": "Connected",
+  "connectConnectedFor": "Connected · {duration}",
+  "@connectConnectedFor": {
+    "description": "Connected with elapsed time",
+    "placeholders": {
+      "duration": {}
+    }
+  },
+  "connectTapToConnect": "Tap to connect",
+  "connectNotProtected": "Not protected",
+  "connectProvisioning": "Setting up your subscription…",
+  "connectProvisioningHint": "This usually takes a few seconds",
+  "connectExpiredTitle": "Subscription expired",
+  "connectExpiredHint": "Renew to keep protecting your traffic",
+  "connectFailedTitle": "Provisioning failed",
+  "connectFailedHint": "Something went wrong. Please try again.",
+  "connectGetPlanHint": "Get a plan to start protecting your traffic",
+  "connectExpiresLabel": "Expires",
+  "chooseServer": "Choose server",
+  "startFreeTrial": "Start free trial",
+  "viewPlans": "View plans",
+  "choosePlan": "Choose plan",
+  "retry": "Retry",
+  "signIn": "Sign in",
+  "createAccount": "Create account",
+  "upgradePlan": "Upgrade plan",
+  "searchServers": "Search servers",
+  "serversTest": "Test",
+  "serversTesting": "Testing…",
+  "serversEmptyTitle": "No servers yet",
+  "serversEmptyHint": "Claim a subscription to load your servers.",
+  "serverTimeout": "timeout",
+  "activityThroughput": "Throughput",
+  "activityLive": "Live",
+  "activityDuration": "Duration",
+  "activityDownloaded": "Downloaded",
+  "activityUploaded": "Uploaded",
+  "activityUsageWeek": "Usage · last 7 days",
+  "activityDailyTraffic": "Daily traffic",
+  "activityDemo": "demo",
+  "accountSignedIn": "Signed in",
+  "statusActive": "Active",
+  "statusProvisioning": "Setting up",
+  "statusFailed": "Failed",
+  "planTrial": "Trial plan",
+  "planMonthly": "Monthly plan",
+  "planYearly": "Yearly plan",
+  "planGeneric": "Subscription",
+  "planNamed": "{name} plan",
+  "@planNamed": {
+    "description": "Capitalized plan name",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "accountOfLimit": "of {limit}",
+  "@accountOfLimit": {
+    "description": "Used out of total",
+    "placeholders": {
+      "limit": {}
+    }
+  },
+  "accountExpiresInDays": "Expires in {days} days · {date}",
+  "@accountExpiresInDays": {
+    "description": "Expiry with days and date",
+    "placeholders": {
+      "days": {},
+      "date": {}
+    }
+  },
+  "subscriptionHistory": "Subscription history",
+  "noActiveSubscription": "No active subscription",
+  "noSubHint": "Claim your free trial or choose a plan to get started.",
+  "notSignedIn": "Not signed in",
+  "signInToManage": "Sign in to manage your subscription.",
+  "accountLoadError": "Could not load your account.",
+  "settingsAppearance": "Appearance",
+  "settingsConnection": "Connection",
+  "connectionSettings": "Connection settings",
+  "connectionSettingsSub": "General · Network · DNS",
+  "settingsApp": "App",
+  "launchAtStartup": "Launch at startup",
+  "enableLogs": "Enable logs",
+  "overrideProviderSettingsFull": "Override provider settings",
+  "aboutApp": "About {app}",
+  "@aboutApp": {
+    "description": "About the app",
+    "placeholders": {
+      "app": {}
+    }
+  },
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "pureBlack": "Pure black",
+  "langSystem": "System",
+  "chooseAPlan": "Choose a plan",
+  "plansSubtitle": "Protect your traffic. Cancel anytime.",
+  "plansLoadError": "Could not load plans. Tap to retry.",
+  "plansBillingNote": "Prices shown for reference — billing is not yet active.",
+  "planDaysAccess": "{days} days access",
+  "@planDaysAccess": {
+    "description": "Days of access",
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "planUnlimitedTraffic": "Unlimited traffic",
+  "planTrafficAmount": "{size} traffic",
+  "@planTrafficAmount": {
+    "description": "Traffic amount",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "planDevices": "{count} devices",
+  "@planDevices": {
+    "description": "Device count",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "planDevice": "{count} device",
+  "@planDevice": {
+    "description": "Single device",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "planFree": "Free",
+  "planPerMonth": "/month",
+  "planPerYear": "/year",
+  "planOneTime": "One-time",
+  "planBestValue": "Best value",
+  "planChoose": "Choose",
+  "billingNotActive": "Billing is not active yet",
+  "authCreateTitle": "Create your account",
+  "authWelcomeTitle": "Welcome back",
+  "authCreateSubtitle": "Sign in to claim your free trial.",
+  "authLegal": "By continuing you agree to our Terms of Service and Privacy Policy.",
+  "notifications": "Notifications",
+  "markAllRead": "Mark all read"
 }
