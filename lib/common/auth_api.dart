@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/common/constant.dart';
+import 'package:flclashx/models/models.dart';
 
 /// Kinds of auth failures, used to pick a localized message in the UI.
 enum AuthErrorKind {
@@ -10,6 +11,10 @@ enum AuthErrorKind {
   emailTaken,
   network,
   server,
+  /// 401 on an authenticated request: the session expired / token is no longer
+  /// valid. The new UI drops to guest mode + a "session expired" toast; the old
+  /// UI logs out. Distinct from [invalidCredentials] (a failed login attempt).
+  sessionExpired,
   unknown,
 }
 
@@ -113,10 +118,13 @@ class AuthApi {
     throw _mapStatus(status);
   }
 
-  /// Fetches the current user's email, subscription URL and provisioning
-  /// status using the token.
-  Future<({String email, String subscriptionUrl, String subscriptionStatus})>
-      getMe(String token) async {
+  /// Fetches the authenticated account view (`GET /v1/me` v2, ADR 0010):
+  /// email, the list of subscriptions, trial eligibility and device limit.
+  ///
+  /// An account with NO subscription is valid and returns a [Me] with an empty
+  /// subscriptions list (NOT an error). A 401 throws [AuthErrorKind.sessionExpired]
+  /// so the caller can drop to guest mode / log out.
+  Future<Me> getMe(String token) async {
     final Response<dynamic> response;
     try {
       response = await _dio.get<dynamic>(
@@ -132,8 +140,8 @@ class AuthApi {
     final status = response.statusCode ?? 0;
     if (status == HttpStatus.unauthorized) {
       throw AuthException(
-        AuthErrorKind.invalidCredentials,
-        appLocalizations.authErrorInvalidCredentials,
+        AuthErrorKind.sessionExpired,
+        appLocalizations.authErrorSessionExpired,
       );
     }
     if (status != HttpStatus.ok) {
@@ -147,20 +155,7 @@ class AuthApi {
         appLocalizations.authErrorServer,
       );
     }
-    final subscriptionUrl = (data['subscription_url'] as String?) ?? '';
-    if (subscriptionUrl.isEmpty) {
-      throw AuthException(
-        AuthErrorKind.server,
-        appLocalizations.authErrorServer,
-      );
-    }
-    return (
-      email: (data['email'] as String?) ?? '',
-      subscriptionUrl: subscriptionUrl,
-      // Older backends predate ADR 0009 and only ever expose ready URLs.
-      subscriptionStatus: (data['subscription_status'] as String?) ??
-          SubscriptionStatus.active,
-    );
+    return Me.fromJson(Map<String, Object?>.from(data));
   }
 
   String? _extractToken(dynamic data) {

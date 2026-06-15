@@ -110,6 +110,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authErrorServer": MessageLookupByLibrary.simpleMessage(
       "Server error. Please try again later",
     ),
+    "authErrorSessionExpired": MessageLookupByLibrary.simpleMessage(
+      "Session expired. Please sign in again",
+    ),
     "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
       "Something went wrong. Please try again",
     ),

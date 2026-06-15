@@ -134,6 +134,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authErrorServer": MessageLookupByLibrary.simpleMessage(
       "Ошибка сервера. Повторите попытку позже",
     ),
+    "authErrorSessionExpired": MessageLookupByLibrary.simpleMessage(
+      "Сессия истекла. Войдите снова",
+    ),
     "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
       "Что-то пошло не так. Повторите попытку",
     ),

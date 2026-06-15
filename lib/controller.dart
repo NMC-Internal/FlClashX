@@ -725,12 +725,20 @@ class AppController {
     );
   }
 
+  /// Runs [task], showing the legacy loading overlay when the old home scaffold
+  /// is still mounted, otherwise running it directly. The redesigned UI has no
+  /// CommonScaffold (homeScaffoldKey is null), so engine ops MUST still run —
+  /// previously they silently no-op'd when the scaffold was absent.
+  Future<T?> _withLoading<T>(Future<T> Function() task, {String? title}) async {
+    final state = globalState.homeScaffoldKey.currentState;
+    if (state?.mounted == true) {
+      return state!.loadingRun<T>(task, title: title);
+    }
+    return task();
+  }
+
   Future<void> updateClashConfig() async {
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-    await commonScaffoldState?.loadingRun(() async {
-      await _updateClashConfig();
-    });
+    await _withLoading(_updateClashConfig);
   }
 
   Future<void> _updateClashConfig() async {
@@ -768,11 +776,7 @@ class AppController {
   }
 
   Future<void> setupClashConfig() async {
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-    await commonScaffoldState?.loadingRun(() async {
-      await _setupClashConfig();
-    });
+    await _withLoading(_setupClashConfig);
   }
 
   Future<void> _setupClashConfig() async {
@@ -842,11 +846,7 @@ class AppController {
     if (silence) {
       await _applyProfile();
     } else {
-      final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-      if (commonScaffoldState?.mounted != true) return;
-      await commonScaffoldState?.loadingRun(() async {
-        await _applyProfile();
-      });
+      await _withLoading(_applyProfile);
     }
     addCheckIpNumDebounce();
   }
@@ -1317,8 +1317,7 @@ class AppController {
       return;
     }
 
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    final profile = await commonScaffoldState?.loadingRun<Profile>(
+    final profile = await _withLoading<Profile>(
       () => _fetchProvisionedProfile(url),
       title: "${appLocalizations.add}${appLocalizations.profile}",
     );

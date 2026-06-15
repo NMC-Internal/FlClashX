@@ -3704,6 +3704,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Session expired. Please sign in again`
+  String get authErrorSessionExpired {
+    return Intl.message(
+      'Session expired. Please sign in again',
+      name: 'authErrorSessionExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Subscription`
   String get subscription {
     return Intl.message(
