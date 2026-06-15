@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flclashx/common/common.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/models/models.dart';
@@ -106,13 +107,17 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
     });
 
     final index = ref.watch(shellTabProvider);
+    // Subscription-driven background (flclashx-background contract). Re-hosted
+    // here after the legacy CommonScaffold (which used to paint it) was removed.
+    final bgUrl = ref.watch(backgroundUrlProvider);
+    final hasBg = bgUrl != null && bgUrl.isNotEmpty;
     final body = IndexedStack(
       index: index,
       children: [for (final d in _dests) d.view],
     );
 
-    return Scaffold(
-      backgroundColor: AppTokens.bg,
+    final scaffold = Scaffold(
+      backgroundColor: hasBg ? Colors.transparent : AppTokens.bg,
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth >= _kRailBreakpoint) {
@@ -132,6 +137,23 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
           );
         },
       ),
+    );
+
+    if (!hasBg) return scaffold;
+    // Full-bleed background image + a stealth scrim so content stays readable.
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: CachedNetworkImage(
+            imageUrl: bgUrl,
+            fit: BoxFit.cover,
+            placeholder: (_, __) => const ColoredBox(color: AppTokens.bg),
+            errorWidget: (_, __, ___) => const ColoredBox(color: AppTokens.bg),
+          ),
+        ),
+        Positioned.fill(child: ColoredBox(color: AppTokens.bg.withValues(alpha: 0.9))),
+        scaffold,
+      ],
     );
   }
 }

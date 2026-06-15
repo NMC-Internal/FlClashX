@@ -1420,15 +1420,8 @@ class AppController {
   void _applyCustomViewSettings(Profile profile) {
     final headers = profile.providerHeaders;
 
-    final dashboardLayout = headers['flclashx-widgets'];
-    if (dashboardLayout != null && dashboardLayout.isNotEmpty) {
-      final newLayout = DashboardWidgetParser.parseLayout(dashboardLayout);
-      if (newLayout.isNotEmpty) {
-        _ref.read(appSettingProvider.notifier).updateState(
-              (state) => state.copyWith(dashboardWidgets: newLayout),
-            );
-      }
-    }
+    // flclashx-widgets / denywidgets grid removed (ADR 0013, decision 1): our
+    // backend never sends them and the dashboard grid was deleted.
 
     final proxiesView = headers['flclashx-view'];
     if (proxiesView != null && proxiesView.isNotEmpty) {

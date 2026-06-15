@@ -40,38 +40,10 @@ const defaultThemeProps = ThemeProps(
   primaryColor: defaultPrimaryColor,
 );
 
-const List<DashboardWidget> defaultDashboardWidgets = [
-  DashboardWidget.announce,
-  DashboardWidget.metainfo,
-  DashboardWidget.outboundModeV2,
-  // TUN toggle (tunButton on desktop, vpnButton on Android — the dashboard
-  // filters by platform) and the "your IP"/location widget are shown by default
-  // so the user doesn't have to add them manually.
-  DashboardWidget.tunButton,
-  DashboardWidget.vpnButton,
-  DashboardWidget.networkDetection,
-];
-
-List<DashboardWidget> dashboardWidgetsSafeFormJson(
-  List<dynamic>? dashboardWidgets,
-) {
-  try {
-    return dashboardWidgets
-            ?.map((e) => $enumDecode(_$DashboardWidgetEnumMap, e))
-            .toList() ??
-        defaultDashboardWidgets;
-  } catch (_) {
-    return defaultDashboardWidgets;
-  }
-}
-
 @freezed
 class AppSettingProps with _$AppSettingProps {
   const factory AppSettingProps({
     String? locale,
-    @Default(defaultDashboardWidgets)
-    @JsonKey(fromJson: dashboardWidgetsSafeFormJson)
-    List<DashboardWidget> dashboardWidgets,
     @Default(false) bool onlyStatisticsProxy,
     @Default(false) bool autoLaunch,
     @Default(false) bool silentLaunch,

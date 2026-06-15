@@ -174,23 +174,6 @@ final homeStateProvider = AutoDisposeProvider<HomeState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef HomeStateRef = AutoDisposeProviderRef<HomeState>;
-String _$dashboardStateHash() => r'4434206df2753d7df9eb5223c07ddead4ed170fa';
-
-/// See also [dashboardState].
-@ProviderFor(dashboardState)
-final dashboardStateProvider = AutoDisposeProvider<DashboardState>.internal(
-  dashboardState,
-  name: r'dashboardStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$dashboardStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DashboardStateRef = AutoDisposeProviderRef<DashboardState>;
 String _$proxiesActionsStateHash() =>
     r'84f8a94706233ff5d4b8a456291a4e66c1381c62';
 
@@ -1882,7 +1865,7 @@ final layoutChangeProvider = AutoDisposeProvider<VM2?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef LayoutChangeRef = AutoDisposeProviderRef<VM2?>;
-String _$checkIpHash() => r'07ebf8d032349e2b3adda483e68b1936ffbed68d';
+String _$checkIpHash() => r'706199cb226dd88a154d6f030560fc97f6725449';
 
 /// See also [checkIp].
 @ProviderFor(checkIp)

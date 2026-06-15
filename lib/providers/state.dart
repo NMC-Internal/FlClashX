@@ -225,16 +225,6 @@ HomeState homeState(Ref ref) {
   );
 }
 
-@riverpod
-DashboardState dashboardState(Ref ref) {
-  final dashboardWidgets =
-      ref.watch(appSettingProvider.select((state) => state.dashboardWidgets));
-  final viewWidth = ref.watch(viewWidthProvider);
-  return DashboardState(
-    dashboardWidgets: dashboardWidgets,
-    viewWidth: viewWidth,
-  );
-}
 
 @riverpod
 ProxiesActionsState proxiesActionsState(Ref ref) {
@@ -623,12 +613,10 @@ VM2? layoutChange(Ref ref) {
 @riverpod
 VM2<int, bool> checkIp(Ref ref) {
   final checkIpNum = ref.watch(checkIpNumProvider);
-  final containsDetection = ref.watch(
-    dashboardStateProvider.select(
-      (state) =>
-          state.dashboardWidgets.contains(DashboardWidget.networkDetection),
-    ),
-  );
+  // The IP/location check used to be gated on the dashboard "networkDetection"
+  // widget being present (default-on). The dashboard grid is gone in the
+  // redesign, so keep the historical default: always enabled.
+  const containsDetection = true;
   return VM2(
     a: checkIpNum,
     b: containsDetection,
