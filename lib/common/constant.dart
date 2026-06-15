@@ -8,12 +8,12 @@ import 'package:flclashx/enum/enum.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flutter/material.dart';
 
-const appName = "FlClashX";
+const appName = "Fantomask VPN";
 const appHelperService = "FlClashHelperService";
 const coreName = "clashx.meta";
 const browserUa =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-const packageName = "com.follow.clashx";
+const packageName = "net.fantomask.vpn";
 // Backend base URL is injected at build time via
 // `--dart-define=BACKEND_URL=https://...`. Defaults to the local dev backend.
 const backendBaseUrl = String.fromEnvironment(
@@ -51,6 +51,7 @@ const localhost = "127.0.0.1";
 const clashConfigKey = "clash_config";
 const configKey = "config";
 const authTokenKey = "auth_token";
+const userEmailKey = "user_email";
 const double dialogCommonWidth = 300;
 const repository = "pluralplay/FlClashX";
 const defaultExternalController = "127.0.0.1:9090";
@@ -89,7 +90,7 @@ const viewModeColumnsMap = {
 // const toolsStoreKey = PageStorageKey<String>('tools');
 // const profilesStoreKey = PageStorageKey<String>('profiles');
 
-const defaultPrimaryColor = 0xFF03A9F4;
+const defaultPrimaryColor = 0xFF40C987;
 
 double getWidgetHeight(num lines) => max(lines * 84 + (lines - 1) * 16, 0).ap;
 
@@ -100,13 +101,11 @@ const mainIsolate = "FlClashXMainIsolate";
 const serviceIsolate = "FlClashXServiceIsolate";
 
 const defaultPrimaryColors = [
-  0xFF795548,
   defaultPrimaryColor,
-  0xFFFFFF00,
-  0XFFBBC9CC,
-  0XFFABD397,
-  0XFFD8C0C3,
-  0XFF665390,
+  0xFF2E86DE,
+  0xFF2FD3A6,
+  0xFFF2A93B,
+  0xFF6C7A89,
 ];
 
 const scriptTemplate = """

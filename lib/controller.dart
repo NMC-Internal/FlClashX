@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:archive/archive.dart';
+import 'package:dio/dio.dart';
 import 'package:flclashx/clash/clash.dart';
 import 'package:flclashx/common/archive.dart';
 import 'package:flclashx/services/subscription_notification_service.dart';
@@ -32,24 +33,35 @@ class AppController {
   final BuildContext context;
   final WidgetRef _ref;
 
+  /// Schedules [func] on the global [debouncer], dropping the call if this
+  /// controller's widget tree is gone by the time the timer fires — e.g. the
+  /// auth gate unmounted `Application` on logout, after which [_ref] reads
+  /// would throw "Looking up a deactivated widget's ancestor is unsafe".
+  void _debounce(FunctionTag tag, Function func, {List<dynamic>? args}) {
+    debouncer.call(tag, () {
+      if (!context.mounted) return;
+      Function.apply(func, args);
+    });
+  }
+
   void setupClashConfigDebounce() {
-    debouncer.call(FunctionTag.setupClashConfig, () async {
+    _debounce(FunctionTag.setupClashConfig, () async {
       await setupClashConfig();
     });
   }
 
   void updateClashConfigDebounce() {
-    debouncer.call(FunctionTag.updateClashConfig, () async {
+    _debounce(FunctionTag.updateClashConfig, () async {
       await updateClashConfig();
     });
   }
 
   void updateGroupsDebounce() {
-    debouncer.call(FunctionTag.updateGroups, updateGroups);
+    _debounce(FunctionTag.updateGroups, updateGroups);
   }
 
   void addCheckIpNumDebounce() {
-    debouncer.call(FunctionTag.addCheckIpNum, () {
+    _debounce(FunctionTag.addCheckIpNum, () {
       _ref.read(checkIpNumProvider.notifier).add();
     });
   }
@@ -57,17 +69,17 @@ class AppController {
   void applyProfileDebounce({
     bool silence = false,
   }) {
-    debouncer.call(FunctionTag.applyProfile, (silence) {
+    _debounce(FunctionTag.applyProfile, (silence) {
       applyProfile(silence: silence);
     }, args: [silence]);
   }
 
   void savePreferencesDebounce() {
-    debouncer.call(FunctionTag.savePreferences, savePreferences);
+    _debounce(FunctionTag.savePreferences, savePreferences);
   }
 
   void changeProxyDebounce(String groupName, String proxyName) {
-    debouncer.call(FunctionTag.changeProxy,
+    _debounce(FunctionTag.changeProxy,
         (String groupName, String proxyName) async {
       await changeProxy(
         groupName: groupName,
@@ -199,16 +211,21 @@ class AppController {
     _ref.read(profilesProvider.notifier).deleteProfileById(id);
     clearEffect(id);
     if (globalState.config.currentProfileId == id) {
-      final profiles = globalState.config.profiles;
-      final currentProfileId = _ref.read(currentProfileIdProvider.notifier);
-      if (profiles.isNotEmpty) {
-        final updateId = profiles.first.id;
-        currentProfileId.value = updateId;
-      } else {
-        currentProfileId.value = null;
-        updateStatus(false);
-      }
+      _ref.read(currentProfileIdProvider.notifier).value = null;
+      await updateStatus(false);
     }
+  }
+
+  /// Removes every profile and stops the proxy. Used by the account logout flow
+  /// so a fresh login provisions the subscription from scratch.
+  Future<void> clearProfiles() async {
+    final profiles = List<Profile>.from(_ref.read(profilesProvider));
+    for (final profile in profiles) {
+      _ref.read(profilesProvider.notifier).deleteProfileById(profile.id);
+      unawaited(clearEffect(profile.id));
+    }
+    _ref.read(currentProfileIdProvider.notifier).value = null;
+    await updateStatus(false);
   }
 
   Future<void> updateProviders() async {
@@ -648,12 +665,15 @@ class AppController {
     }
   }
 
-  void setProfiles(List<Profile> profiles) {
-    _ref.read(profilesProvider.notifier).value = profiles;
-  }
-
   void addLog(Log log) {
-    _ref.read(logsProvider).add(log);
+    // Logging must never crash the app. During teardown (e.g. logout, when the
+    // ConsumerStatefulElement backing [_ref] is being deactivated) reading a
+    // provider throws "Looking up a deactivated widget's ancestor is unsafe".
+    // The entry is already persisted by the file logger (CommonPrint.log), so
+    // drop the in-memory UI log silently rather than re-entering FlutterError.
+    try {
+      _ref.read(logsProvider).add(log);
+    } catch (_) {}
   }
 
   void updateOrAddHotKeyAction(HotKeyAction hotKeyAction) {
@@ -1210,7 +1230,6 @@ class AppController {
       }
     }
     await _handlePreference();
-    await _handlerDisclaimer();
     _ref.read(initProvider.notifier).value = true;
   }
 
@@ -1236,112 +1255,40 @@ class AppController {
     _ref.read(currentPageLabelProvider.notifier).value = pageLabel;
   }
 
-  void toProfiles() {
-    toPage(PageLabel.profiles);
-  }
-
   void initLink() {
-    linkManager.initAppLinksListen(
-      (url) async {
-        final res = await globalState.showMessage(
-          title: "${appLocalizations.add} ${appLocalizations.profile}",
-          message: TextSpan(
-            children: [
-              TextSpan(text: appLocalizations.doYouWantToPass),
-              TextSpan(
-                text: " $url",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  decoration: TextDecoration.underline,
-                  decorationColor: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-        );
-
-        if (res != true) {
-          return;
-        }
-        addProfileFormURL(url);
-      },
-    );
+    // Deep links are intentionally inert in this single-subscription product:
+    // the subscription is provisioned programmatically after login
+    // (see provisionSubscription), so importing arbitrary subscription URLs
+    // via `install-config?url=` is disabled for safety. The listener is still
+    // installed so the platform channel is consumed and future safe deep links
+    // can be handled here.
+    linkManager.initAppLinksListen();
   }
 
-  Future<bool> showDisclaimer() async =>
-      await globalState.showCommonDialog<bool>(
-        dismissible: false,
-        child: CommonDialog(
-          title: appLocalizations.disclaimer,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop<bool>(false);
-              },
-              child: Text(appLocalizations.exit),
-            ),
-            TextButton(
-              onPressed: () {
-                _ref.read(appSettingProvider.notifier).updateState(
-                      (state) => state.copyWith(disclaimerAccepted: true),
-                    );
-                Navigator.of(context).pop<bool>(true);
-              },
-              child: Text(appLocalizations.agree),
-            )
-          ],
-          child: SelectableText(
-            appLocalizations.disclaimerDesc,
-          ),
-        ),
-      ) ??
-      false;
-
-  Future<void> _handlerDisclaimer() async {
-    if (_ref.read(appSettingProvider).disclaimerAccepted) {
-      return;
-    }
-    final isDisclaimerAccepted = await showDisclaimer();
-    if (!isDisclaimerAccepted) {
-      await handleExit();
-    }
-    return;
-  }
-
-  Future<void> addProfileFormURL(String url) async {
-    if (globalState.navigatorKey.currentState?.canPop() ?? false) {
-      globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    }
-    toPage(PageLabel.dashboard);
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-
-    try {
-      final profile = await commonScaffoldState?.loadingRun<Profile>(
-        () async {
-          final prefs = await SharedPreferences.getInstance();
-          final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
-          return Profile.normal(url: url).update(shouldSendHeaders: shouldSend);
-        },
-        title: "${appLocalizations.add}${appLocalizations.profile}",
-      );
-
-      if (profile != null) {
-        _applyAllHeaderSettings(profile, isNewProfile: true);
-
-        final headers = profile.providerHeaders;
-        final showHwidLimit = headers['x-hwid-limit']?.toLowerCase() == 'true';
-        final announceText = headers['announce'];
-        if (showHwidLimit && announceText != null && announceText.isNotEmpty) {
-          _showHwidLimitNotice(announceText, headers['support-url']);
+  /// Downloads the subscription profile, retrying while the backend reports
+  /// it as not ready: right after registration the subscription may still be
+  /// `provisioning` (ADR 0009) — `/v1/sub/{token}` answers 409 until the
+  /// panel user exists, and 502 while the panel itself is unavailable. The
+  /// window is normally a few seconds, so a bounded poll hides it.
+  Future<Profile> _fetchProvisionedProfile(String url) async {
+    const maxAttempts = 15;
+    const retryDelay = Duration(seconds: 2);
+    final prefs = await SharedPreferences.getInstance();
+    final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
+    for (var attempt = 1; ; attempt++) {
+      try {
+        return await Profile.normal(url: url)
+            .update(shouldSendHeaders: shouldSend);
+      } on DioException catch (e) {
+        final status = e.response?.statusCode;
+        final notReady = status == HttpStatus.conflict ||
+            status == HttpStatus.badGateway;
+        if (!notReady) rethrow;
+        if (attempt >= maxAttempts) {
+          throw appLocalizations.subscriptionPreparing;
         }
-
-        await addProfile(profile);
+        await Future.delayed(retryDelay);
       }
-    } catch (err) {
-      commonPrint.log('Add Profile Failed: $err');
-      unawaited(
-          globalState.showMessage(message: TextSpan(text: err.toString())));
     }
   }
 
@@ -1372,11 +1319,7 @@ class AppController {
 
     final commonScaffoldState = globalState.homeScaffoldKey.currentState;
     final profile = await commonScaffoldState?.loadingRun<Profile>(
-      () async {
-        final prefs = await SharedPreferences.getInstance();
-        final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
-        return Profile.normal(url: url).update(shouldSendHeaders: shouldSend);
-      },
+      () => _fetchProvisionedProfile(url),
       title: "${appLocalizations.add}${appLocalizations.profile}",
     );
 
@@ -1384,35 +1327,6 @@ class AppController {
 
     _applyAllHeaderSettings(profile, isNewProfile: true);
     await addProfile(profile);
-  }
-
-  Future<Null> addProfileFormFile() async {
-    final platformFile = await globalState.safeRun(picker.pickerFile);
-    final bytes = platformFile?.bytes;
-    if (bytes == null) {
-      return null;
-    }
-    if (!context.mounted) return;
-    globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    toPage(PageLabel.dashboard);
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-    final profile = await commonScaffoldState?.loadingRun<Profile?>(
-      () async {
-        await Future.delayed(const Duration(milliseconds: 300));
-        return Profile.normal(label: platformFile?.name).saveFile(bytes);
-      },
-      title: "${appLocalizations.add}${appLocalizations.profile}",
-    );
-    if (profile != null) {
-      await addProfile(profile);
-    }
-  }
-
-  Future<void> addProfileFormQrCode() async {
-    final url = await globalState.safeRun(picker.pickerConfigQRCode);
-    if (url == null) return;
-    addProfileFormURL(url);
   }
 
   void updateViewSize(Size size) {

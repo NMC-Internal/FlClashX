@@ -295,8 +295,6 @@
   "action_mode": "モード切替",
   "action_proxy": "システムプロキシ",
   "action_tun": "TUN",
-  "disclaimer": "免責事項",
-  "disclaimerDesc": "本ソフトウェアは学習交流や科学研究などの非営利目的でのみ使用されます。商用利用は厳禁です。いかなる商用活動も本ソフトウェアとは無関係です。",
   "agree": "同意",
   "hotkeyManagement": "ホットキー管理",
   "hotkeyManagementDesc": "キーボードでアプリを制御",
@@ -447,5 +445,12 @@
   "authErrorEmailTaken": "This email is already registered",
   "authErrorNetwork": "Network error. Please check your connection and try again",
   "authErrorServer": "Server error. Please try again later",
-  "authErrorUnknown": "Something went wrong. Please try again"
+  "authErrorUnknown": "Something went wrong. Please try again",
+  "subscription": "Subscription",
+  "logout": "Log out",
+  "logoutConfirm": "Log out of your account? The subscription will be removed from this device.",
+  "accountEmailUnknown": "Unknown email",
+  "accountNoSubscription": "No active subscription yet",
+  "subscriptionPreparing": "Your subscription is still being prepared. Please try again in a minute",
+  "accountTrafficRemaining": "{used} of {total} used"
 }

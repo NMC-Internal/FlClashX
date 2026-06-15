@@ -2314,21 +2314,6 @@ class AppLocalizations {
     return Intl.message('TUN', name: 'action_tun', desc: '', args: []);
   }
 
-  /// `Disclaimer`
-  String get disclaimer {
-    return Intl.message('Disclaimer', name: 'disclaimer', desc: '', args: []);
-  }
-
-  /// `This software is only used for non-commercial purposes such as learning exchanges and scientific research. It is strictly prohibited to use this software for commercial purposes. Any commercial activity, if any, has nothing to do with this software.`
-  String get disclaimerDesc {
-    return Intl.message(
-      'This software is only used for non-commercial purposes such as learning exchanges and scientific research. It is strictly prohibited to use this software for commercial purposes. Any commercial activity, if any, has nothing to do with this software.',
-      name: 'disclaimerDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Agree`
   String get agree {
     return Intl.message('Agree', name: 'agree', desc: '', args: []);
@@ -3716,6 +3701,71 @@ class AppLocalizations {
       name: 'authErrorUnknown',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Subscription`
+  String get subscription {
+    return Intl.message(
+      'Subscription',
+      name: 'subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log out`
+  String get logout {
+    return Intl.message('Log out', name: 'logout', desc: '', args: []);
+  }
+
+  /// `Log out of your account? The subscription will be removed from this device.`
+  String get logoutConfirm {
+    return Intl.message(
+      'Log out of your account? The subscription will be removed from this device.',
+      name: 'logoutConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown email`
+  String get accountEmailUnknown {
+    return Intl.message(
+      'Unknown email',
+      name: 'accountEmailUnknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active subscription yet`
+  String get accountNoSubscription {
+    return Intl.message(
+      'No active subscription yet',
+      name: 'accountNoSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your subscription is still being prepared. Please try again in a minute`
+  String get subscriptionPreparing {
+    return Intl.message(
+      'Your subscription is still being prepared. Please try again in a minute',
+      name: 'subscriptionPreparing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{used} of {total} used`
+  String accountTrafficRemaining(Object used, Object total) {
+    return Intl.message(
+      '$used of $total used',
+      name: 'accountTrafficRemaining',
+      desc: '',
+      args: [used, total],
     );
   }
 }

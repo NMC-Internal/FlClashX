@@ -26,10 +26,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
     try {
       final token = await authApi.login(email, password);
-      final me = await authApi.getMe(token);
+      // The session is valid from here on: persist it before any follow-up
+      // call so a transient /v1/me failure cannot strand the account on this
+      // screen.
       await preferences.setAuthToken(token);
+      await preferences.setUserEmail(email);
+      String? subscriptionUrl;
+      try {
+        final me = await authApi.getMe(token);
+        if (me.email.isNotEmpty) {
+          await preferences.setUserEmail(me.email);
+        }
+        subscriptionUrl = me.subscriptionUrl;
+      } on AuthException {
+        // Application re-fetches /v1/me and provisions the subscription once
+        // the gate flips (see _provisionPendingSubscription).
+      }
+      if (!mounted) return;
       ref.read(pendingSubscriptionUrlProvider.notifier).state =
-          me.subscriptionUrl;
+          subscriptionUrl;
       ref.read(authTokenProvider.notifier).state = token;
       // Gate rebuilds into Application; this page is disposed.
     } on AuthException catch (e) {

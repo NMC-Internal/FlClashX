@@ -20,27 +20,29 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(label) =>
-      "Are you sure you want to delete the selected ${label}?";
+  static String m0(used, total) => "${used} of ${total} used";
 
   static String m1(label) =>
+      "Are you sure you want to delete the selected ${label}?";
+
+  static String m2(label) =>
       "Are you sure you want to delete the current ${label}?";
 
-  static String m2(label) => "${label} cannot be empty";
+  static String m3(label) => "${label} cannot be empty";
 
-  static String m3(label) => "Current ${label} already exists";
+  static String m4(label) => "Current ${label} already exists";
 
-  static String m4(label) => "No ${label} at the moment";
+  static String m5(label) => "No ${label} at the moment";
 
-  static String m5(label) => "${label} must be a number";
+  static String m6(label) => "${label} must be a number";
 
-  static String m6(label) => "${label} must be between 1024 and 49151";
+  static String m7(label) => "${label} must be between 1024 and 49151";
 
-  static String m7(count) => "${count} items have been selected";
+  static String m8(count) => "${count} items have been selected";
 
-  static String m8(days) => "Your subscription expires in ${days} day(s)";
+  static String m9(days) => "Your subscription expires in ${days} day(s)";
 
-  static String m9(label) => "${label} must be a url";
+  static String m10(label) => "${label} must be a url";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -56,6 +58,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "The selected application will be excluded from VPN",
     ),
     "account": MessageLookupByLibrary.simpleMessage("Account"),
+    "accountEmailUnknown": MessageLookupByLibrary.simpleMessage(
+      "Unknown email",
+    ),
+    "accountNoSubscription": MessageLookupByLibrary.simpleMessage(
+      "No active subscription yet",
+    ),
+    "accountTrafficRemaining": m0,
     "action": MessageLookupByLibrary.simpleMessage("Action"),
     "action_mode": MessageLookupByLibrary.simpleMessage("Switch mode"),
     "action_proxy": MessageLookupByLibrary.simpleMessage("System proxy"),
@@ -250,8 +259,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "delay": MessageLookupByLibrary.simpleMessage("Delay"),
     "delaySort": MessageLookupByLibrary.simpleMessage("Sort by delay"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
-    "deleteMultipTip": m0,
-    "deleteTip": m1,
+    "deleteMultipTip": m1,
+    "deleteTip": m2,
     "desc": MessageLookupByLibrary.simpleMessage(
       "A multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free.",
     ),
@@ -263,10 +272,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Developer mode is enabled.",
     ),
     "direct": MessageLookupByLibrary.simpleMessage("Direct"),
-    "disclaimer": MessageLookupByLibrary.simpleMessage("Disclaimer"),
-    "disclaimerDesc": MessageLookupByLibrary.simpleMessage(
-      "This software is only used for non-commercial purposes such as learning exchanges and scientific research. It is strictly prohibited to use this software for commercial purposes. Any commercial activity, if any, has nothing to do with this software.",
-    ),
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "Discover the new version",
     ),
@@ -284,7 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download": MessageLookupByLibrary.simpleMessage("Download"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
-    "emptyTip": m2,
+    "emptyTip": m3,
     "en": MessageLookupByLibrary.simpleMessage("English"),
     "enableOverride": MessageLookupByLibrary.simpleMessage("Enable override"),
     "entries": MessageLookupByLibrary.simpleMessage(" entries"),
@@ -293,7 +298,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "excludeDesc": MessageLookupByLibrary.simpleMessage(
       "When the app is in the background, the app is hidden from the recent task",
     ),
-    "existsTip": m3,
+    "existsTip": m4,
     "exit": MessageLookupByLibrary.simpleMessage("Exit"),
     "expand": MessageLookupByLibrary.simpleMessage("Standard"),
     "expirationTime": MessageLookupByLibrary.simpleMessage("Expiration time"),
@@ -424,6 +429,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Disabling will hide the log entry",
     ),
     "login": MessageLookupByLibrary.simpleMessage("Log in"),
+    "logout": MessageLookupByLibrary.simpleMessage("Log out"),
+    "logoutConfirm": MessageLookupByLibrary.simpleMessage(
+      "Log out of your account? The subscription will be removed from this device.",
+    ),
     "logs": MessageLookupByLibrary.simpleMessage("Logs"),
     "logsDesc": MessageLookupByLibrary.simpleMessage("Log capture records"),
     "logsTest": MessageLookupByLibrary.simpleMessage("Logs test"),
@@ -496,8 +505,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "No profile, Please add a profile",
     ),
     "nullScriptTip": MessageLookupByLibrary.simpleMessage("No scripts"),
-    "nullTip": m4,
-    "numberTip": m5,
+    "nullTip": m5,
+    "numberTip": m6,
     "oneColumn": MessageLookupByLibrary.simpleMessage("One column"),
     "oneline": MessageLookupByLibrary.simpleMessage("Oneline"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("Icon"),
@@ -567,7 +576,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "portConflictTip": MessageLookupByLibrary.simpleMessage(
       "Please enter a different port",
     ),
-    "portTip": m6,
+    "portTip": m7,
     "preferH3Desc": MessageLookupByLibrary.simpleMessage(
       "Prioritize the use of DOH\'s http/3",
     ),
@@ -700,7 +709,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectAll": MessageLookupByLibrary.simpleMessage("Select all"),
     "selectProfile": MessageLookupByLibrary.simpleMessage("Select Profile"),
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "selectedCountTitle": m7,
+    "selectedCountTitle": m8,
     "sendToTv": MessageLookupByLibrary.simpleMessage("Send to TV"),
     "sendToTvTitle": MessageLookupByLibrary.simpleMessage("Send to TV"),
     "sentSuccessfullyMessage": MessageLookupByLibrary.simpleMessage(
@@ -738,18 +747,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "style": MessageLookupByLibrary.simpleMessage("Style"),
     "subRule": MessageLookupByLibrary.simpleMessage("Sub rule"),
     "submit": MessageLookupByLibrary.simpleMessage("Submit"),
+    "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
     "subscriptionEternal": MessageLookupByLibrary.simpleMessage(
       "Lifetime Subscription",
     ),
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "Your subscription has expired",
     ),
-    "subscriptionExpiresInDays": m8,
+    "subscriptionExpiresInDays": m9,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "Subscription expires soon",
     ),
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "Your subscription expires today",
+    ),
+    "subscriptionPreparing": MessageLookupByLibrary.simpleMessage(
+      "Your subscription is still being prepared. Please try again in a minute",
     ),
     "subscriptionUnlimited": MessageLookupByLibrary.simpleMessage(
       "Lifetime Subscription",
@@ -823,7 +836,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain profile through URL",
     ),
-    "urlTip": m9,
+    "urlTip": m10,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),

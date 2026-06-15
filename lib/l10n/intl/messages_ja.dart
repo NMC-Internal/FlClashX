@@ -20,25 +20,27 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
-  static String m0(label) => "選択された${label}を削除してもよろしいですか？";
+  static String m0(used, total) => "${used} of ${total} used";
 
-  static String m1(label) => "現在の${label}を削除してもよろしいですか？";
+  static String m1(label) => "選択された${label}を削除してもよろしいですか？";
 
-  static String m2(label) => "${label}は空欄にできません";
+  static String m2(label) => "現在の${label}を削除してもよろしいですか？";
 
-  static String m3(label) => "現在の${label}は既に存在しています";
+  static String m3(label) => "${label}は空欄にできません";
 
-  static String m4(label) => "現在${label}はありません";
+  static String m4(label) => "現在の${label}は既に存在しています";
 
-  static String m5(label) => "${label}は数字でなければなりません";
+  static String m5(label) => "現在${label}はありません";
 
-  static String m6(label) => "${label} は 1024 から 49151 の間でなければなりません";
+  static String m6(label) => "${label}は数字でなければなりません";
 
-  static String m7(count) => "${count} 項目が選択されています";
+  static String m7(label) => "${label} は 1024 から 49151 の間でなければなりません";
 
-  static String m8(days) => "サブスクリプションは${days}日後に期限切れになります";
+  static String m8(count) => "${count} 項目が選択されています";
 
-  static String m9(label) => "${label}はURLである必要があります";
+  static String m9(days) => "サブスクリプションは${days}日後に期限切れになります";
+
+  static String m10(label) => "${label}はURLである必要があります";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -54,6 +56,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "選択したアプリをVPNから除外",
     ),
     "account": MessageLookupByLibrary.simpleMessage("アカウント"),
+    "accountEmailUnknown": MessageLookupByLibrary.simpleMessage(
+      "Unknown email",
+    ),
+    "accountNoSubscription": MessageLookupByLibrary.simpleMessage(
+      "No active subscription yet",
+    ),
+    "accountTrafficRemaining": m0,
     "action": MessageLookupByLibrary.simpleMessage("アクション"),
     "action_mode": MessageLookupByLibrary.simpleMessage("モード切替"),
     "action_proxy": MessageLookupByLibrary.simpleMessage("システムプロキシ"),
@@ -193,8 +202,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "delay": MessageLookupByLibrary.simpleMessage("遅延"),
     "delaySort": MessageLookupByLibrary.simpleMessage("遅延順"),
     "delete": MessageLookupByLibrary.simpleMessage("削除"),
-    "deleteMultipTip": m0,
-    "deleteTip": m1,
+    "deleteMultipTip": m1,
+    "deleteTip": m2,
     "desc": MessageLookupByLibrary.simpleMessage(
       "ClashMetaベースのマルチプラットフォームプロキシクライアント。シンプルで使いやすく、オープンソースで広告なし。",
     ),
@@ -204,10 +213,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "デベロッパーモードが有効になりました。",
     ),
     "direct": MessageLookupByLibrary.simpleMessage("ダイレクト"),
-    "disclaimer": MessageLookupByLibrary.simpleMessage("免責事項"),
-    "disclaimerDesc": MessageLookupByLibrary.simpleMessage(
-      "本ソフトウェアは学習交流や科学研究などの非営利目的でのみ使用されます。商用利用は厳禁です。いかなる商用活動も本ソフトウェアとは無関係です。",
-    ),
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage("新バージョンを発見"),
     "discovery": MessageLookupByLibrary.simpleMessage("新しいバージョンを発見"),
     "dnsDesc": MessageLookupByLibrary.simpleMessage("DNS関連設定の更新"),
@@ -217,7 +222,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download": MessageLookupByLibrary.simpleMessage("ダウンロード"),
     "edit": MessageLookupByLibrary.simpleMessage("編集"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
-    "emptyTip": m2,
+    "emptyTip": m3,
     "en": MessageLookupByLibrary.simpleMessage("英語"),
     "enableOverride": MessageLookupByLibrary.simpleMessage("上書きを有効化"),
     "entries": MessageLookupByLibrary.simpleMessage(" エントリ"),
@@ -225,7 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "excludeDesc": MessageLookupByLibrary.simpleMessage(
       "アプリがバックグラウンド時に最近のタスクから非表示",
     ),
-    "existsTip": m3,
+    "existsTip": m4,
     "exit": MessageLookupByLibrary.simpleMessage("終了"),
     "expand": MessageLookupByLibrary.simpleMessage("標準"),
     "expirationTime": MessageLookupByLibrary.simpleMessage("有効期限"),
@@ -317,6 +322,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "logcat": MessageLookupByLibrary.simpleMessage("ログキャット"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage("無効化するとログエントリを非表示"),
     "login": MessageLookupByLibrary.simpleMessage("Log in"),
+    "logout": MessageLookupByLibrary.simpleMessage("Log out"),
+    "logoutConfirm": MessageLookupByLibrary.simpleMessage(
+      "Log out of your account? The subscription will be removed from this device.",
+    ),
     "logs": MessageLookupByLibrary.simpleMessage("ログ"),
     "logsDesc": MessageLookupByLibrary.simpleMessage("ログキャプチャ記録"),
     "logsTest": MessageLookupByLibrary.simpleMessage("ログテスト"),
@@ -379,8 +388,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "プロファイルがありません。追加してください",
     ),
     "nullScriptTip": MessageLookupByLibrary.simpleMessage("スクリプトはありません"),
-    "nullTip": m4,
-    "numberTip": m5,
+    "nullTip": m5,
+    "numberTip": m6,
     "oneColumn": MessageLookupByLibrary.simpleMessage("1列"),
     "oneline": MessageLookupByLibrary.simpleMessage("オンライン"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("アイコンのみ"),
@@ -435,7 +444,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "port": MessageLookupByLibrary.simpleMessage("ポート"),
     "portConflictTip": MessageLookupByLibrary.simpleMessage("別のポートを入力してください"),
-    "portTip": m6,
+    "portTip": m7,
     "preferH3Desc": MessageLookupByLibrary.simpleMessage("DOHのHTTP/3を優先使用"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage("キーボードを押してください"),
     "preview": MessageLookupByLibrary.simpleMessage("プレビュー"),
@@ -532,7 +541,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("秒"),
     "selectAll": MessageLookupByLibrary.simpleMessage("すべて選択"),
     "selected": MessageLookupByLibrary.simpleMessage("選択済み"),
-    "selectedCountTitle": m7,
+    "selectedCountTitle": m8,
     "settings": MessageLookupByLibrary.simpleMessage("設定"),
     "show": MessageLookupByLibrary.simpleMessage("表示"),
     "shrink": MessageLookupByLibrary.simpleMessage("縮小"),
@@ -555,15 +564,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "style": MessageLookupByLibrary.simpleMessage("スタイル"),
     "subRule": MessageLookupByLibrary.simpleMessage("サブルール"),
     "submit": MessageLookupByLibrary.simpleMessage("送信"),
+    "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションが期限切れになりました",
     ),
-    "subscriptionExpiresInDays": m8,
+    "subscriptionExpiresInDays": m9,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションがまもなく期限切れ",
     ),
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションは本日期限切れになります",
+    ),
+    "subscriptionPreparing": MessageLookupByLibrary.simpleMessage(
+      "Your subscription is still being prepared. Please try again in a minute",
     ),
     "support": MessageLookupByLibrary.simpleMessage("サポート"),
     "sync": MessageLookupByLibrary.simpleMessage("同期"),
@@ -616,7 +629,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("アップロード"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("URL経由でプロファイルを取得"),
-    "urlTip": m9,
+    "urlTip": m10,
     "useHosts": MessageLookupByLibrary.simpleMessage("ホストを使用"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("システムホストを使用"),
     "value": MessageLookupByLibrary.simpleMessage("値"),
