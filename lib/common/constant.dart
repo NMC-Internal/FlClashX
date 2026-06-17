@@ -20,6 +20,23 @@ const backendBaseUrl = String.fromEnvironment(
   'BACKEND_URL',
   defaultValue: 'http://127.0.0.1:8080',
 );
+
+// Google OAuth (ADR 0014), injected at build time via --dart-define. No client
+// secret is needed here — Android/iOS/macOS use native clients (no secret), and
+// the Windows/Linux desktop flow only builds the auth URL with the desktop
+// client ID; the code is exchanged on the backend (which holds the secret).
+// - googleServerClientId: the Web client ID, passed to google_sign_in on mobile
+//   so the issued ID token's audience matches what the backend validates.
+// - googleIosClientId: the iOS/macOS OAuth client ID. The native GoogleSignIn SDK
+//   needs it to build its configuration; without it the SDK throws "No active
+//   configuration" (it is the GIDClientID, supplied here instead of Info.plist).
+//   Not a secret — iOS/macOS client IDs are public. Empty on Android (the native
+//   client there is resolved from google-services.json + the signing SHA).
+// - googleDesktopClientId: the "Desktop app" client ID for the Windows/Linux
+//   browser PKCE flow.
+const googleServerClientId = String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
+const googleIosClientId = String.fromEnvironment('GOOGLE_IOS_CLIENT_ID');
+const googleDesktopClientId = String.fromEnvironment('GOOGLE_DESKTOP_CLIENT_ID');
 final unixSocketPath = "/tmp/FlClashXSocket_${Random().nextInt(10000)}.sock";
 const helperPort = 47890;
 const maxTextScale = 1.4;

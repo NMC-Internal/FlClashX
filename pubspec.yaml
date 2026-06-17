@@ -71,6 +71,10 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   cached_network_image: ^3.4.1
   crypto: ^3.0.7
+  forui: ^0.22.3
+  fl_chart: ^1.2.0
+  google_sign_in: ^6.2.1
+  flutter_web_auth_2: ^4.0.0
 
 dev_dependencies:
   flutter_test:

@@ -389,11 +389,9 @@ class AppController {
   }
 
   Future<void> updateProfile(Profile profile) async {
-    final prefs = await SharedPreferences.getInstance();
-    final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
-    final newProfile = await profile.update(
-      shouldSendHeaders: shouldSend,
-    );
+    // Device headers are always sent (the HWID toggle was removed — product
+    // decision); Profile.update defaults shouldSendHeaders to true.
+    final newProfile = await profile.update();
 
     final headers = newProfile.providerHeaders;
     if (headers.isNotEmpty) {
@@ -725,12 +723,20 @@ class AppController {
     );
   }
 
+  /// Runs [task], showing the legacy loading overlay when the old home scaffold
+  /// is still mounted, otherwise running it directly. The redesigned UI has no
+  /// CommonScaffold (homeScaffoldKey is null), so engine ops MUST still run —
+  /// previously they silently no-op'd when the scaffold was absent.
+  Future<T?> _withLoading<T>(Future<T> Function() task, {String? title}) async {
+    final state = globalState.homeScaffoldKey.currentState;
+    if (state?.mounted == true) {
+      return state!.loadingRun<T>(task, title: title);
+    }
+    return task();
+  }
+
   Future<void> updateClashConfig() async {
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-    await commonScaffoldState?.loadingRun(() async {
-      await _updateClashConfig();
-    });
+    await _withLoading(_updateClashConfig);
   }
 
   Future<void> _updateClashConfig() async {
@@ -768,11 +774,7 @@ class AppController {
   }
 
   Future<void> setupClashConfig() async {
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    if (commonScaffoldState?.mounted != true) return;
-    await commonScaffoldState?.loadingRun(() async {
-      await _setupClashConfig();
-    });
+    await _withLoading(_setupClashConfig);
   }
 
   Future<void> _setupClashConfig() async {
@@ -842,11 +844,7 @@ class AppController {
     if (silence) {
       await _applyProfile();
     } else {
-      final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-      if (commonScaffoldState?.mounted != true) return;
-      await commonScaffoldState?.loadingRun(() async {
-        await _applyProfile();
-      });
+      await _withLoading(_applyProfile);
     }
     addCheckIpNumDebounce();
   }
@@ -1211,6 +1209,16 @@ class AppController {
     FlutterError.onError = (details) {
       commonPrint.log(details.stack.toString());
     };
+    // Product decision (ADR 0013): these are no longer user-facing settings —
+    // pin them so the engine behaves consistently regardless of persisted state.
+    // - overrideNetworkSettings = false: network config always from the subscription.
+    // - overrideProviderSettings = true: app-launch behaviors stay the user's manual values.
+    _ref.read(appSettingProvider.notifier).updateState(
+          (state) => state.copyWith(
+            overrideNetworkSettings: false,
+            overrideProviderSettings: true,
+          ),
+        );
     updateTray(true);
     await _initCore();
     await _initStatus();
@@ -1273,12 +1281,9 @@ class AppController {
   Future<Profile> _fetchProvisionedProfile(String url) async {
     const maxAttempts = 15;
     const retryDelay = Duration(seconds: 2);
-    final prefs = await SharedPreferences.getInstance();
-    final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
     for (var attempt = 1; ; attempt++) {
       try {
-        return await Profile.normal(url: url)
-            .update(shouldSendHeaders: shouldSend);
+        return await Profile.normal(url: url).update();
       } on DioException catch (e) {
         final status = e.response?.statusCode;
         final notReady = status == HttpStatus.conflict ||
@@ -1317,8 +1322,7 @@ class AppController {
       return;
     }
 
-    final commonScaffoldState = globalState.homeScaffoldKey.currentState;
-    final profile = await commonScaffoldState?.loadingRun<Profile>(
+    final profile = await _withLoading<Profile>(
       () => _fetchProvisionedProfile(url),
       title: "${appLocalizations.add}${appLocalizations.profile}",
     );
@@ -1421,15 +1425,8 @@ class AppController {
   void _applyCustomViewSettings(Profile profile) {
     final headers = profile.providerHeaders;
 
-    final dashboardLayout = headers['flclashx-widgets'];
-    if (dashboardLayout != null && dashboardLayout.isNotEmpty) {
-      final newLayout = DashboardWidgetParser.parseLayout(dashboardLayout);
-      if (newLayout.isNotEmpty) {
-        _ref.read(appSettingProvider.notifier).updateState(
-              (state) => state.copyWith(dashboardWidgets: newLayout),
-            );
-      }
-    }
+    // flclashx-widgets / denywidgets grid removed (ADR 0013, decision 1): our
+    // backend never sends them and the dashboard grid was deleted.
 
     final proxiesView = headers['flclashx-view'];
     if (proxiesView != null && proxiesView.isNotEmpty) {

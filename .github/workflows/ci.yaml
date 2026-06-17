@@ -1,0 +1,54 @@
+name: CI
+
+# Lint + ARB parity + tests. Pure Dart — does NOT build the Go core, so it runs
+# fast on every push/PR. Release builds live in build.yaml / build-core.yaml.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  analyze-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.0
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: ARB parity (all 4 locales share one key set)
+        run: |
+          python3 - <<'PY'
+          import json, sys, glob
+          files = sorted(glob.glob('arb/intl_*.arb'))
+          sets = {}
+          for f in files:
+              d = json.load(open(f, encoding='utf-8'))
+              sets[f] = {k for k in d if not k.startswith('@')}
+          base_name = 'arb/intl_en.arb'
+          base = sets[base_name]
+          ok = True
+          for f, keys in sets.items():
+              missing, extra = base - keys, keys - base
+              if missing or extra:
+                  ok = False
+                  print(f'{f}: missing={sorted(missing)} extra={sorted(extra)}')
+          if ok:
+              print(f'ARB parity OK ({len(base)} keys x {len(files)} locales)')
+          sys.exit(0 if ok else 1)
+          PY
+
+      - name: Analyze (errors + warnings fatal; legacy infos allowed)
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test
+        run: flutter test

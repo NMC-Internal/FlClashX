@@ -1,3 +1,7 @@
+run-mac: ### run on macOS with env.local.json (BACKEND_URL + Google client IDs)
+	fvm flutter run -d macos --dart-define-from-file=env.local.json
+.PHONY: run-mac
+
 android_arm64:
 	fvm dart ./setup.dart android --arch arm64
 macos_arm64:

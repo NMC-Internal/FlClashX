@@ -4,19 +4,21 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flclashx/clash/clash.dart';
 import 'package:flclashx/common/common.dart';
+import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/l10n/l10n.dart';
 import 'package:flclashx/manager/hotkey_manager.dart';
 import 'package:flclashx/manager/manager.dart';
 import 'package:flclashx/plugins/app.dart';
 import 'package:flclashx/providers/providers.dart';
 import 'package:flclashx/state.dart';
+import 'package:flclashx/views/redesign/redesign.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:forui/forui.dart';
 
 import 'controller.dart';
 import 'pages/auth/auth_state.dart';
-import 'pages/pages.dart';
 
 class Application extends ConsumerStatefulWidget {
   const Application({
@@ -106,6 +108,9 @@ class ApplicationState extends ConsumerState<Application> {
         return;
       }
     }
+    // Authenticated but no active subscription yet (ADR 0010: a valid state —
+    // guest/claim-trial) — nothing to provision.
+    if (url.isEmpty) return;
     try {
       await globalState.appController.provisionSubscription(url);
     } catch (e) {
@@ -185,14 +190,14 @@ class ApplicationState extends ConsumerState<Application> {
                   GlobalWidgetsLocalizations.delegate
                 ],
                 builder: (_, child) {
-                  final Widget app = AppEnvManager(
+                  Widget app = AppEnvManager(
                     child: _buildPlatformApp(
                       _buildApp(child!),
                     ),
                   );
 
                   if (Platform.isMacOS) {
-                    return FittedBox(
+                    app = FittedBox(
                       fit: BoxFit.contain,
                       alignment: Alignment.topCenter,
                       child: SizedBox(
@@ -203,13 +208,25 @@ class ApplicationState extends ConsumerState<Application> {
                     );
                   }
 
+                  // Redesign (ADR 0013): wrap in the forui theme + toaster
+                  // OUTSIDE the macOS FittedBox (verified anchoring, spike
+                  // ae0c56a) so forui widgets/sheets/toasts are themed.
+                  app = FTheme(
+                    data: AppTokens.forui(touch: !system.isDesktop),
+                    child: FToaster(child: app),
+                  );
+
                   return app;
                 },
                 scrollBehavior: BaseScrollBehavior(),
                 title: appName,
                 locale: utils.getLocaleForString(locale),
                 supportedLocales: AppLocalizations.delegate.supportedLocales,
-                themeMode: themeProps.themeMode,
+                // Brand-lock (ADR 0013 decision 6): Fantomask is a dark-first
+                // branded product — the UI is always the stealth dark theme,
+                // not user-switchable. (themeProps.primaryColor stays wired for
+                // the subscription-driven flclashx-hex accent.)
+                themeMode: ThemeMode.dark,
                 theme: ThemeData(
                   useMaterial3: true,
                   pageTransitionsTheme: _pageTransitionsTheme,
@@ -233,7 +250,7 @@ class ApplicationState extends ConsumerState<Application> {
                 home: child,
               );
             },
-            child: const HomePage(),
+            child: const RedesignShell(),
           ),
         ),
       );

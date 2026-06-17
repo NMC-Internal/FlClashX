@@ -419,36 +419,6 @@ class AppLocalizations {
     );
   }
 
-  /// `These settings are managed by your provider`
-  String get managedByProvider {
-    return Intl.message(
-      'These settings are managed by your provider',
-      name: 'managedByProvider',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Override network settings`
-  String get overrideNetworkSettings {
-    return Intl.message(
-      'Override network settings',
-      name: 'overrideNetworkSettings',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ignore network settings from provider config`
-  String get overrideNetworkSettingsDesc {
-    return Intl.message(
-      'Ignore network settings from provider config',
-      name: 'overrideNetworkSettingsDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `These parameters are managed by your provider`
   String get managedByProviderNetwork {
     return Intl.message(
@@ -1242,11 +1212,6 @@ class AppLocalizations {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Password`
-  String get password {
-    return Intl.message('Password', name: 'password', desc: '', args: []);
   }
 
   /// `Check for updates`
@@ -3284,11 +3249,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Add Profile`
-  String get addProfile {
-    return Intl.message('Add Profile', name: 'addProfile', desc: '', args: []);
-  }
-
   /// `Traffic`
   String get traffic {
     return Intl.message('Traffic', name: 'traffic', desc: '', args: []);
@@ -3344,84 +3304,14 @@ class AppLocalizations {
     );
   }
 
-  /// `QR code not found`
-  String get qrNotFound {
-    return Intl.message(
-      'QR code not found',
-      name: 'qrNotFound',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Success`
   String get successTitle {
     return Intl.message('Success', name: 'successTitle', desc: '', args: []);
   }
 
-  /// `Sent successfully`
-  String get sentSuccessfullyMessage {
-    return Intl.message(
-      'Sent successfully',
-      name: 'sentSuccessfullyMessage',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Error`
   String get errorTitle {
     return Intl.message('Error', name: 'errorTitle', desc: '', args: []);
-  }
-
-  /// `Invalid QR code`
-  String get invalidQrMessage {
-    return Intl.message(
-      'Invalid QR code',
-      name: 'invalidQrMessage',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send to TV`
-  String get sendToTvTitle {
-    return Intl.message(
-      'Send to TV',
-      name: 'sendToTvTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add from Phone`
-  String get addFromPhoneTitle {
-    return Intl.message(
-      'Add from Phone',
-      name: 'addFromPhoneTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Scan QR code with phone`
-  String get addFromPhoneSubtitle {
-    return Intl.message(
-      'Scan QR code with phone',
-      name: 'addFromPhoneSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Paste`
-  String get pasteFromClipboard {
-    return Intl.message(
-      'Paste',
-      name: 'pasteFromClipboard',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Lifetime Subscription`
@@ -3437,21 +3327,6 @@ class AppLocalizations {
   /// `Updated`
   String get updated {
     return Intl.message('Updated', name: 'updated', desc: '', args: []);
-  }
-
-  /// `Select Profile`
-  String get selectProfile {
-    return Intl.message(
-      'Select Profile',
-      name: 'selectProfile',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send to TV`
-  String get sendToTv {
-    return Intl.message('Send to TV', name: 'sendToTv', desc: '', args: []);
   }
 
   /// `Support`
@@ -3489,36 +3364,6 @@ class AppLocalizations {
     return Intl.message(
       'Open logs folder',
       name: 'openLogsFolder',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Receive Subscription`
-  String get receiveSubscriptionTitle {
-    return Intl.message(
-      'Receive Subscription',
-      name: 'receiveSubscriptionTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send HWID`
-  String get settingsSendDeviceDataTitle {
-    return Intl.message(
-      'Send HWID',
-      name: 'settingsSendDeviceDataTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send device identifier, app version and device name to proxy provider server`
-  String get settingsSendDeviceDataSubtitle {
-    return Intl.message(
-      'Send device identifier, app version and device name to proxy provider server',
-      name: 'settingsSendDeviceDataSubtitle',
       desc: '',
       args: [],
     );
@@ -3577,11 +3422,6 @@ class AppLocalizations {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Email`
-  String get email {
-    return Intl.message('Email', name: 'email', desc: '', args: []);
   }
 
   /// `Log in`
@@ -3654,26 +3494,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Invalid email or password`
-  String get authErrorInvalidCredentials {
-    return Intl.message(
-      'Invalid email or password',
-      name: 'authErrorInvalidCredentials',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This email is already registered`
-  String get authErrorEmailTaken {
-    return Intl.message(
-      'This email is already registered',
-      name: 'authErrorEmailTaken',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Network error. Please check your connection and try again`
   String get authErrorNetwork {
     return Intl.message(
@@ -3699,6 +3519,16 @@ class AppLocalizations {
     return Intl.message(
       'Something went wrong. Please try again',
       name: 'authErrorUnknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session expired. Please sign in again`
+  String get authErrorSessionExpired {
+    return Intl.message(
+      'Session expired. Please sign in again',
+      name: 'authErrorSessionExpired',
       desc: '',
       args: [],
     );
@@ -3766,6 +3596,771 @@ class AppLocalizations {
       name: 'accountTrafficRemaining',
       desc: '',
       args: [used, total],
+    );
+  }
+
+  /// `Connect`
+  String get navConnect {
+    return Intl.message('Connect', name: 'navConnect', desc: '', args: []);
+  }
+
+  /// `Servers`
+  String get navServers {
+    return Intl.message('Servers', name: 'navServers', desc: '', args: []);
+  }
+
+  /// `Activity`
+  String get navActivity {
+    return Intl.message('Activity', name: 'navActivity', desc: '', args: []);
+  }
+
+  /// `Protected`
+  String get connectProtected {
+    return Intl.message(
+      'Protected',
+      name: 'connectProtected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected`
+  String get connectConnected {
+    return Intl.message(
+      'Connected',
+      name: 'connectConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected · {duration}`
+  String connectConnectedFor(Object duration) {
+    return Intl.message(
+      'Connected · $duration',
+      name: 'connectConnectedFor',
+      desc: 'Connected with elapsed time',
+      args: [duration],
+    );
+  }
+
+  /// `Tap to connect`
+  String get connectTapToConnect {
+    return Intl.message(
+      'Tap to connect',
+      name: 'connectTapToConnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not protected`
+  String get connectNotProtected {
+    return Intl.message(
+      'Not protected',
+      name: 'connectNotProtected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Setting up your subscription…`
+  String get connectProvisioning {
+    return Intl.message(
+      'Setting up your subscription…',
+      name: 'connectProvisioning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This usually takes a few seconds`
+  String get connectProvisioningHint {
+    return Intl.message(
+      'This usually takes a few seconds',
+      name: 'connectProvisioningHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription expired`
+  String get connectExpiredTitle {
+    return Intl.message(
+      'Subscription expired',
+      name: 'connectExpiredTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew to keep protecting your traffic`
+  String get connectExpiredHint {
+    return Intl.message(
+      'Renew to keep protecting your traffic',
+      name: 'connectExpiredHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Provisioning failed`
+  String get connectFailedTitle {
+    return Intl.message(
+      'Provisioning failed',
+      name: 'connectFailedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong. Please try again.`
+  String get connectFailedHint {
+    return Intl.message(
+      'Something went wrong. Please try again.',
+      name: 'connectFailedHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get a plan to start protecting your traffic`
+  String get connectGetPlanHint {
+    return Intl.message(
+      'Get a plan to start protecting your traffic',
+      name: 'connectGetPlanHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get connectExpiresLabel {
+    return Intl.message(
+      'Expires',
+      name: 'connectExpiresLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose server`
+  String get chooseServer {
+    return Intl.message(
+      'Choose server',
+      name: 'chooseServer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start free trial`
+  String get startFreeTrial {
+    return Intl.message(
+      'Start free trial',
+      name: 'startFreeTrial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View plans`
+  String get viewPlans {
+    return Intl.message('View plans', name: 'viewPlans', desc: '', args: []);
+  }
+
+  /// `Choose plan`
+  String get choosePlan {
+    return Intl.message('Choose plan', name: 'choosePlan', desc: '', args: []);
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+  }
+
+  /// `Sign in`
+  String get signIn {
+    return Intl.message('Sign in', name: 'signIn', desc: '', args: []);
+  }
+
+  /// `Upgrade plan`
+  String get upgradePlan {
+    return Intl.message(
+      'Upgrade plan',
+      name: 'upgradePlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search servers`
+  String get searchServers {
+    return Intl.message(
+      'Search servers',
+      name: 'searchServers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Test`
+  String get serversTest {
+    return Intl.message('Test', name: 'serversTest', desc: '', args: []);
+  }
+
+  /// `Testing…`
+  String get serversTesting {
+    return Intl.message('Testing…', name: 'serversTesting', desc: '', args: []);
+  }
+
+  /// `No servers yet`
+  String get serversEmptyTitle {
+    return Intl.message(
+      'No servers yet',
+      name: 'serversEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Claim a subscription to load your servers.`
+  String get serversEmptyHint {
+    return Intl.message(
+      'Claim a subscription to load your servers.',
+      name: 'serversEmptyHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `timeout`
+  String get serverTimeout {
+    return Intl.message('timeout', name: 'serverTimeout', desc: '', args: []);
+  }
+
+  /// `Throughput`
+  String get activityThroughput {
+    return Intl.message(
+      'Throughput',
+      name: 'activityThroughput',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Live`
+  String get activityLive {
+    return Intl.message('Live', name: 'activityLive', desc: '', args: []);
+  }
+
+  /// `Duration`
+  String get activityDuration {
+    return Intl.message(
+      'Duration',
+      name: 'activityDuration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Downloaded`
+  String get activityDownloaded {
+    return Intl.message(
+      'Downloaded',
+      name: 'activityDownloaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uploaded`
+  String get activityUploaded {
+    return Intl.message(
+      'Uploaded',
+      name: 'activityUploaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usage · last 7 days`
+  String get activityUsageWeek {
+    return Intl.message(
+      'Usage · last 7 days',
+      name: 'activityUsageWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily traffic`
+  String get activityDailyTraffic {
+    return Intl.message(
+      'Daily traffic',
+      name: 'activityDailyTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `demo`
+  String get activityDemo {
+    return Intl.message('demo', name: 'activityDemo', desc: '', args: []);
+  }
+
+  /// `Signed in`
+  String get accountSignedIn {
+    return Intl.message(
+      'Signed in',
+      name: 'accountSignedIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get statusActive {
+    return Intl.message('Active', name: 'statusActive', desc: '', args: []);
+  }
+
+  /// `Setting up`
+  String get statusProvisioning {
+    return Intl.message(
+      'Setting up',
+      name: 'statusProvisioning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get statusFailed {
+    return Intl.message('Failed', name: 'statusFailed', desc: '', args: []);
+  }
+
+  /// `Trial plan`
+  String get planTrial {
+    return Intl.message('Trial plan', name: 'planTrial', desc: '', args: []);
+  }
+
+  /// `Monthly plan`
+  String get planMonthly {
+    return Intl.message(
+      'Monthly plan',
+      name: 'planMonthly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yearly plan`
+  String get planYearly {
+    return Intl.message('Yearly plan', name: 'planYearly', desc: '', args: []);
+  }
+
+  /// `Subscription`
+  String get planGeneric {
+    return Intl.message(
+      'Subscription',
+      name: 'planGeneric',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} plan`
+  String planNamed(Object name) {
+    return Intl.message(
+      '$name plan',
+      name: 'planNamed',
+      desc: 'Capitalized plan name',
+      args: [name],
+    );
+  }
+
+  /// `of {limit}`
+  String accountOfLimit(Object limit) {
+    return Intl.message(
+      'of $limit',
+      name: 'accountOfLimit',
+      desc: 'Used out of total',
+      args: [limit],
+    );
+  }
+
+  /// `Expires in {days} days · {date}`
+  String accountExpiresInDays(Object days, Object date) {
+    return Intl.message(
+      'Expires in $days days · $date',
+      name: 'accountExpiresInDays',
+      desc: 'Expiry with days and date',
+      args: [days, date],
+    );
+  }
+
+  /// `Subscription history`
+  String get subscriptionHistory {
+    return Intl.message(
+      'Subscription history',
+      name: 'subscriptionHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active subscription`
+  String get noActiveSubscription {
+    return Intl.message(
+      'No active subscription',
+      name: 'noActiveSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Claim your free trial or choose a plan to get started.`
+  String get noSubHint {
+    return Intl.message(
+      'Claim your free trial or choose a plan to get started.',
+      name: 'noSubHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not signed in`
+  String get notSignedIn {
+    return Intl.message(
+      'Not signed in',
+      name: 'notSignedIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in to manage your subscription.`
+  String get signInToManage {
+    return Intl.message(
+      'Sign in to manage your subscription.',
+      name: 'signInToManage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not load your account.`
+  String get accountLoadError {
+    return Intl.message(
+      'Could not load your account.',
+      name: 'accountLoadError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance`
+  String get settingsAppearance {
+    return Intl.message(
+      'Appearance',
+      name: 'settingsAppearance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection`
+  String get settingsConnection {
+    return Intl.message(
+      'Connection',
+      name: 'settingsConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection settings`
+  String get connectionSettings {
+    return Intl.message(
+      'Connection settings',
+      name: 'connectionSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General · Network · DNS`
+  String get connectionSettingsSub {
+    return Intl.message(
+      'General · Network · DNS',
+      name: 'connectionSettingsSub',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `App`
+  String get settingsApp {
+    return Intl.message('App', name: 'settingsApp', desc: '', args: []);
+  }
+
+  /// `Launch at startup`
+  String get launchAtStartup {
+    return Intl.message(
+      'Launch at startup',
+      name: 'launchAtStartup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable logs`
+  String get enableLogs {
+    return Intl.message('Enable logs', name: 'enableLogs', desc: '', args: []);
+  }
+
+  /// `About {app}`
+  String aboutApp(Object app) {
+    return Intl.message(
+      'About $app',
+      name: 'aboutApp',
+      desc: 'About the app',
+      args: [app],
+    );
+  }
+
+  /// `System`
+  String get langSystem {
+    return Intl.message('System', name: 'langSystem', desc: '', args: []);
+  }
+
+  /// `Choose a plan`
+  String get chooseAPlan {
+    return Intl.message(
+      'Choose a plan',
+      name: 'chooseAPlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Protect your traffic. Cancel anytime.`
+  String get plansSubtitle {
+    return Intl.message(
+      'Protect your traffic. Cancel anytime.',
+      name: 'plansSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not load plans. Tap to retry.`
+  String get plansLoadError {
+    return Intl.message(
+      'Could not load plans. Tap to retry.',
+      name: 'plansLoadError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prices shown for reference — billing is not yet active.`
+  String get plansBillingNote {
+    return Intl.message(
+      'Prices shown for reference — billing is not yet active.',
+      name: 'plansBillingNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{days} days access`
+  String planDaysAccess(Object days) {
+    return Intl.message(
+      '$days days access',
+      name: 'planDaysAccess',
+      desc: 'Days of access',
+      args: [days],
+    );
+  }
+
+  /// `Unlimited traffic`
+  String get planUnlimitedTraffic {
+    return Intl.message(
+      'Unlimited traffic',
+      name: 'planUnlimitedTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{size} traffic`
+  String planTrafficAmount(Object size) {
+    return Intl.message(
+      '$size traffic',
+      name: 'planTrafficAmount',
+      desc: 'Traffic amount',
+      args: [size],
+    );
+  }
+
+  /// `{count} devices`
+  String planDevices(Object count) {
+    return Intl.message(
+      '$count devices',
+      name: 'planDevices',
+      desc: 'Device count',
+      args: [count],
+    );
+  }
+
+  /// `{count} device`
+  String planDevice(Object count) {
+    return Intl.message(
+      '$count device',
+      name: 'planDevice',
+      desc: 'Single device',
+      args: [count],
+    );
+  }
+
+  /// `Free`
+  String get planFree {
+    return Intl.message('Free', name: 'planFree', desc: '', args: []);
+  }
+
+  /// `/month`
+  String get planPerMonth {
+    return Intl.message('/month', name: 'planPerMonth', desc: '', args: []);
+  }
+
+  /// `/year`
+  String get planPerYear {
+    return Intl.message('/year', name: 'planPerYear', desc: '', args: []);
+  }
+
+  /// `One-time`
+  String get planOneTime {
+    return Intl.message('One-time', name: 'planOneTime', desc: '', args: []);
+  }
+
+  /// `Best value`
+  String get planBestValue {
+    return Intl.message(
+      'Best value',
+      name: 'planBestValue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose`
+  String get planChoose {
+    return Intl.message('Choose', name: 'planChoose', desc: '', args: []);
+  }
+
+  /// `Billing is not active yet`
+  String get billingNotActive {
+    return Intl.message(
+      'Billing is not active yet',
+      name: 'billingNotActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By continuing you agree to our Terms of Service and Privacy Policy.`
+  String get authLegal {
+    return Intl.message(
+      'By continuing you agree to our Terms of Service and Privacy Policy.',
+      name: 'authLegal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get notifications {
+    return Intl.message(
+      'Notifications',
+      name: 'notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark all read`
+  String get markAllRead {
+    return Intl.message(
+      'Mark all read',
+      name: 'markAllRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advanced`
+  String get settingsAdvanced {
+    return Intl.message(
+      'Advanced',
+      name: 'settingsAdvanced',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset network settings`
+  String get resetNetworkSettings {
+    return Intl.message(
+      'Reset network settings',
+      name: 'resetNetworkSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in`
+  String get authSignInTitle {
+    return Intl.message('Sign in', name: 'authSignInTitle', desc: '', args: []);
+  }
+
+  /// `Sign in to claim your free trial and manage your subscription.`
+  String get authSignInSubtitle {
+    return Intl.message(
+      'Sign in to claim your free trial and manage your subscription.',
+      name: 'authSignInSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue with Google`
+  String get continueWithGoogle {
+    return Intl.message(
+      'Continue with Google',
+      name: 'continueWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue with Apple (soon)`
+  String get appleComingSoon {
+    return Intl.message(
+      'Continue with Apple (soon)',
+      name: 'appleComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not sign in with Google. Please try again.`
+  String get authGoogleFailed {
+    return Intl.message(
+      'Could not sign in with Google. Please try again.',
+      name: 'authGoogleFailed',
+      desc: '',
+      args: [],
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/common/constant.dart';
+import 'package:flclashx/models/models.dart';
 
 /// Kinds of auth failures, used to pick a localized message in the UI.
 enum AuthErrorKind {
@@ -10,6 +11,10 @@ enum AuthErrorKind {
   emailTaken,
   network,
   server,
+  /// 401 on an authenticated request: the session expired / token is no longer
+  /// valid. The new UI drops to guest mode + a "session expired" toast; the old
+  /// UI logs out. Distinct from [invalidCredentials] (a failed login attempt).
+  sessionExpired,
   unknown,
 }
 
@@ -34,15 +39,12 @@ abstract final class SubscriptionStatus {
   static const failed = 'failed';
 }
 
-/// Thin client for the auth/me backend contract (ADR 0008, ADR 0009).
+/// Thin client for the auth/me backend contract (ADR 0014 social login, ADR 0010).
 ///
 /// Endpoints (base = [backendBaseUrl]):
-/// - `POST /v1/auth/register {email,password}` -> `201 {"token":"<jwt>"}`
-///   (201 even when the panel is down — the subscription provisions later)
-/// - `POST /v1/auth/login    {email,password}` -> `200 {"token":"<jwt>"}`
-/// - `GET  /v1/me  (Authorization: Bearer <jwt>)` ->
-///       `200 {"email":"...","subscription_url":"<url>"`
-///       `      "subscription_status":"provisioning|active|failed"}`
+/// - `POST /v1/auth/google {id_token}` -> `200 {"token":"<jwt>"}`
+///   (verifies the Google ID token; first sign-in also creates the account + trial)
+/// - `GET  /v1/me  (Authorization: Bearer <jwt>)` -> the account view (ADR 0010)
 class AuthApi {
   AuthApi({Dio? dio, String? baseUrl})
       : _dio = dio ??
@@ -60,26 +62,25 @@ class AuthApi {
 
   final Dio _dio;
 
-  /// Registers a new account, returning the JWT on success.
-  Future<String> register(String email, String password) =>
-      _authRequest('/v1/auth/register', email, password, isRegister: true);
+  /// Exchanges a verified Google ID token for our JWT (ADR 0014). The first
+  /// sign-in for an identity creates the account + trial server-side.
+  /// Used on Android/iOS/macOS (native sign-in).
+  Future<String> google(String idToken) =>
+      _googleAuth('/v1/auth/google', {'id_token': idToken});
 
-  /// Logs in, returning the JWT on success.
-  Future<String> login(String email, String password) =>
-      _authRequest('/v1/auth/login', email, password, isRegister: false);
+  /// Desktop (Windows/Linux): sends the browser PKCE authorization code for the
+  /// backend to exchange (the OAuth secret stays server-side).
+  Future<String> googleDesktop(String code, String codeVerifier, String redirectUri) =>
+      _googleAuth('/v1/auth/google/desktop', {
+        'code': code,
+        'code_verifier': codeVerifier,
+        'redirect_uri': redirectUri,
+      });
 
-  Future<String> _authRequest(
-    String path,
-    String email,
-    String password, {
-    required bool isRegister,
-  }) async {
+  Future<String> _googleAuth(String path, Map<String, Object?> data) async {
     final Response<dynamic> response;
     try {
-      response = await _dio.post<dynamic>(
-        path,
-        data: {'email': email, 'password': password},
-      );
+      response = await _dio.post<dynamic>(path, data: data);
     } on DioException catch (e) {
       throw _mapDioException(e);
     }
@@ -96,27 +97,23 @@ class AuthApi {
       return token;
     }
 
-    if (isRegister && status == HttpStatus.conflict) {
-      throw AuthException(
-        AuthErrorKind.emailTaken,
-        appLocalizations.authErrorEmailTaken,
-      );
-    }
-    if (!isRegister &&
-        (status == HttpStatus.unauthorized ||
-            status == HttpStatus.badRequest)) {
+    // 401/400 = the backend rejected the Google credential (bad/expired/wrong audience).
+    if (status == HttpStatus.unauthorized || status == HttpStatus.badRequest) {
       throw AuthException(
         AuthErrorKind.invalidCredentials,
-        appLocalizations.authErrorInvalidCredentials,
+        appLocalizations.authGoogleFailed,
       );
     }
     throw _mapStatus(status);
   }
 
-  /// Fetches the current user's email, subscription URL and provisioning
-  /// status using the token.
-  Future<({String email, String subscriptionUrl, String subscriptionStatus})>
-      getMe(String token) async {
+  /// Fetches the authenticated account view (`GET /v1/me` v2, ADR 0010):
+  /// email, the list of subscriptions, trial eligibility and device limit.
+  ///
+  /// An account with NO subscription is valid and returns a [Me] with an empty
+  /// subscriptions list (NOT an error). A 401 throws [AuthErrorKind.sessionExpired]
+  /// so the caller can drop to guest mode / log out.
+  Future<Me> getMe(String token) async {
     final Response<dynamic> response;
     try {
       response = await _dio.get<dynamic>(
@@ -132,8 +129,8 @@ class AuthApi {
     final status = response.statusCode ?? 0;
     if (status == HttpStatus.unauthorized) {
       throw AuthException(
-        AuthErrorKind.invalidCredentials,
-        appLocalizations.authErrorInvalidCredentials,
+        AuthErrorKind.sessionExpired,
+        appLocalizations.authErrorSessionExpired,
       );
     }
     if (status != HttpStatus.ok) {
@@ -147,20 +144,7 @@ class AuthApi {
         appLocalizations.authErrorServer,
       );
     }
-    final subscriptionUrl = (data['subscription_url'] as String?) ?? '';
-    if (subscriptionUrl.isEmpty) {
-      throw AuthException(
-        AuthErrorKind.server,
-        appLocalizations.authErrorServer,
-      );
-    }
-    return (
-      email: (data['email'] as String?) ?? '',
-      subscriptionUrl: subscriptionUrl,
-      // Older backends predate ADR 0009 and only ever expose ready URLs.
-      subscriptionStatus: (data['subscription_status'] as String?) ??
-          SubscriptionStatus.active,
-    );
+    return Me.fromJson(Map<String, Object?>.from(data));
   }
 
   String? _extractToken(dynamic data) {
