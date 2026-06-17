@@ -534,12 +534,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Used for UWP loopback unlocking",
     ),
     "loose": MessageLookupByLibrary.simpleMessage("Loose"),
-    "managedByProvider": MessageLookupByLibrary.simpleMessage(
-      "These settings are managed by your provider",
-    ),
-    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
-      "These settings are managed by your provider.",
-    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "These parameters are managed by your provider",
     ),
@@ -646,12 +640,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideInvalidTip": MessageLookupByLibrary.simpleMessage(
       "Does not take effect in script mode",
     ),
-    "overrideNetworkSettings": MessageLookupByLibrary.simpleMessage(
-      "Override network settings",
-    ),
-    "overrideNetworkSettingsDesc": MessageLookupByLibrary.simpleMessage(
-      "Ignore network settings from provider config",
-    ),
     "overrideOriginRules": MessageLookupByLibrary.simpleMessage(
       "Override the original rule",
     ),
@@ -660,9 +648,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "overrideProviderSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Ignore provider settings and manage manually",
-    ),
-    "overrideProviderSettingsFull": MessageLookupByLibrary.simpleMessage(
-      "Override provider settings",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("Palette"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
@@ -859,13 +844,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "settingsApp": MessageLookupByLibrary.simpleMessage("App"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("Appearance"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("Connection"),
-    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("Privacy"),
-    "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Send device identifier, app version and device name to proxy provider server",
-    ),
-    "settingsSendDeviceDataTitle": MessageLookupByLibrary.simpleMessage(
-      "Send HWID",
-    ),
     "show": MessageLookupByLibrary.simpleMessage("Show"),
     "shrink": MessageLookupByLibrary.simpleMessage("Shrink"),
     "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),

@@ -22,7 +22,6 @@ class RSettingsView extends ConsumerWidget {
     final autoLaunch = ref.watch(appSettingProvider.select((s) => s.autoLaunch));
     final minimizeOnExit = ref.watch(appSettingProvider.select((s) => s.minimizeOnExit));
     final openLogs = ref.watch(appSettingProvider.select((s) => s.openLogs));
-    final override = ref.watch(appSettingProvider.select((s) => s.overrideProviderSettings));
     final locale = ref.watch(appSettingProvider.select((s) => s.locale));
     final notifier = ref.read(appSettingProvider.notifier);
 
@@ -74,13 +73,6 @@ class RSettingsView extends ConsumerWidget {
                   title: appLocalizations.enableLogs,
                   value: openLogs,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(openLogs: v)),
-                ),
-                const RGroupDivider(),
-                RSwitchRow(
-                  icon: Icons.edit_outlined,
-                  title: appLocalizations.overrideProviderSettingsFull,
-                  value: override,
-                  onChanged: (v) => notifier.updateState((s) => s.copyWith(overrideProviderSettings: v)),
                 ),
               ]),
               const SizedBox(height: 22),

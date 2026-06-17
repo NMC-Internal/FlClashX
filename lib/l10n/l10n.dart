@@ -419,36 +419,6 @@ class AppLocalizations {
     );
   }
 
-  /// `These settings are managed by your provider`
-  String get managedByProvider {
-    return Intl.message(
-      'These settings are managed by your provider',
-      name: 'managedByProvider',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Override network settings`
-  String get overrideNetworkSettings {
-    return Intl.message(
-      'Override network settings',
-      name: 'overrideNetworkSettings',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ignore network settings from provider config`
-  String get overrideNetworkSettingsDesc {
-    return Intl.message(
-      'Ignore network settings from provider config',
-      name: 'overrideNetworkSettingsDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `These parameters are managed by your provider`
   String get managedByProviderNetwork {
     return Intl.message(
@@ -3404,26 +3374,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Send HWID`
-  String get settingsSendDeviceDataTitle {
-    return Intl.message(
-      'Send HWID',
-      name: 'settingsSendDeviceDataTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send device identifier, app version and device name to proxy provider server`
-  String get settingsSendDeviceDataSubtitle {
-    return Intl.message(
-      'Send device identifier, app version and device name to proxy provider server',
-      name: 'settingsSendDeviceDataSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Subscription expires soon`
   String get subscriptionExpiresSoon {
     return Intl.message(
@@ -4209,16 +4159,6 @@ class AppLocalizations {
     return Intl.message('Enable logs', name: 'enableLogs', desc: '', args: []);
   }
 
-  /// `Override provider settings`
-  String get overrideProviderSettingsFull {
-    return Intl.message(
-      'Override provider settings',
-      name: 'overrideProviderSettingsFull',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `About {app}`
   String aboutApp(Object app) {
     return Intl.message(
@@ -4429,11 +4369,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Privacy`
-  String get settingsPrivacy {
-    return Intl.message('Privacy', name: 'settingsPrivacy', desc: '', args: []);
-  }
-
   /// `Advanced`
   String get settingsAdvanced {
     return Intl.message(
@@ -4449,16 +4384,6 @@ class AppLocalizations {
     return Intl.message(
       'Reset network settings',
       name: 'resetNetworkSettings',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `These settings are managed by your provider.`
-  String get managedByProviderHint {
-    return Intl.message(
-      'These settings are managed by your provider.',
-      name: 'managedByProviderHint',
       desc: '',
       args: [],
     );

@@ -389,11 +389,9 @@ class AppController {
   }
 
   Future<void> updateProfile(Profile profile) async {
-    final prefs = await SharedPreferences.getInstance();
-    final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
-    final newProfile = await profile.update(
-      shouldSendHeaders: shouldSend,
-    );
+    // Device headers are always sent (the HWID toggle was removed — product
+    // decision); Profile.update defaults shouldSendHeaders to true.
+    final newProfile = await profile.update();
 
     final headers = newProfile.providerHeaders;
     if (headers.isNotEmpty) {
@@ -1211,6 +1209,16 @@ class AppController {
     FlutterError.onError = (details) {
       commonPrint.log(details.stack.toString());
     };
+    // Product decision (ADR 0013): these are no longer user-facing settings —
+    // pin them so the engine behaves consistently regardless of persisted state.
+    // - overrideNetworkSettings = false: network config always from the subscription.
+    // - overrideProviderSettings = true: app-launch behaviors stay the user's manual values.
+    _ref.read(appSettingProvider.notifier).updateState(
+          (state) => state.copyWith(
+            overrideNetworkSettings: false,
+            overrideProviderSettings: true,
+          ),
+        );
     updateTray(true);
     await _initCore();
     await _initStatus();
@@ -1273,12 +1281,9 @@ class AppController {
   Future<Profile> _fetchProvisionedProfile(String url) async {
     const maxAttempts = 15;
     const retryDelay = Duration(seconds: 2);
-    final prefs = await SharedPreferences.getInstance();
-    final shouldSend = prefs.getBool('sendDeviceHeaders') ?? true;
     for (var attempt = 1; ; attempt++) {
       try {
-        return await Profile.normal(url: url)
-            .update(shouldSendHeaders: shouldSend);
+        return await Profile.normal(url: url).update();
       } on DioException catch (e) {
         final status = e.response?.statusCode;
         final notReady = status == HttpStatus.conflict ||

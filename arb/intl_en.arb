@@ -50,9 +50,6 @@
   "autoRunDesc": "Auto run when the application is opened",
   "overrideProviderSettings": "Override",
   "overrideProviderSettingsDesc": "Ignore provider settings and manage manually",
-  "managedByProvider": "These settings are managed by your provider",
-  "overrideNetworkSettings": "Override network settings",
-  "overrideNetworkSettingsDesc": "Ignore network settings from provider config",
   "managedByProviderNetwork": "These parameters are managed by your provider",
   "logcat": "Logcat",
   "logcatDesc": "Disabling will hide the log entry",
@@ -441,8 +438,6 @@
   "gratitude": "Gratitude",
   "originalRepository": "Original Repository",
   "openLogsFolder": "Open logs folder",
-  "settingsSendDeviceDataTitle": "Send HWID",
-  "settingsSendDeviceDataSubtitle": "Send device identifier, app version and device name to proxy provider server",
   "subscriptionExpiresSoon": "Subscription expires soon",
   "subscriptionExpiresInDays": "Your subscription expires in {days} day(s)",
   "subscriptionExpiresToday": "Your subscription expires today",
@@ -558,7 +553,6 @@
   "settingsApp": "App",
   "launchAtStartup": "Launch at startup",
   "enableLogs": "Enable logs",
-  "overrideProviderSettingsFull": "Override provider settings",
   "aboutApp": "About {app}",
   "@aboutApp": {
     "description": "About the app",
@@ -613,12 +607,8 @@
   "authLegal": "By continuing you agree to our Terms of Service and Privacy Policy.",
   "notifications": "Notifications",
   "markAllRead": "Mark all read",
-  "settingsPrivacy": "Privacy",
-  "@settingsPrivacy": {},
   "settingsAdvanced": "Advanced",
   "@settingsAdvanced": {},
   "resetNetworkSettings": "Reset network settings",
-  "@resetNetworkSettings": {},
-  "managedByProviderHint": "These settings are managed by your provider.",
-  "@managedByProviderHint": {}
+  "@resetNetworkSettings": {}
 }

@@ -422,12 +422,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "loopback": MessageLookupByLibrary.simpleMessage("ループバック解除ツール"),
     "loopbackDesc": MessageLookupByLibrary.simpleMessage("UWPループバック解除用"),
     "loose": MessageLookupByLibrary.simpleMessage("疎"),
-    "managedByProvider": MessageLookupByLibrary.simpleMessage(
-      "これらの設定はプロバイダーによって管理されています",
-    ),
-    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
-      "これらの設定はプロバイダーによって管理されます。",
-    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "これらのパラメータはプロバイダーによって管理されています",
     ),
@@ -518,19 +512,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideInvalidTip": MessageLookupByLibrary.simpleMessage(
       "スクリプトモードでは有効になりません",
     ),
-    "overrideNetworkSettings": MessageLookupByLibrary.simpleMessage(
-      "ネットワーク設定を上書き",
-    ),
-    "overrideNetworkSettingsDesc": MessageLookupByLibrary.simpleMessage(
-      "プロバイダー設定のネットワーク設定を無視",
-    ),
     "overrideOriginRules": MessageLookupByLibrary.simpleMessage("元のルールを上書き"),
     "overrideProviderSettings": MessageLookupByLibrary.simpleMessage("上書き"),
     "overrideProviderSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "プロバイダーの設定を無視して手動で管理",
-    ),
-    "overrideProviderSettingsFull": MessageLookupByLibrary.simpleMessage(
-      "プロバイダー設定を上書き",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("パレット"),
     "password": MessageLookupByLibrary.simpleMessage("パスワード"),
@@ -695,13 +680,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "settingsApp": MessageLookupByLibrary.simpleMessage("アプリ"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("外観"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("接続"),
-    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("プライバシー"),
-    "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
-      "デバイス識別子、アプリのバージョン、デバイス名をプロキシ提供元サーバーに送信します",
-    ),
-    "settingsSendDeviceDataTitle": MessageLookupByLibrary.simpleMessage(
-      "HWID を送信",
-    ),
     "show": MessageLookupByLibrary.simpleMessage("表示"),
     "shrink": MessageLookupByLibrary.simpleMessage("縮小"),
     "signIn": MessageLookupByLibrary.simpleMessage("ログイン"),

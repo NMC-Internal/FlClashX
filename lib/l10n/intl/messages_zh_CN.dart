@@ -376,10 +376,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "loopback": MessageLookupByLibrary.simpleMessage("回环解锁工具"),
     "loopbackDesc": MessageLookupByLibrary.simpleMessage("用于UWP回环解锁"),
     "loose": MessageLookupByLibrary.simpleMessage("宽松"),
-    "managedByProvider": MessageLookupByLibrary.simpleMessage("这些设置由您的提供商管理"),
-    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
-      "这些设置由您的提供商管理。",
-    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "这些参数由您的提供商管理",
     ),
@@ -452,17 +448,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideDns": MessageLookupByLibrary.simpleMessage("覆写DNS"),
     "overrideDnsDesc": MessageLookupByLibrary.simpleMessage("开启后将覆盖配置中的DNS选项"),
     "overrideInvalidTip": MessageLookupByLibrary.simpleMessage("在脚本模式下不生效"),
-    "overrideNetworkSettings": MessageLookupByLibrary.simpleMessage("覆盖网络设置"),
-    "overrideNetworkSettingsDesc": MessageLookupByLibrary.simpleMessage(
-      "忽略提供商配置中的网络设置",
-    ),
     "overrideOriginRules": MessageLookupByLibrary.simpleMessage("覆盖原始规则"),
     "overrideProviderSettings": MessageLookupByLibrary.simpleMessage("覆盖"),
     "overrideProviderSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "忽略提供商设置并手动管理",
-    ),
-    "overrideProviderSettingsFull": MessageLookupByLibrary.simpleMessage(
-      "覆盖提供商设置",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("调色板"),
     "password": MessageLookupByLibrary.simpleMessage("密码"),
@@ -601,13 +590,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "settingsApp": MessageLookupByLibrary.simpleMessage("应用"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("外观"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("连接"),
-    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("隐私"),
-    "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
-      "向代理提供商服务器发送设备标识、应用版本和设备名称",
-    ),
-    "settingsSendDeviceDataTitle": MessageLookupByLibrary.simpleMessage(
-      "发送 HWID",
-    ),
     "show": MessageLookupByLibrary.simpleMessage("显示"),
     "shrink": MessageLookupByLibrary.simpleMessage("紧凑"),
     "signIn": MessageLookupByLibrary.simpleMessage("登录"),

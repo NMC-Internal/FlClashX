@@ -50,9 +50,6 @@
   "autoRunDesc": "Автоматически запускать прокси при открытии приложения",
   "overrideProviderSettings": "Переопределение",
   "overrideProviderSettingsDesc": "Игнорировать настройки от провайдера и управлять вручную",
-  "managedByProvider": "Заблокированными настройками управляет ваш провайдер",
-  "overrideNetworkSettings": "Переопределение сетевых настроек",
-  "overrideNetworkSettingsDesc": "Игнорировать сетевые настройки из конфига провайдера",
   "managedByProviderNetwork": "Этими параметрами управляет ваш провайдер",
   "logcat": "Журналирование",
   "logcatDesc": "Вести журнал событий приложения",
@@ -441,8 +438,6 @@
   "gratitude": "Благодарность",
   "originalRepository": "Оригинальный репозиторий",
   "openLogsFolder": "Открыть папку логов",
-  "settingsSendDeviceDataTitle": "Отправлять HWID",
-  "settingsSendDeviceDataSubtitle": "Отправлять идентификатор устройства, версию приложения и название устройства на сервер прокси-провайдера",
   "subscriptionExpiresSoon": "Подписка скоро истекает",
   "subscriptionExpiresInDays": "Ваша подписка истекает через {days} дн.",
   "subscriptionExpiresToday": "Ваша подписка истекает сегодня",
@@ -533,7 +528,6 @@
   "settingsApp": "Приложение",
   "launchAtStartup": "Запуск при старте",
   "enableLogs": "Включить логи",
-  "overrideProviderSettingsFull": "Переопределять настройки провайдера",
   "aboutApp": "О {app}",
   "langSystem": "Системный",
   "chooseAPlan": "Выберите тариф",
@@ -558,8 +552,6 @@
   "authLegal": "Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.",
   "notifications": "Уведомления",
   "markAllRead": "Прочитать все",
-  "settingsPrivacy": "Приватность",
   "settingsAdvanced": "Дополнительно",
-  "resetNetworkSettings": "Сбросить сетевые настройки",
-  "managedByProviderHint": "Этими настройками управляет ваш провайдер."
+  "resetNetworkSettings": "Сбросить сетевые настройки"
 }

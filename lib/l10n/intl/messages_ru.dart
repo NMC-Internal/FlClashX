@@ -547,12 +547,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Разблокировать Loopback для UWP-приложений",
     ),
     "loose": MessageLookupByLibrary.simpleMessage("Свободный"),
-    "managedByProvider": MessageLookupByLibrary.simpleMessage(
-      "Заблокированными настройками управляет ваш провайдер",
-    ),
-    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
-      "Этими настройками управляет ваш провайдер.",
-    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "Этими параметрами управляет ваш провайдер",
     ),
@@ -669,12 +663,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideInvalidTip": MessageLookupByLibrary.simpleMessage(
       "В скриптовом режиме не действует",
     ),
-    "overrideNetworkSettings": MessageLookupByLibrary.simpleMessage(
-      "Переопределение сетевых настроек",
-    ),
-    "overrideNetworkSettingsDesc": MessageLookupByLibrary.simpleMessage(
-      "Игнорировать сетевые настройки из конфига провайдера",
-    ),
     "overrideOriginRules": MessageLookupByLibrary.simpleMessage(
       "Переопределить оригинальное правило",
     ),
@@ -683,9 +671,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "overrideProviderSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Игнорировать настройки от провайдера и управлять вручную",
-    ),
-    "overrideProviderSettingsFull": MessageLookupByLibrary.simpleMessage(
-      "Переопределять настройки провайдера",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("Палитра"),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
@@ -888,13 +873,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "settingsApp": MessageLookupByLibrary.simpleMessage("Приложение"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("Оформление"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("Соединение"),
-    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("Приватность"),
-    "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Отправлять идентификатор устройства, версию приложения и название устройства на сервер прокси-провайдера",
-    ),
-    "settingsSendDeviceDataTitle": MessageLookupByLibrary.simpleMessage(
-      "Отправлять HWID",
-    ),
     "show": MessageLookupByLibrary.simpleMessage("Показать"),
     "shrink": MessageLookupByLibrary.simpleMessage("Сжать"),
     "signIn": MessageLookupByLibrary.simpleMessage("Войти"),
