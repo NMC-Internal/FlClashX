@@ -557,5 +557,9 @@
   "subscriptionUnlimited": "永久サブスクリプション",
   "successTitle": "成功",
   "trafficUnlimited": "無制限トラフィック",
-  "updated": "更新済み"
+  "updated": "更新済み",
+  "settingsPrivacy": "プライバシー",
+  "settingsAdvanced": "詳細設定",
+  "resetNetworkSettings": "ネットワーク設定をリセット",
+  "managedByProviderHint": "これらの設定はプロバイダーによって管理されます。"
 }

@@ -5,7 +5,7 @@ import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/providers/providers.dart';
 import 'package:flclashx/state.dart';
 import 'package:flclashx/views/about.dart';
-import 'package:flclashx/views/config/config.dart';
+import 'package:flclashx/views/redesign/connection_view.dart';
 import 'package:flclashx/views/redesign/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,8 +34,8 @@ class RSettingsView extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
             children: [
               RSectionLabel(appLocalizations.settingsAppearance),
-              _Group(children: [
-                _NavRow(
+              RGroup(children: [
+                RNavRow(
                   icon: Icons.language,
                   title: appLocalizations.language,
                   subtitle: _localeLabel(locale),
@@ -44,39 +44,39 @@ class RSettingsView extends ConsumerWidget {
               ]),
               const SizedBox(height: 22),
               RSectionLabel(appLocalizations.settingsConnection),
-              _Group(children: [
-                _NavRow(
+              RGroup(children: [
+                RNavRow(
                   icon: Icons.tune,
                   title: appLocalizations.connectionSettings,
                   subtitle: appLocalizations.connectionSettingsSub,
-                  onTap: () => _push(context, 'Connection', const ConfigView()),
+                  onTap: () => _push(context, appLocalizations.connectionSettings, const RConnectionView()),
                 ),
               ]),
               const SizedBox(height: 22),
               RSectionLabel(appLocalizations.settingsApp),
-              _Group(children: [
-                _SwitchRow(
+              RGroup(children: [
+                RSwitchRow(
                   icon: Icons.rocket_launch_outlined,
                   title: appLocalizations.launchAtStartup,
                   value: autoLaunch,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(autoLaunch: v)),
                 ),
-                const _Divider(),
-                _SwitchRow(
+                const RGroupDivider(),
+                RSwitchRow(
                   icon: Icons.minimize,
                   title: appLocalizations.minimizeOnExit,
                   value: minimizeOnExit,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(minimizeOnExit: v)),
                 ),
-                const _Divider(),
-                _SwitchRow(
+                const RGroupDivider(),
+                RSwitchRow(
                   icon: Icons.article_outlined,
                   title: appLocalizations.enableLogs,
                   value: openLogs,
                   onChanged: (v) => notifier.updateState((s) => s.copyWith(openLogs: v)),
                 ),
-                const _Divider(),
-                _SwitchRow(
+                const RGroupDivider(),
+                RSwitchRow(
                   icon: Icons.edit_outlined,
                   title: appLocalizations.overrideProviderSettingsFull,
                   value: override,
@@ -85,8 +85,8 @@ class RSettingsView extends ConsumerWidget {
               ]),
               const SizedBox(height: 22),
               RSectionLabel(appLocalizations.about),
-              _Group(children: [
-                _NavRow(
+              RGroup(children: [
+                RNavRow(
                   icon: Icons.shield_outlined,
                   title: appLocalizations.aboutApp(appName),
                   subtitle: 'v${globalState.packageInfo.version} · core $kCoreVersionFromSource',
@@ -141,65 +141,6 @@ class _SubScreen extends StatelessWidget {
           title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         ),
         body: SafeArea(child: child),
-      );
-}
-
-class _Group extends StatelessWidget {
-  const _Group({required this.children});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: AppTokens.surface,
-          borderRadius: BorderRadius.circular(AppTokens.rCard),
-          border: Border.all(color: AppTokens.border),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(children: children),
-      );
-}
-
-class _Divider extends StatelessWidget {
-  const _Divider();
-
-  @override
-  Widget build(BuildContext context) =>
-      const Divider(height: 1, thickness: 1, color: AppTokens.border, indent: 14, endIndent: 14);
-}
-
-class _NavRow extends StatelessWidget {
-  const _NavRow({required this.icon, required this.title, required this.subtitle, required this.onTap});
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            children: [
-              Icon(icon, color: AppTokens.muted, size: 20),
-              const SizedBox(width: 13),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(color: AppTokens.text, fontSize: 15)),
-                    const SizedBox(height: 2),
-                    Text(subtitle, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right, color: AppTokens.muted, size: 18),
-            ],
-          ),
-        ),
       );
 }
 
@@ -309,33 +250,4 @@ class _LanguageSheet extends ConsumerWidget {
       ],
     );
   }
-}
-
-class _SwitchRow extends StatelessWidget {
-  const _SwitchRow({required this.icon, required this.title, required this.value, required this.onChanged});
-
-  final IconData icon;
-  final String title;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        child: Row(
-          children: [
-            Icon(icon, color: AppTokens.muted, size: 20),
-            const SizedBox(width: 13),
-            Expanded(
-              child: Text(title, style: const TextStyle(color: AppTokens.text, fontSize: 15)),
-            ),
-            Switch(
-              value: value,
-              onChanged: onChanged,
-              activeTrackColor: AppTokens.accent,
-              activeThumbColor: AppTokens.onAccent,
-            ),
-          ],
-        ),
-      );
 }

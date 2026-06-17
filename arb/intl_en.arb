@@ -612,5 +612,13 @@
   "authCreateSubtitle": "Sign in to claim your free trial.",
   "authLegal": "By continuing you agree to our Terms of Service and Privacy Policy.",
   "notifications": "Notifications",
-  "markAllRead": "Mark all read"
+  "markAllRead": "Mark all read",
+  "settingsPrivacy": "Privacy",
+  "@settingsPrivacy": {},
+  "settingsAdvanced": "Advanced",
+  "@settingsAdvanced": {},
+  "resetNetworkSettings": "Reset network settings",
+  "@resetNetworkSettings": {},
+  "managedByProviderHint": "These settings are managed by your provider.",
+  "@managedByProviderHint": {}
 }

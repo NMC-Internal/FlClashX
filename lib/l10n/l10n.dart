@@ -4428,6 +4428,41 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Privacy`
+  String get settingsPrivacy {
+    return Intl.message('Privacy', name: 'settingsPrivacy', desc: '', args: []);
+  }
+
+  /// `Advanced`
+  String get settingsAdvanced {
+    return Intl.message(
+      'Advanced',
+      name: 'settingsAdvanced',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset network settings`
+  String get resetNetworkSettings {
+    return Intl.message(
+      'Reset network settings',
+      name: 'resetNetworkSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `These settings are managed by your provider.`
+  String get managedByProviderHint {
+    return Intl.message(
+      'These settings are managed by your provider.',
+      name: 'managedByProviderHint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -537,6 +537,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "managedByProvider": MessageLookupByLibrary.simpleMessage(
       "These settings are managed by your provider",
     ),
+    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
+      "These settings are managed by your provider.",
+    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "These parameters are managed by your provider",
     ),
@@ -801,6 +804,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "View recently request records",
     ),
     "reset": MessageLookupByLibrary.simpleMessage("Reset"),
+    "resetNetworkSettings": MessageLookupByLibrary.simpleMessage(
+      "Reset network settings",
+    ),
     "resetTip": MessageLookupByLibrary.simpleMessage("Make sure to reset"),
     "resources": MessageLookupByLibrary.simpleMessage("Resources"),
     "resourcesDesc": MessageLookupByLibrary.simpleMessage(
@@ -849,9 +855,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "serversTest": MessageLookupByLibrary.simpleMessage("Test"),
     "serversTesting": MessageLookupByLibrary.simpleMessage("Testing…"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+    "settingsAdvanced": MessageLookupByLibrary.simpleMessage("Advanced"),
     "settingsApp": MessageLookupByLibrary.simpleMessage("App"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("Appearance"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("Connection"),
+    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("Privacy"),
     "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
       "Send device identifier, app version and device name to proxy provider server",
     ),

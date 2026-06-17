@@ -425,6 +425,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "managedByProvider": MessageLookupByLibrary.simpleMessage(
       "これらの設定はプロバイダーによって管理されています",
     ),
+    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
+      "これらの設定はプロバイダーによって管理されます。",
+    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "これらのパラメータはプロバイダーによって管理されています",
     ),
@@ -645,6 +648,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "requests": MessageLookupByLibrary.simpleMessage("リクエスト"),
     "requestsDesc": MessageLookupByLibrary.simpleMessage("最近のリクエスト記録を表示"),
     "reset": MessageLookupByLibrary.simpleMessage("リセット"),
+    "resetNetworkSettings": MessageLookupByLibrary.simpleMessage(
+      "ネットワーク設定をリセット",
+    ),
     "resetTip": MessageLookupByLibrary.simpleMessage("リセットを確定"),
     "resources": MessageLookupByLibrary.simpleMessage("リソース"),
     "resourcesDesc": MessageLookupByLibrary.simpleMessage("外部リソース関連情報"),
@@ -685,9 +691,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "serversTest": MessageLookupByLibrary.simpleMessage("テスト"),
     "serversTesting": MessageLookupByLibrary.simpleMessage("テスト中…"),
     "settings": MessageLookupByLibrary.simpleMessage("設定"),
+    "settingsAdvanced": MessageLookupByLibrary.simpleMessage("詳細設定"),
     "settingsApp": MessageLookupByLibrary.simpleMessage("アプリ"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("外観"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("接続"),
+    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("プライバシー"),
     "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
       "デバイス識別子、アプリのバージョン、デバイス名をプロキシ提供元サーバーに送信します",
     ),

@@ -557,5 +557,9 @@
   "subscriptionUnlimited": "终身订阅",
   "successTitle": "成功",
   "trafficUnlimited": "无限流量",
-  "updated": "已更新"
+  "updated": "已更新",
+  "settingsPrivacy": "隐私",
+  "settingsAdvanced": "高级",
+  "resetNetworkSettings": "重置网络设置",
+  "managedByProviderHint": "这些设置由您的提供商管理。"
 }

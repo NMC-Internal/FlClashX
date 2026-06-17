@@ -139,6 +139,132 @@ class RSecondaryButton extends StatelessWidget {
   }
 }
 
+/// A grouped settings card: a rounded surface holding a column of rows
+/// ([RNavRow] / [RSwitchRow]) separated by [RGroupDivider].
+class RGroup extends StatelessWidget {
+  const RGroup({required this.children, super.key});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          color: AppTokens.surface,
+          borderRadius: BorderRadius.circular(AppTokens.rCard),
+          border: Border.all(color: AppTokens.border),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(children: children),
+      );
+}
+
+/// Hairline divider between rows inside an [RGroup].
+class RGroupDivider extends StatelessWidget {
+  const RGroupDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Divider(
+        height: 1,
+        thickness: 1,
+        color: AppTokens.border,
+        indent: 14,
+        endIndent: 14,
+      );
+}
+
+/// A settings row that navigates or runs an action: leading icon, title, optional
+/// subtitle, and a trailing widget (defaults to a chevron).
+class RNavRow extends StatelessWidget {
+  const RNavRow({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    this.subtitle,
+    this.trailing,
+    super.key,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Row(
+            children: [
+              Icon(icon, color: AppTokens.muted, size: 20),
+              const SizedBox(width: 13),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: const TextStyle(color: AppTokens.text, fontSize: 15)),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(subtitle!, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
+                    ],
+                  ],
+                ),
+              ),
+              trailing ?? const Icon(Icons.chevron_right, color: AppTokens.muted, size: 18),
+            ],
+          ),
+        ),
+      );
+}
+
+/// A settings toggle row: leading icon, title, optional subtitle, trailing switch.
+class RSwitchRow extends StatelessWidget {
+  const RSwitchRow({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.onChanged,
+    this.subtitle,
+    super.key,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        child: Row(
+          children: [
+            Icon(icon, color: AppTokens.muted, size: 20),
+            const SizedBox(width: 13),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(color: AppTokens.text, fontSize: 15)),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(subtitle!, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
+                  ],
+                ],
+              ),
+            ),
+            Switch(
+              value: value,
+              onChanged: onChanged,
+              activeTrackColor: AppTokens.accent,
+              activeThumbColor: AppTokens.onAccent,
+            ),
+          ],
+        ),
+      );
+}
+
 /// A plain screen app-bar title row (left-aligned, 22 semibold) with optional
 /// trailing widget. The shell already insets for device/window chrome
 /// (SafeArea on mobile, the header band on Win/Linux, a popover on macOS), so

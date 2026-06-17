@@ -550,6 +550,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "managedByProvider": MessageLookupByLibrary.simpleMessage(
       "Заблокированными настройками управляет ваш провайдер",
     ),
+    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
+      "Этими настройками управляет ваш провайдер.",
+    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "Этими параметрами управляет ваш провайдер",
     ),
@@ -828,6 +831,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Просмотр последних записей запросов",
     ),
     "reset": MessageLookupByLibrary.simpleMessage("Сброс"),
+    "resetNetworkSettings": MessageLookupByLibrary.simpleMessage(
+      "Сбросить сетевые настройки",
+    ),
     "resetTip": MessageLookupByLibrary.simpleMessage(
       "Убедитесь, что хотите сбросить",
     ),
@@ -878,9 +884,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "serversTest": MessageLookupByLibrary.simpleMessage("Тест"),
     "serversTesting": MessageLookupByLibrary.simpleMessage("Проверка…"),
     "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
+    "settingsAdvanced": MessageLookupByLibrary.simpleMessage("Дополнительно"),
     "settingsApp": MessageLookupByLibrary.simpleMessage("Приложение"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("Оформление"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("Соединение"),
+    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("Приватность"),
     "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
       "Отправлять идентификатор устройства, версию приложения и название устройства на сервер прокси-провайдера",
     ),

@@ -557,5 +557,9 @@
   "authCreateSubtitle": "Войдите, чтобы активировать пробный период.",
   "authLegal": "Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.",
   "notifications": "Уведомления",
-  "markAllRead": "Прочитать все"
+  "markAllRead": "Прочитать все",
+  "settingsPrivacy": "Приватность",
+  "settingsAdvanced": "Дополнительно",
+  "resetNetworkSettings": "Сбросить сетевые настройки",
+  "managedByProviderHint": "Этими настройками управляет ваш провайдер."
 }

@@ -377,6 +377,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "loopbackDesc": MessageLookupByLibrary.simpleMessage("用于UWP回环解锁"),
     "loose": MessageLookupByLibrary.simpleMessage("宽松"),
     "managedByProvider": MessageLookupByLibrary.simpleMessage("这些设置由您的提供商管理"),
+    "managedByProviderHint": MessageLookupByLibrary.simpleMessage(
+      "这些设置由您的提供商管理。",
+    ),
     "managedByProviderNetwork": MessageLookupByLibrary.simpleMessage(
       "这些参数由您的提供商管理",
     ),
@@ -557,6 +560,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "requests": MessageLookupByLibrary.simpleMessage("请求"),
     "requestsDesc": MessageLookupByLibrary.simpleMessage("查看最近请求记录"),
     "reset": MessageLookupByLibrary.simpleMessage("重置"),
+    "resetNetworkSettings": MessageLookupByLibrary.simpleMessage("重置网络设置"),
     "resetTip": MessageLookupByLibrary.simpleMessage("确定要重置吗?"),
     "resources": MessageLookupByLibrary.simpleMessage("资源"),
     "resourcesDesc": MessageLookupByLibrary.simpleMessage("外部资源相关信息"),
@@ -593,9 +597,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "serversTest": MessageLookupByLibrary.simpleMessage("测试"),
     "serversTesting": MessageLookupByLibrary.simpleMessage("测试中…"),
     "settings": MessageLookupByLibrary.simpleMessage("设置"),
+    "settingsAdvanced": MessageLookupByLibrary.simpleMessage("高级"),
     "settingsApp": MessageLookupByLibrary.simpleMessage("应用"),
     "settingsAppearance": MessageLookupByLibrary.simpleMessage("外观"),
     "settingsConnection": MessageLookupByLibrary.simpleMessage("连接"),
+    "settingsPrivacy": MessageLookupByLibrary.simpleMessage("隐私"),
     "settingsSendDeviceDataSubtitle": MessageLookupByLibrary.simpleMessage(
       "向代理提供商服务器发送设备标识、应用版本和设备名称",
     ),
