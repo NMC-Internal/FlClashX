@@ -144,25 +144,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "appDesc": MessageLookupByLibrary.simpleMessage(
       "Обработка настроек, связанных с приложением",
     ),
+    "appleComingSoon": MessageLookupByLibrary.simpleMessage("Apple — скоро"),
     "application": MessageLookupByLibrary.simpleMessage("Настройки приложения"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage(
       "Стандартные настройки приложения",
     ),
-    "authCreateSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Войдите, чтобы активировать пробный период.",
-    ),
-    "authCreateTitle": MessageLookupByLibrary.simpleMessage("Создайте аккаунт"),
     "authEmailInvalid": MessageLookupByLibrary.simpleMessage(
       "Введите корректный адрес эл. почты",
     ),
     "authEmailRequired": MessageLookupByLibrary.simpleMessage(
       "Введите эл. почту",
-    ),
-    "authErrorEmailTaken": MessageLookupByLibrary.simpleMessage(
-      "Эта почта уже зарегистрирована",
-    ),
-    "authErrorInvalidCredentials": MessageLookupByLibrary.simpleMessage(
-      "Неверная почта или пароль",
     ),
     "authErrorNetwork": MessageLookupByLibrary.simpleMessage(
       "Ошибка сети. Проверьте подключение и повторите попытку",
@@ -176,6 +167,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
       "Что-то пошло не так. Повторите попытку",
     ),
+    "authGoogleFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось войти через Google. Попробуйте снова.",
+    ),
     "authLegal": MessageLookupByLibrary.simpleMessage(
       "Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.",
     ),
@@ -185,7 +179,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "authPasswordTooShort": MessageLookupByLibrary.simpleMessage(
       "Пароль должен содержать минимум 8 символов",
     ),
-    "authWelcomeTitle": MessageLookupByLibrary.simpleMessage("С возвращением"),
+    "authSignInSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Войдите, чтобы активировать пробный период и управлять подпиской.",
+    ),
+    "authSignInTitle": MessageLookupByLibrary.simpleMessage("Вход"),
     "auto": MessageLookupByLibrary.simpleMessage("Авто"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage(
       "Автопроверка обновлений",
@@ -320,6 +317,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "contactMe": MessageLookupByLibrary.simpleMessage("Свяжитесь со мной"),
     "content": MessageLookupByLibrary.simpleMessage("Содержание"),
     "contentScheme": MessageLookupByLibrary.simpleMessage("Контентная тема"),
+    "continueWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "Продолжить с Google",
+    ),
     "copy": MessageLookupByLibrary.simpleMessage("Копировать"),
     "copyEnvVar": MessageLookupByLibrary.simpleMessage(
       "Копирование переменных окружения",
@@ -331,7 +331,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "country": MessageLookupByLibrary.simpleMessage("Страна"),
     "crashTest": MessageLookupByLibrary.simpleMessage("Тест на сбои"),
     "create": MessageLookupByLibrary.simpleMessage("Создать"),
-    "createAccount": MessageLookupByLibrary.simpleMessage("Создать аккаунт"),
     "cut": MessageLookupByLibrary.simpleMessage("Вырезать"),
     "dark": MessageLookupByLibrary.simpleMessage("Темный"),
     "dashboard": MessageLookupByLibrary.simpleMessage("Главная"),
@@ -380,7 +379,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "domain": MessageLookupByLibrary.simpleMessage("Домен"),
     "download": MessageLookupByLibrary.simpleMessage("Загрузка"),
     "edit": MessageLookupByLibrary.simpleMessage("Редактировать"),
-    "email": MessageLookupByLibrary.simpleMessage("Эл. почта"),
     "emptyTip": m7,
     "en": MessageLookupByLibrary.simpleMessage("Английский"),
     "enableLogs": MessageLookupByLibrary.simpleMessage("Включить логи"),
@@ -673,7 +671,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Игнорировать настройки от провайдера и управлять вручную",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("Палитра"),
-    "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "paste": MessageLookupByLibrary.simpleMessage("Вставить"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("Выгодно"),
     "planChoose": MessageLookupByLibrary.simpleMessage("Выбрать"),

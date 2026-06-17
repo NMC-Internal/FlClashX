@@ -39,15 +39,12 @@ abstract final class SubscriptionStatus {
   static const failed = 'failed';
 }
 
-/// Thin client for the auth/me backend contract (ADR 0008, ADR 0009).
+/// Thin client for the auth/me backend contract (ADR 0014 social login, ADR 0010).
 ///
 /// Endpoints (base = [backendBaseUrl]):
-/// - `POST /v1/auth/register {email,password}` -> `201 {"token":"<jwt>"}`
-///   (201 even when the panel is down — the subscription provisions later)
-/// - `POST /v1/auth/login    {email,password}` -> `200 {"token":"<jwt>"}`
-/// - `GET  /v1/me  (Authorization: Bearer <jwt>)` ->
-///       `200 {"email":"...","subscription_url":"<url>"`
-///       `      "subscription_status":"provisioning|active|failed"}`
+/// - `POST /v1/auth/google {id_token}` -> `200 {"token":"<jwt>"}`
+///   (verifies the Google ID token; first sign-in also creates the account + trial)
+/// - `GET  /v1/me  (Authorization: Bearer <jwt>)` -> the account view (ADR 0010)
 class AuthApi {
   AuthApi({Dio? dio, String? baseUrl})
       : _dio = dio ??
@@ -65,25 +62,14 @@ class AuthApi {
 
   final Dio _dio;
 
-  /// Registers a new account, returning the JWT on success.
-  Future<String> register(String email, String password) =>
-      _authRequest('/v1/auth/register', email, password, isRegister: true);
-
-  /// Logs in, returning the JWT on success.
-  Future<String> login(String email, String password) =>
-      _authRequest('/v1/auth/login', email, password, isRegister: false);
-
-  Future<String> _authRequest(
-    String path,
-    String email,
-    String password, {
-    required bool isRegister,
-  }) async {
+  /// Exchanges a verified Google ID token for our JWT (ADR 0014). The first
+  /// sign-in for an identity creates the account + trial server-side.
+  Future<String> google(String idToken) async {
     final Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(
-        path,
-        data: {'email': email, 'password': password},
+        '/v1/auth/google',
+        data: {'id_token': idToken},
       );
     } on DioException catch (e) {
       throw _mapDioException(e);
@@ -101,18 +87,11 @@ class AuthApi {
       return token;
     }
 
-    if (isRegister && status == HttpStatus.conflict) {
-      throw AuthException(
-        AuthErrorKind.emailTaken,
-        appLocalizations.authErrorEmailTaken,
-      );
-    }
-    if (!isRegister &&
-        (status == HttpStatus.unauthorized ||
-            status == HttpStatus.badRequest)) {
+    // 401 = the backend rejected the Google token (bad/expired/wrong audience).
+    if (status == HttpStatus.unauthorized || status == HttpStatus.badRequest) {
       throw AuthException(
         AuthErrorKind.invalidCredentials,
-        appLocalizations.authErrorInvalidCredentials,
+        appLocalizations.authGoogleFailed,
       );
     }
     throw _mapStatus(status);

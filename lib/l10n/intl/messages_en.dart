@@ -147,27 +147,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "appDesc": MessageLookupByLibrary.simpleMessage(
       "Processing app related settings",
     ),
+    "appleComingSoon": MessageLookupByLibrary.simpleMessage(
+      "Continue with Apple (soon)",
+    ),
     "application": MessageLookupByLibrary.simpleMessage("Application Settings"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage(
       "Standard application settings",
-    ),
-    "authCreateSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Sign in to claim your free trial.",
-    ),
-    "authCreateTitle": MessageLookupByLibrary.simpleMessage(
-      "Create your account",
     ),
     "authEmailInvalid": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email",
     ),
     "authEmailRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter your email",
-    ),
-    "authErrorEmailTaken": MessageLookupByLibrary.simpleMessage(
-      "This email is already registered",
-    ),
-    "authErrorInvalidCredentials": MessageLookupByLibrary.simpleMessage(
-      "Invalid email or password",
     ),
     "authErrorNetwork": MessageLookupByLibrary.simpleMessage(
       "Network error. Please check your connection and try again",
@@ -181,6 +172,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
       "Something went wrong. Please try again",
     ),
+    "authGoogleFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not sign in with Google. Please try again.",
+    ),
     "authLegal": MessageLookupByLibrary.simpleMessage(
       "By continuing you agree to our Terms of Service and Privacy Policy.",
     ),
@@ -190,7 +184,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "authPasswordTooShort": MessageLookupByLibrary.simpleMessage(
       "Password must be at least 8 characters",
     ),
-    "authWelcomeTitle": MessageLookupByLibrary.simpleMessage("Welcome back"),
+    "authSignInSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Sign in to claim your free trial and manage your subscription.",
+    ),
+    "authSignInTitle": MessageLookupByLibrary.simpleMessage("Sign in"),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage(
       "Auto check updates",
@@ -319,6 +316,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "contactMe": MessageLookupByLibrary.simpleMessage("Contact me"),
     "content": MessageLookupByLibrary.simpleMessage("Content"),
     "contentScheme": MessageLookupByLibrary.simpleMessage("Content"),
+    "continueWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "Continue with Google",
+    ),
     "copy": MessageLookupByLibrary.simpleMessage("Copy"),
     "copyEnvVar": MessageLookupByLibrary.simpleMessage(
       "Copying environment variables",
@@ -330,7 +330,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "country": MessageLookupByLibrary.simpleMessage("Country"),
     "crashTest": MessageLookupByLibrary.simpleMessage("Crash test"),
     "create": MessageLookupByLibrary.simpleMessage("Create"),
-    "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
     "cut": MessageLookupByLibrary.simpleMessage("Cut"),
     "dark": MessageLookupByLibrary.simpleMessage("Dark"),
     "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
@@ -377,7 +376,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "domain": MessageLookupByLibrary.simpleMessage("Domain"),
     "download": MessageLookupByLibrary.simpleMessage("Download"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
     "emptyTip": m7,
     "en": MessageLookupByLibrary.simpleMessage("English"),
     "enableLogs": MessageLookupByLibrary.simpleMessage("Enable logs"),
@@ -650,7 +648,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ignore provider settings and manage manually",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("Palette"),
-    "password": MessageLookupByLibrary.simpleMessage("Password"),
     "paste": MessageLookupByLibrary.simpleMessage("Paste"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("Best value"),
     "planChoose": MessageLookupByLibrary.simpleMessage("Choose"),

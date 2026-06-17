@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flclashx/common/common.dart';
+import 'package:flclashx/common/social_auth.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/pages/auth/auth_state.dart';
 import 'package:flclashx/state.dart';
@@ -9,60 +10,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 
-/// Opens the redesigned auth modal (forui bottom sheet) — the on-demand gate of
-/// the guest flow (claim a subscription). Returns `true` if the user
-/// authenticated. [register] selects the initial Sign in / Create account tab.
-Future<bool> showAuthSheet(BuildContext context, {bool register = true}) async {
+/// Opens the social-login sheet (ADR 0014) — the on-demand gate of the guest
+/// flow (claim a subscription). Returns `true` if the user authenticated.
+Future<bool> showAuthSheet(BuildContext context) async {
   final ok = await showFSheet<bool>(
     context: context,
     side: FLayout.btt,
     mainAxisMaxRatio: null,
-    builder: (context) => _AuthSheet(initialRegister: register),
+    builder: (context) => const _AuthSheet(),
   );
   return ok ?? false;
 }
 
 class _AuthSheet extends ConsumerStatefulWidget {
-  const _AuthSheet({required this.initialRegister});
-
-  final bool initialRegister;
+  const _AuthSheet();
 
   @override
   ConsumerState<_AuthSheet> createState() => _AuthSheetState();
 }
 
 class _AuthSheetState extends ConsumerState<_AuthSheet> {
-  late bool _register = widget.initialRegister;
-  final _email = TextEditingController();
-  final _password = TextEditingController();
   bool _loading = false;
-  bool _obscure = true;
   String? _error;
 
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    final email = _email.text.trim();
-    final password = _password.text;
-    if (email.isEmpty || password.isEmpty) {
-      setState(() => _error = appLocalizations.authErrorInvalidCredentials);
-      return;
-    }
+  Future<void> _signInWithGoogle() async {
     setState(() {
       _loading = true;
       _error = null;
     });
     try {
-      final token = _register
-          ? await authApi.register(email, password)
-          : await authApi.login(email, password);
+      final idToken = await googleAuth.obtainIdToken();
+      if (idToken == null) {
+        // User cancelled the Google flow.
+        if (mounted) setState(() => _loading = false);
+        return;
+      }
+
+      final token = await authApi.google(idToken);
       await preferences.setAuthToken(token);
-      await preferences.setUserEmail(email);
+
       // Fetch the account; provision the active subscription's profile so the
       // tunnel is ready (Application.initState only provisions once, at boot).
       String? url;
@@ -73,33 +59,32 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
       } on AuthException {
         // best-effort; the reconciler / next /me will heal it
       }
+
       if (!mounted) return;
-      ref.read(authTokenProvider.notifier).state =
-          token; // refreshes meProvider
+      ref.read(authTokenProvider.notifier).state = token; // refreshes meProvider
       if (url != null && url.isNotEmpty) {
         unawaited(globalState.appController.provisionSubscription(url));
       }
       ref.invalidate(meProvider);
       Navigator.of(context).pop(true);
     } on AuthException catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.message;
-        _loading = false;
-      });
+      if (mounted) setState(() => _showError(e.message));
+    } on SocialAuthException catch (e) {
+      if (mounted) setState(() => _showError(e.message));
     } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _error = appLocalizations.authErrorUnknown;
-        _loading = false;
-      });
+      if (mounted) setState(() => _showError(appLocalizations.authErrorUnknown));
     }
+  }
+
+  void _showError(String message) {
+    _error = message;
+    _loading = false;
   }
 
   @override
   Widget build(BuildContext context) => Material(
         // The forui sheet is pushed outside the app's Material tree; Material
-        // form widgets (TextField/FilledButton) need a Material ancestor.
+        // widgets (buttons) need a Material ancestor.
         type: MaterialType.transparency,
         child: Container(
           width: double.infinity,
@@ -130,65 +115,31 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
               ),
               const SizedBox(height: 20),
               Text(
-                _register
-                    ? appLocalizations.authCreateTitle
-                    : appLocalizations.authWelcomeTitle,
+                appLocalizations.authSignInTitle,
                 style: const TextStyle(
-                    color: AppTokens.text,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600),
+                    color: AppTokens.text, fontSize: 22, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 6),
               Text(
-                _register
-                    ? appLocalizations.authCreateSubtitle
-                    : appLocalizations.signInToManage,
+                appLocalizations.authSignInSubtitle,
                 style: const TextStyle(color: AppTokens.muted, fontSize: 14),
               ),
-              const SizedBox(height: 20),
-              _Toggle(
-                register: _register,
-                onChanged:
-                    _loading ? null : (v) => setState(() => _register = v),
-              ),
-              const SizedBox(height: 20),
-              RSectionLabel(appLocalizations.email),
-              _Field(
-                  controller: _email,
-                  hint: 'you@email.com',
-                  icon: Icons.mail_outline,
-                  keyboard: TextInputType.emailAddress),
-              const SizedBox(height: 14),
-              RSectionLabel(appLocalizations.password),
-              _Field(
-                controller: _password,
-                hint: '••••••••',
-                icon: Icons.lock_outline,
-                obscure: _obscure,
-                trailing: IconButton(
-                  icon: Icon(
-                      _obscure
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: AppTokens.muted,
-                      size: 20),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
               if (_error != null) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 Text(_error!,
-                    style:
-                        const TextStyle(color: AppTokens.amber, fontSize: 13)),
+                    style: const TextStyle(color: AppTokens.amber, fontSize: 13)),
               ],
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               RPrimaryButton(
-                label: _loading
-                    ? '…'
-                    : (_register
-                        ? appLocalizations.createAccount
-                        : appLocalizations.signIn),
-                onPressed: _loading ? null : _submit,
+                label: _loading ? '…' : appLocalizations.continueWithGoogle,
+                icon: _loading ? null : Icons.g_mobiledata,
+                onPressed: _loading ? null : _signInWithGoogle,
+              ),
+              const SizedBox(height: 12),
+              // Apple sign-in is reserved (ADR 0014) — disabled until implemented.
+              RSecondaryButton(
+                label: appLocalizations.appleComingSoon,
+                onPressed: null,
               ),
               const SizedBox(height: 16),
               Text(
@@ -198,96 +149,6 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
                     color: AppTokens.muted, fontSize: 12, height: 1.4),
               ),
             ],
-          ),
-        ),
-      );
-}
-
-class _Toggle extends StatelessWidget {
-  const _Toggle({required this.register, required this.onChanged});
-
-  final bool register;
-  final ValueChanged<bool>? onChanged;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        height: 44,
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: AppTokens.surface,
-          borderRadius: BorderRadius.circular(AppTokens.rField),
-        ),
-        child: Row(
-          children: [
-            _seg(appLocalizations.signIn, !register,
-                () => onChanged?.call(false)),
-            _seg(appLocalizations.createAccount, register,
-                () => onChanged?.call(true)),
-          ],
-        ),
-      );
-
-  Widget _seg(String label, bool selected, VoidCallback onTap) => Expanded(
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: selected ? AppTokens.accentTint : Colors.transparent,
-              borderRadius: BorderRadius.circular(AppTokens.rSegment),
-            ),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: selected ? AppTokens.accent : AppTokens.muted,
-                fontSize: 14,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      );
-}
-
-class _Field extends StatelessWidget {
-  const _Field({
-    required this.controller,
-    required this.hint,
-    required this.icon,
-    this.obscure = false,
-    this.trailing,
-    this.keyboard,
-  });
-
-  final TextEditingController controller;
-  final String hint;
-  final IconData icon;
-  final bool obscure;
-  final Widget? trailing;
-  final TextInputType? keyboard;
-
-  @override
-  Widget build(BuildContext context) => TextField(
-        controller: controller,
-        obscureText: obscure,
-        keyboardType: keyboard,
-        style: const TextStyle(color: AppTokens.text, fontSize: 15),
-        cursorColor: AppTokens.accent,
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: AppTokens.muted, fontSize: 15),
-          prefixIcon: Icon(icon, color: AppTokens.muted, size: 20),
-          suffixIcon: trailing,
-          filled: true,
-          fillColor: AppTokens.surface,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppTokens.rField),
-            borderSide: const BorderSide(color: AppTokens.border),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppTokens.rField),
-            borderSide: const BorderSide(color: AppTokens.accent, width: 1.5),
           ),
         ),
       );

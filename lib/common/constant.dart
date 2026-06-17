@@ -20,6 +20,17 @@ const backendBaseUrl = String.fromEnvironment(
   'BACKEND_URL',
   defaultValue: 'http://127.0.0.1:8080',
 );
+
+// Google OAuth (ADR 0014), injected at build time via --dart-define.
+// - googleServerClientId: the Web client ID. Passed to google_sign_in on
+//   mobile as serverClientId so the issued ID token's audience matches what the
+//   backend validates.
+// - googleDesktopClientId / Secret: the "Desktop app" OAuth client used by the
+//   PKCE loopback flow on macOS/Windows/Linux.
+const googleServerClientId = String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
+const googleDesktopClientId = String.fromEnvironment('GOOGLE_DESKTOP_CLIENT_ID');
+const googleDesktopClientSecret =
+    String.fromEnvironment('GOOGLE_DESKTOP_CLIENT_SECRET');
 final unixSocketPath = "/tmp/FlClashXSocket_${Random().nextInt(10000)}.sock";
 const helperPort = 47890;
 const maxTextScale = 1.4;

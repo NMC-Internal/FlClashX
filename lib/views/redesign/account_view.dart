@@ -311,7 +311,7 @@ class _GuestAccount extends StatelessWidget {
               const SizedBox(height: 24),
               RPrimaryButton(
                 label: appLocalizations.signIn,
-                onPressed: () => showAuthSheet(context, register: false),
+                onPressed: () => showAuthSheet(context),
               ),
             ],
           ),

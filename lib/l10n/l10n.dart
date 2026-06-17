@@ -1214,11 +1214,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Password`
-  String get password {
-    return Intl.message('Password', name: 'password', desc: '', args: []);
-  }
-
   /// `Check for updates`
   String get checkUpdate {
     return Intl.message(
@@ -3429,11 +3424,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Email`
-  String get email {
-    return Intl.message('Email', name: 'email', desc: '', args: []);
-  }
-
   /// `Log in`
   String get login {
     return Intl.message('Log in', name: 'login', desc: '', args: []);
@@ -3499,26 +3489,6 @@ class AppLocalizations {
     return Intl.message(
       'Password must be at least 8 characters',
       name: 'authPasswordTooShort',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invalid email or password`
-  String get authErrorInvalidCredentials {
-    return Intl.message(
-      'Invalid email or password',
-      name: 'authErrorInvalidCredentials',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This email is already registered`
-  String get authErrorEmailTaken {
-    return Intl.message(
-      'This email is already registered',
-      name: 'authErrorEmailTaken',
       desc: '',
       args: [],
     );
@@ -3812,16 +3782,6 @@ class AppLocalizations {
   /// `Sign in`
   String get signIn {
     return Intl.message('Sign in', name: 'signIn', desc: '', args: []);
-  }
-
-  /// `Create account`
-  String get createAccount {
-    return Intl.message(
-      'Create account',
-      name: 'createAccount',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Upgrade plan`
@@ -4309,36 +4269,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Create your account`
-  String get authCreateTitle {
-    return Intl.message(
-      'Create your account',
-      name: 'authCreateTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Welcome back`
-  String get authWelcomeTitle {
-    return Intl.message(
-      'Welcome back',
-      name: 'authWelcomeTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sign in to claim your free trial.`
-  String get authCreateSubtitle {
-    return Intl.message(
-      'Sign in to claim your free trial.',
-      name: 'authCreateSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `By continuing you agree to our Terms of Service and Privacy Policy.`
   String get authLegal {
     return Intl.message(
@@ -4384,6 +4314,51 @@ class AppLocalizations {
     return Intl.message(
       'Reset network settings',
       name: 'resetNetworkSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in`
+  String get authSignInTitle {
+    return Intl.message('Sign in', name: 'authSignInTitle', desc: '', args: []);
+  }
+
+  /// `Sign in to claim your free trial and manage your subscription.`
+  String get authSignInSubtitle {
+    return Intl.message(
+      'Sign in to claim your free trial and manage your subscription.',
+      name: 'authSignInSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue with Google`
+  String get continueWithGoogle {
+    return Intl.message(
+      'Continue with Google',
+      name: 'continueWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue with Apple (soon)`
+  String get appleComingSoon {
+    return Intl.message(
+      'Continue with Apple (soon)',
+      name: 'appleComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not sign in with Google. Please try again.`
+  String get authGoogleFailed {
+    return Intl.message(
+      'Could not sign in with Google. Please try again.',
+      name: 'authGoogleFailed',
       desc: '',
       args: [],
     );

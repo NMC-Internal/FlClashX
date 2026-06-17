@@ -123,23 +123,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "app": MessageLookupByLibrary.simpleMessage("アプリ"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("アプリアクセス制御"),
     "appDesc": MessageLookupByLibrary.simpleMessage("アプリ関連設定の処理"),
+    "appleComingSoon": MessageLookupByLibrary.simpleMessage("Apple（近日対応）"),
     "application": MessageLookupByLibrary.simpleMessage("アプリケーション設定"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage("標準アプリ設定"),
-    "authCreateSubtitle": MessageLookupByLibrary.simpleMessage(
-      "ログインして無料トライアルを取得。",
-    ),
-    "authCreateTitle": MessageLookupByLibrary.simpleMessage("アカウントを作成"),
     "authEmailInvalid": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email",
     ),
     "authEmailRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter your email",
-    ),
-    "authErrorEmailTaken": MessageLookupByLibrary.simpleMessage(
-      "This email is already registered",
-    ),
-    "authErrorInvalidCredentials": MessageLookupByLibrary.simpleMessage(
-      "Invalid email or password",
     ),
     "authErrorNetwork": MessageLookupByLibrary.simpleMessage(
       "Network error. Please check your connection and try again",
@@ -153,6 +144,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
       "Something went wrong. Please try again",
     ),
+    "authGoogleFailed": MessageLookupByLibrary.simpleMessage(
+      "Google でのログインに失敗しました。もう一度お試しください。",
+    ),
     "authLegal": MessageLookupByLibrary.simpleMessage(
       "続行すると、利用規約とプライバシーポリシーに同意したものとみなされます。",
     ),
@@ -162,7 +156,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "authPasswordTooShort": MessageLookupByLibrary.simpleMessage(
       "Password must be at least 8 characters",
     ),
-    "authWelcomeTitle": MessageLookupByLibrary.simpleMessage("おかえりなさい"),
+    "authSignInSubtitle": MessageLookupByLibrary.simpleMessage(
+      "ログインして無料トライアルを取得し、サブスクリプションを管理します。",
+    ),
+    "authSignInTitle": MessageLookupByLibrary.simpleMessage("ログイン"),
     "auto": MessageLookupByLibrary.simpleMessage("自動"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("自動更新チェック"),
     "autoCheckUpdateDesc": MessageLookupByLibrary.simpleMessage(
@@ -259,6 +256,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "contactMe": MessageLookupByLibrary.simpleMessage("連絡する"),
     "content": MessageLookupByLibrary.simpleMessage("内容"),
     "contentScheme": MessageLookupByLibrary.simpleMessage("コンテンツテーマ"),
+    "continueWithGoogle": MessageLookupByLibrary.simpleMessage("Google で続行"),
     "copy": MessageLookupByLibrary.simpleMessage("コピー"),
     "copyEnvVar": MessageLookupByLibrary.simpleMessage("環境変数をコピー"),
     "copyLink": MessageLookupByLibrary.simpleMessage("リンクをコピー"),
@@ -268,7 +266,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "country": MessageLookupByLibrary.simpleMessage("国"),
     "crashTest": MessageLookupByLibrary.simpleMessage("クラッシュテスト"),
     "create": MessageLookupByLibrary.simpleMessage("作成"),
-    "createAccount": MessageLookupByLibrary.simpleMessage("アカウント作成"),
     "cut": MessageLookupByLibrary.simpleMessage("切り取り"),
     "dark": MessageLookupByLibrary.simpleMessage("ダーク"),
     "dashboard": MessageLookupByLibrary.simpleMessage("ダッシュボード"),
@@ -303,7 +300,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "domain": MessageLookupByLibrary.simpleMessage("ドメイン"),
     "download": MessageLookupByLibrary.simpleMessage("ダウンロード"),
     "edit": MessageLookupByLibrary.simpleMessage("編集"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
     "emptyTip": m7,
     "en": MessageLookupByLibrary.simpleMessage("英語"),
     "enableLogs": MessageLookupByLibrary.simpleMessage("ログを有効にする"),
@@ -518,7 +514,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "プロバイダーの設定を無視して手動で管理",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("パレット"),
-    "password": MessageLookupByLibrary.simpleMessage("パスワード"),
     "paste": MessageLookupByLibrary.simpleMessage("貼り付け"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("お得"),
     "planChoose": MessageLookupByLibrary.simpleMessage("選択"),

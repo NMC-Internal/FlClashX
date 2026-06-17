@@ -117,21 +117,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "app": MessageLookupByLibrary.simpleMessage("应用"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("应用访问控制"),
     "appDesc": MessageLookupByLibrary.simpleMessage("处理应用相关设置"),
+    "appleComingSoon": MessageLookupByLibrary.simpleMessage(
+      "通过 Apple 继续（即将推出）",
+    ),
     "application": MessageLookupByLibrary.simpleMessage("应用程序设置"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage("标准应用程序设置"),
-    "authCreateSubtitle": MessageLookupByLibrary.simpleMessage("登录以领取免费试用。"),
-    "authCreateTitle": MessageLookupByLibrary.simpleMessage("创建您的账户"),
     "authEmailInvalid": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email",
     ),
     "authEmailRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter your email",
-    ),
-    "authErrorEmailTaken": MessageLookupByLibrary.simpleMessage(
-      "This email is already registered",
-    ),
-    "authErrorInvalidCredentials": MessageLookupByLibrary.simpleMessage(
-      "Invalid email or password",
     ),
     "authErrorNetwork": MessageLookupByLibrary.simpleMessage(
       "Network error. Please check your connection and try again",
@@ -145,6 +140,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authErrorUnknown": MessageLookupByLibrary.simpleMessage(
       "Something went wrong. Please try again",
     ),
+    "authGoogleFailed": MessageLookupByLibrary.simpleMessage(
+      "无法通过 Google 登录，请重试。",
+    ),
     "authLegal": MessageLookupByLibrary.simpleMessage("继续即表示您同意我们的服务条款和隐私政策。"),
     "authPasswordRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter your password",
@@ -152,7 +150,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "authPasswordTooShort": MessageLookupByLibrary.simpleMessage(
       "Password must be at least 8 characters",
     ),
-    "authWelcomeTitle": MessageLookupByLibrary.simpleMessage("欢迎回来"),
+    "authSignInSubtitle": MessageLookupByLibrary.simpleMessage(
+      "登录以领取免费试用并管理您的订阅。",
+    ),
+    "authSignInTitle": MessageLookupByLibrary.simpleMessage("登录"),
     "auto": MessageLookupByLibrary.simpleMessage("自动"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("自动检查更新"),
     "autoCheckUpdateDesc": MessageLookupByLibrary.simpleMessage("应用启动时自动检查更新"),
@@ -229,6 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "contactMe": MessageLookupByLibrary.simpleMessage("联系我"),
     "content": MessageLookupByLibrary.simpleMessage("内容"),
     "contentScheme": MessageLookupByLibrary.simpleMessage("内容主题"),
+    "continueWithGoogle": MessageLookupByLibrary.simpleMessage("通过 Google 继续"),
     "copy": MessageLookupByLibrary.simpleMessage("复制"),
     "copyEnvVar": MessageLookupByLibrary.simpleMessage("复制环境变量"),
     "copyLink": MessageLookupByLibrary.simpleMessage("复制链接"),
@@ -238,7 +240,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "country": MessageLookupByLibrary.simpleMessage("区域"),
     "crashTest": MessageLookupByLibrary.simpleMessage("崩溃测试"),
     "create": MessageLookupByLibrary.simpleMessage("创建"),
-    "createAccount": MessageLookupByLibrary.simpleMessage("创建账户"),
     "cut": MessageLookupByLibrary.simpleMessage("剪切"),
     "dark": MessageLookupByLibrary.simpleMessage("深色"),
     "dashboard": MessageLookupByLibrary.simpleMessage("仪表盘"),
@@ -269,7 +270,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "domain": MessageLookupByLibrary.simpleMessage("域名"),
     "download": MessageLookupByLibrary.simpleMessage("下载"),
     "edit": MessageLookupByLibrary.simpleMessage("编辑"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
     "emptyTip": m7,
     "en": MessageLookupByLibrary.simpleMessage("英语"),
     "enableLogs": MessageLookupByLibrary.simpleMessage("启用日志"),
@@ -454,7 +454,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "忽略提供商设置并手动管理",
     ),
     "palette": MessageLookupByLibrary.simpleMessage("调色板"),
-    "password": MessageLookupByLibrary.simpleMessage("密码"),
     "paste": MessageLookupByLibrary.simpleMessage("粘贴"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("超值"),
     "planChoose": MessageLookupByLibrary.simpleMessage("选择"),

@@ -117,7 +117,7 @@ class _PlanCard extends ConsumerWidget {
 
   Future<void> _onCta(BuildContext context, WidgetRef ref) async {
     if (plan.isTrial) {
-      final ok = await showAuthSheet(context, register: true);
+      final ok = await showAuthSheet(context);
       if (ok && context.mounted) unawaited(Navigator.of(context).maybePop());
       return;
     }
