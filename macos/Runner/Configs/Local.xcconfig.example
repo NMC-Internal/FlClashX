@@ -1,10 +1,18 @@
-// Local signing configuration
-// Copy this file to Local.xcconfig and update with your credentials
-// Local.xcconfig is gitignored and won't be committed
+// Local-only build config for the macOS Runner (gitignored — never committed).
+// Copy this file to Local.xcconfig and fill it in. It is included by
+// AppInfo.xcconfig (Google sign-in) and Signing.xcconfig (code signing).
 
-// Your Apple Developer ID
-CODE_SIGN_IDENTITY = Developer ID Application: Name Surname (TEAM_ID)
+// ── Google sign-in (ADR 0014) ───────────────────────────────────────────────
+// Your iOS/macOS OAuth client ID, REVERSED. If the client ID is
+//   123-abc.apps.googleusercontent.com
+// then this value is
+//   com.googleusercontent.apps.123-abc
+// The GoogleSignIn SDK refuses to start unless this is registered as a URL
+// scheme; Info.plist injects it via $(GOOGLE_IOS_REVERSED_CLIENT_ID).
+GOOGLE_IOS_REVERSED_CLIENT_ID = com.googleusercontent.apps.CHANGE-ME
 
-// Your Team ID
-DEVELOPMENT_TEAM = TEAM_ID
-
+// ── Code signing (optional) ─────────────────────────────────────────────────
+// Leave unset for automatic local signing (debug `make run-mac` works without).
+// Uncomment and fill only for notarized Developer ID release builds.
+// CODE_SIGN_IDENTITY = Developer ID Application: Name Surname (TEAM_ID)
+// DEVELOPMENT_TEAM = TEAM_ID

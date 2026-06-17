@@ -75,7 +75,21 @@ class GoogleAuthProvider implements SocialAuthProvider {
 
   // ── Android / iOS / macOS: native plugin (no secret) ───────────────────────
   Future<SocialCredential?> _nativeIdToken() async {
+    // On iOS/macOS the GoogleSignIn SDK needs a client ID to build its
+    // configuration; without one it throws an uncatchable native NSException
+    // ("No active configuration"). Fail with a readable error instead of
+    // crashing. Android resolves its client from google-services.json + SHA,
+    // so it does not take a runtime clientId.
+    final isApple = Platform.isIOS || Platform.isMacOS;
+    if (isApple && googleIosClientId.isEmpty) {
+      throw const SocialAuthException(
+        'Google iOS/macOS client ID is not configured (GOOGLE_IOS_CLIENT_ID)',
+      );
+    }
     final signIn = GoogleSignIn(
+      // clientId = the iOS/macOS OAuth client (Apple only). Becomes the
+      // GIDConfiguration's client identifier the native SDK requires.
+      clientId: isApple ? googleIosClientId : null,
       // serverClientId = the Web OAuth client; makes the issued ID token's
       // audience match what the backend validates.
       serverClientId: googleServerClientId.isEmpty ? null : googleServerClientId,
@@ -108,7 +122,7 @@ class GoogleAuthProvider implements SocialAuthProvider {
         .encode(sha256.convert(ascii.encode(verifier)).bytes)
         .replaceAll('=', '');
     final state = _randomUrlSafe(24);
-    final redirectUri = 'http://127.0.0.1:$_desktopPort';
+    const redirectUri = 'http://127.0.0.1:$_desktopPort';
 
     final authUrl = Uri.https('accounts.google.com', '/o/oauth2/v2/auth', {
       'response_type': 'code',

@@ -12,3 +12,9 @@ PRODUCT_BUNDLE_IDENTIFIER = net.fantomask.vpn
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 Fantomask. All rights reserved.
+
+// Local-only, gitignored overrides for the Runner target — currently the Google
+// sign-in reversed client ID consumed by Info.plist (GOOGLE_IOS_REVERSED_CLIENT_ID).
+// Copy Local.xcconfig.example to Local.xcconfig and fill it in. Optional: the
+// build still succeeds without it (Google sign-in just won't be configured).
+#include? "Local.xcconfig"

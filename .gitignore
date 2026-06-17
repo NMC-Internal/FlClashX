@@ -70,6 +70,8 @@ app.*.map.json
 *.local.sh
 # Flutter --dart-define-from-file (real values; commit only the .example)
 env.local.json
+# macOS local build config: signing + Google reversed client ID (commit only the .example)
+macos/Runner/Configs/Local.xcconfig
 
 # FVM Version Cache
 .fvm/

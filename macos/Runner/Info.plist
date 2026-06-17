@@ -33,6 +33,20 @@
 				<string>flclashx</string>
 			</array>
 		</dict>
+		<dict>
+			<!-- Google sign-in callback (ADR 0014). The GoogleSignIn SDK refuses to
+			     start unless the reversed iOS/macOS client ID is registered here.
+			     The value is injected at build time from GOOGLE_IOS_REVERSED_CLIENT_ID
+			     (Configs/Local.xcconfig, gitignored) so the real ID stays out of git. -->
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google-signin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(GOOGLE_IOS_REVERSED_CLIENT_ID)</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
