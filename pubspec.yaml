@@ -74,6 +74,7 @@ dependencies:
   forui: ^0.22.3
   fl_chart: ^1.2.0
   google_sign_in: ^6.2.1
+  flutter_web_auth_2: ^4.0.0
 
 dev_dependencies:
   flutter_test:

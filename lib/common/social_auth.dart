@@ -1,19 +1,18 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flclashx/common/constant.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 
 /// Social-login providers (ADR 0014). Apple lands later as another implementation.
 enum SocialProvider { google, apple }
 
 /// A social sign-in failure that is safe to surface to the user. Distinct from a
-/// user cancellation, which is represented by a `null` id-token (not an error).
+/// user cancellation, which is represented by a `null` credential (not an error).
 class SocialAuthException implements Exception {
   const SocialAuthException(this.message);
   final String message;
@@ -21,32 +20,61 @@ class SocialAuthException implements Exception {
   String toString() => 'SocialAuthException: $message';
 }
 
-/// Obtains a provider ID token to exchange with our backend. Returns `null` when
-/// the user cancels; throws [SocialAuthException] on a real failure.
-abstract interface class SocialAuthProvider {
-  SocialProvider get provider;
-  Future<String?> obtainIdToken();
+/// The result of a provider sign-in. On Android/iOS/macOS the native SDK yields
+/// an [IdTokenCredential] directly; on Windows/Linux the browser flow yields an
+/// [AuthCodeCredential] that the BACKEND exchanges (the OAuth secret stays
+/// server-side — never in the client).
+sealed class SocialCredential {}
+
+class IdTokenCredential extends SocialCredential {
+  IdTokenCredential(this.idToken);
+  final String idToken;
 }
 
-/// Google sign-in. Uses the native `google_sign_in` plugin on Android/iOS and a
-/// PKCE OAuth loopback (system browser + localhost listener) on desktop
-/// (macOS/Windows/Linux), where the plugin isn't available.
+class AuthCodeCredential extends SocialCredential {
+  AuthCodeCredential({
+    required this.code,
+    required this.codeVerifier,
+    required this.redirectUri,
+  });
+  final String code;
+  final String codeVerifier;
+  final String redirectUri;
+}
+
+/// Obtains a provider credential. Returns `null` when the user cancels; throws
+/// [SocialAuthException] on a real failure.
+abstract interface class SocialAuthProvider {
+  SocialProvider get provider;
+  Future<SocialCredential?> obtainCredential();
+}
+
+/// Google sign-in. Native `google_sign_in` on Android/iOS/macOS; a maintained
+/// browser flow (`flutter_web_auth_2`) on Windows/Linux that returns an auth
+/// code for the backend to exchange.
 class GoogleAuthProvider implements SocialAuthProvider {
   const GoogleAuthProvider();
+
+  // Fixed loopback port for the desktop browser redirect. Google "Desktop app"
+  // clients accept any 127.0.0.1 port; flutter_web_auth_2 needs it in the scheme.
+  static const _desktopPort = 8765;
 
   @override
   SocialProvider get provider => SocialProvider.google;
 
   @override
-  Future<String?> obtainIdToken() {
-    if (Platform.isAndroid || Platform.isIOS) {
-      return _pluginIdToken();
+  Future<SocialCredential?> obtainCredential() {
+    if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) {
+      return _nativeIdToken();
     }
-    return _desktopLoopbackIdToken();
+    if (Platform.isWindows || Platform.isLinux) {
+      return _desktopAuthCode();
+    }
+    throw const SocialAuthException('Google sign-in is not supported on this platform');
   }
 
-  // ── Mobile: native plugin ──────────────────────────────────────────────────
-  Future<String?> _pluginIdToken() async {
+  // ── Android / iOS / macOS: native plugin (no secret) ───────────────────────
+  Future<SocialCredential?> _nativeIdToken() async {
     final signIn = GoogleSignIn(
       // serverClientId = the Web OAuth client; makes the issued ID token's
       // audience match what the backend validates.
@@ -61,7 +89,7 @@ class GoogleAuthProvider implements SocialAuthProvider {
       if (idToken == null || idToken.isEmpty) {
         throw const SocialAuthException('Google returned no ID token');
       }
-      return idToken;
+      return IdTokenCredential(idToken);
     } on SocialAuthException {
       rethrow;
     } catch (e) {
@@ -69,8 +97,8 @@ class GoogleAuthProvider implements SocialAuthProvider {
     }
   }
 
-  // ── Desktop: PKCE loopback ─────────────────────────────────────────────────
-  Future<String?> _desktopLoopbackIdToken() async {
+  // ── Windows / Linux: browser PKCE → auth code (backend exchanges it) ────────
+  Future<SocialCredential?> _desktopAuthCode() async {
     if (googleDesktopClientId.isEmpty) {
       throw const SocialAuthException('Google desktop client ID is not configured');
     }
@@ -80,9 +108,7 @@ class GoogleAuthProvider implements SocialAuthProvider {
         .encode(sha256.convert(ascii.encode(verifier)).bytes)
         .replaceAll('=', '');
     final state = _randomUrlSafe(24);
-
-    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final redirectUri = 'http://127.0.0.1:${server.port}';
+    final redirectUri = 'http://127.0.0.1:$_desktopPort';
 
     final authUrl = Uri.https('accounts.google.com', '/o/oauth2/v2/auth', {
       'response_type': 'code',
@@ -95,64 +121,28 @@ class GoogleAuthProvider implements SocialAuthProvider {
       'prompt': 'select_account',
     });
 
-    if (!await launchUrl(authUrl, mode: LaunchMode.externalApplication)) {
-      await server.close(force: true);
-      throw const SocialAuthException('Could not open the browser for Google sign-in');
-    }
-
-    final code = await _awaitRedirectCode(server, state);
-    if (code == null) return null; // cancelled / no code
-
-    return _exchangeCode(code, verifier, redirectUri);
-  }
-
-  Future<String?> _awaitRedirectCode(HttpServer server, String expectedState) async {
+    final String result;
     try {
-      await for (final request in server) {
-        final params = request.uri.queryParameters;
-        request.response
-          ..statusCode = HttpStatus.ok
-          ..headers.contentType = ContentType.html
-          ..write(_closePageHtml);
-        await request.response.close();
+      result = await FlutterWebAuth2.authenticate(
+        url: authUrl.toString(),
+        callbackUrlScheme: redirectUri,
+      );
+    } on PlatformException catch (e) {
+      if (e.code == 'CANCELED') return null; // user cancelled
+      throw SocialAuthException('Google sign-in failed: ${e.message}');
+    }
 
-        final error = params['error'];
-        if (error != null) {
-          throw SocialAuthException('Google returned an error: $error');
-        }
-        if (params['state'] != expectedState) {
-          throw const SocialAuthException('OAuth state mismatch');
-        }
-        return params['code'];
-      }
-    } finally {
-      await server.close(force: true);
+    final params = Uri.parse(result).queryParameters;
+    if (params['error'] != null) {
+      throw SocialAuthException('Google returned an error: ${params['error']}');
     }
-    return null;
-  }
+    if (params['state'] != state) {
+      throw const SocialAuthException('OAuth state mismatch');
+    }
+    final code = params['code'];
+    if (code == null || code.isEmpty) return null;
 
-  Future<String?> _exchangeCode(String code, String verifier, String redirectUri) async {
-    final resp = await http.post(
-      Uri.https('oauth2.googleapis.com', '/token'),
-      body: {
-        'grant_type': 'authorization_code',
-        'code': code,
-        'client_id': googleDesktopClientId,
-        if (googleDesktopClientSecret.isNotEmpty)
-          'client_secret': googleDesktopClientSecret,
-        'redirect_uri': redirectUri,
-        'code_verifier': verifier,
-      },
-    );
-    if (resp.statusCode != HttpStatus.ok) {
-      throw SocialAuthException('Token exchange failed (${resp.statusCode})');
-    }
-    final body = jsonDecode(resp.body);
-    final idToken = body is Map ? body['id_token'] : null;
-    if (idToken is! String || idToken.isEmpty) {
-      throw const SocialAuthException('No ID token in the token response');
-    }
-    return idToken;
+    return AuthCodeCredential(code: code, codeVerifier: verifier, redirectUri: redirectUri);
   }
 
   static String _randomUrlSafe(int bytes) {
@@ -160,11 +150,6 @@ class GoogleAuthProvider implements SocialAuthProvider {
     final buf = List<int>.generate(bytes, (_) => rnd.nextInt(256));
     return base64Url.encode(buf).replaceAll('=', '');
   }
-
-  static const _closePageHtml =
-      '<!doctype html><html><body style="font-family:sans-serif;text-align:center;padding-top:3rem">'
-      '<h2>Fantomask VPN</h2><p>You can close this window and return to the app.</p>'
-      '</body></html>';
 }
 
 /// The Google provider singleton used by the auth sheet.

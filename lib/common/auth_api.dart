@@ -64,13 +64,23 @@ class AuthApi {
 
   /// Exchanges a verified Google ID token for our JWT (ADR 0014). The first
   /// sign-in for an identity creates the account + trial server-side.
-  Future<String> google(String idToken) async {
+  /// Used on Android/iOS/macOS (native sign-in).
+  Future<String> google(String idToken) =>
+      _googleAuth('/v1/auth/google', {'id_token': idToken});
+
+  /// Desktop (Windows/Linux): sends the browser PKCE authorization code for the
+  /// backend to exchange (the OAuth secret stays server-side).
+  Future<String> googleDesktop(String code, String codeVerifier, String redirectUri) =>
+      _googleAuth('/v1/auth/google/desktop', {
+        'code': code,
+        'code_verifier': codeVerifier,
+        'redirect_uri': redirectUri,
+      });
+
+  Future<String> _googleAuth(String path, Map<String, Object?> data) async {
     final Response<dynamic> response;
     try {
-      response = await _dio.post<dynamic>(
-        '/v1/auth/google',
-        data: {'id_token': idToken},
-      );
+      response = await _dio.post<dynamic>(path, data: data);
     } on DioException catch (e) {
       throw _mapDioException(e);
     }
@@ -87,7 +97,7 @@ class AuthApi {
       return token;
     }
 
-    // 401 = the backend rejected the Google token (bad/expired/wrong audience).
+    // 401/400 = the backend rejected the Google credential (bad/expired/wrong audience).
     if (status == HttpStatus.unauthorized || status == HttpStatus.badRequest) {
       throw AuthException(
         AuthErrorKind.invalidCredentials,

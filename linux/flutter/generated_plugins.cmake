@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  desktop_webview_window
   dynamic_color
   file_selector_linux
   flutter_js
@@ -12,6 +13,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   tray_manager
   url_launcher_linux
   window_manager
+  window_to_front
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

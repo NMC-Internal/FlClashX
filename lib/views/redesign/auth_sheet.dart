@@ -39,14 +39,18 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
       _error = null;
     });
     try {
-      final idToken = await googleAuth.obtainIdToken();
-      if (idToken == null) {
+      final cred = await googleAuth.obtainCredential();
+      if (cred == null) {
         // User cancelled the Google flow.
         if (mounted) setState(() => _loading = false);
         return;
       }
 
-      final token = await authApi.google(idToken);
+      final token = switch (cred) {
+        IdTokenCredential c => await authApi.google(c.idToken),
+        AuthCodeCredential c =>
+          await authApi.googleDesktop(c.code, c.codeVerifier, c.redirectUri),
+      };
       await preferences.setAuthToken(token);
 
       // Fetch the account; provision the active subscription's profile so the
