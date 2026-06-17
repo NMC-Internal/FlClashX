@@ -68,6 +68,8 @@ app.*.map.json
 # Environment variables (contains sensitive data)
 .env
 *.local.sh
+# Flutter --dart-define-from-file (real values; commit only the .example)
+env.local.json
 
 # FVM Version Cache
 .fvm/
