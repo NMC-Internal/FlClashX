@@ -781,7 +781,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Установить порт прослушивания прокси-сервера",
     ),
     "proxyProviders": MessageLookupByLibrary.simpleMessage("Провайдеры прокси"),
-    "pureBlack": MessageLookupByLibrary.simpleMessage("Чёрный фон"),
     "pureBlackMode": MessageLookupByLibrary.simpleMessage("Чисто черный режим"),
     "qrcode": MessageLookupByLibrary.simpleMessage("QR-код"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage(
@@ -970,13 +969,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "thanks": MessageLookupByLibrary.simpleMessage("Спасибо за вклад"),
     "theme": MessageLookupByLibrary.simpleMessage("Тема"),
     "themeColor": MessageLookupByLibrary.simpleMessage("Цвет темы"),
-    "themeDark": MessageLookupByLibrary.simpleMessage("Тёмная"),
     "themeDesc": MessageLookupByLibrary.simpleMessage(
       "Установить темный режим, настроить цвет",
     ),
-    "themeLight": MessageLookupByLibrary.simpleMessage("Светлая"),
     "themeMode": MessageLookupByLibrary.simpleMessage("Режим темы"),
-    "themeSystem": MessageLookupByLibrary.simpleMessage("Системная"),
     "threeColumns": MessageLookupByLibrary.simpleMessage("Три столбца"),
     "tight": MessageLookupByLibrary.simpleMessage("Плотный"),
     "time": MessageLookupByLibrary.simpleMessage("Время"),

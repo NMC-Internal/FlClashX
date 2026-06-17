@@ -758,7 +758,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Set the Clash listening port",
     ),
     "proxyProviders": MessageLookupByLibrary.simpleMessage("Proxy providers"),
-    "pureBlack": MessageLookupByLibrary.simpleMessage("Pure black"),
     "pureBlackMode": MessageLookupByLibrary.simpleMessage("Pure black mode"),
     "qrcode": MessageLookupByLibrary.simpleMessage("QR code"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage(
@@ -939,13 +938,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "thanks": MessageLookupByLibrary.simpleMessage("Thanks for contribution"),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
     "themeColor": MessageLookupByLibrary.simpleMessage("Theme color"),
-    "themeDark": MessageLookupByLibrary.simpleMessage("Dark"),
     "themeDesc": MessageLookupByLibrary.simpleMessage(
       "Set dark mode,adjust the color",
     ),
-    "themeLight": MessageLookupByLibrary.simpleMessage("Light"),
     "themeMode": MessageLookupByLibrary.simpleMessage("Theme mode"),
-    "themeSystem": MessageLookupByLibrary.simpleMessage("System"),
     "threeColumns": MessageLookupByLibrary.simpleMessage("Three columns"),
     "tight": MessageLookupByLibrary.simpleMessage("Tight"),
     "time": MessageLookupByLibrary.simpleMessage("Time"),

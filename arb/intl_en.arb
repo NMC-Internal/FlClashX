@@ -566,10 +566,6 @@
       "app": {}
     }
   },
-  "themeSystem": "System",
-  "themeLight": "Light",
-  "themeDark": "Dark",
-  "pureBlack": "Pure black",
   "langSystem": "System",
   "chooseAPlan": "Choose a plan",
   "plansSubtitle": "Protect your traffic. Cancel anytime.",

@@ -23,7 +23,6 @@ class RSettingsView extends ConsumerWidget {
     final minimizeOnExit = ref.watch(appSettingProvider.select((s) => s.minimizeOnExit));
     final openLogs = ref.watch(appSettingProvider.select((s) => s.openLogs));
     final override = ref.watch(appSettingProvider.select((s) => s.overrideProviderSettings));
-    final themeMode = ref.watch(themeSettingProvider.select((s) => s.themeMode));
     final locale = ref.watch(appSettingProvider.select((s) => s.locale));
     final notifier = ref.read(appSettingProvider.notifier);
 
@@ -36,13 +35,6 @@ class RSettingsView extends ConsumerWidget {
             children: [
               RSectionLabel(appLocalizations.settingsAppearance),
               _Group(children: [
-                _NavRow(
-                  icon: Icons.dark_mode_outlined,
-                  title: appLocalizations.theme,
-                  subtitle: _themeLabel(themeMode),
-                  onTap: () => _showSheet(context, const _ThemeSheet()),
-                ),
-                const _Divider(),
                 _NavRow(
                   icon: Icons.language,
                   title: appLocalizations.language,
@@ -107,12 +99,6 @@ class RSettingsView extends ConsumerWidget {
       ],
     );
   }
-
-  String _themeLabel(ThemeMode m) => switch (m) {
-        ThemeMode.system => appLocalizations.themeSystem,
-        ThemeMode.light => appLocalizations.themeLight,
-        ThemeMode.dark => appLocalizations.themeDark,
-      };
 
   String _localeLabel(String? code) => switch (code) {
         null || '' => appLocalizations.langSystem,
@@ -290,52 +276,6 @@ class _OptionRow extends StatelessWidget {
           ),
         ),
       );
-}
-
-/// Theme picker: light/dark/system + the pure-black (AMOLED) toggle. Drives the
-/// shared [themeSettingProvider]; the redesign surface is dark-first, so this
-/// primarily affects the system overlay and the legacy Material sub-screens.
-class _ThemeSheet extends ConsumerWidget {
-  const _ThemeSheet();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(themeSettingProvider);
-    final notifier = ref.read(themeSettingProvider.notifier);
-    return _SheetShell(
-      title: appLocalizations.theme,
-      children: [
-        for (final m in ThemeMode.values)
-          _OptionRow(
-            label: switch (m) {
-              ThemeMode.system => appLocalizations.themeSystem,
-              ThemeMode.light => appLocalizations.themeLight,
-              ThemeMode.dark => appLocalizations.themeDark,
-            },
-            selected: theme.themeMode == m,
-            onTap: () => notifier.updateState((s) => s.copyWith(themeMode: m)),
-          ),
-        const Divider(height: 1, thickness: 1, color: AppTokens.border),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(appLocalizations.pureBlack,
-                    style: const TextStyle(color: AppTokens.text, fontSize: 15)),
-              ),
-              Switch(
-                value: theme.pureBlack,
-                onChanged: (v) => notifier.updateState((s) => s.copyWith(pureBlack: v)),
-                activeTrackColor: AppTokens.accent,
-                activeThumbColor: AppTokens.onAccent,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 /// Language picker. "System" follows the OS locale (clears the override).

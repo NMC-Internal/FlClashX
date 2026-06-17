@@ -4230,26 +4230,6 @@ class AppLocalizations {
   }
 
   /// `System`
-  String get themeSystem {
-    return Intl.message('System', name: 'themeSystem', desc: '', args: []);
-  }
-
-  /// `Light`
-  String get themeLight {
-    return Intl.message('Light', name: 'themeLight', desc: '', args: []);
-  }
-
-  /// `Dark`
-  String get themeDark {
-    return Intl.message('Dark', name: 'themeDark', desc: '', args: []);
-  }
-
-  /// `Pure black`
-  String get pureBlack {
-    return Intl.message('Pure black', name: 'pureBlack', desc: '', args: []);
-  }
-
-  /// `System`
   String get langSystem {
     return Intl.message('System', name: 'langSystem', desc: '', args: []);
   }

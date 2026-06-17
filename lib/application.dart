@@ -222,7 +222,11 @@ class ApplicationState extends ConsumerState<Application> {
                 title: appName,
                 locale: utils.getLocaleForString(locale),
                 supportedLocales: AppLocalizations.delegate.supportedLocales,
-                themeMode: themeProps.themeMode,
+                // Brand-lock (ADR 0013 decision 6): Fantomask is a dark-first
+                // branded product — the UI is always the stealth dark theme,
+                // not user-switchable. (themeProps.primaryColor stays wired for
+                // the subscription-driven flclashx-hex accent.)
+                themeMode: ThemeMode.dark,
                 theme: ThemeData(
                   useMaterial3: true,
                   pageTransitionsTheme: _pageTransitionsTheme,
