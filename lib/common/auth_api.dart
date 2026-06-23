@@ -39,6 +39,21 @@ abstract final class SubscriptionStatus {
   static const failed = 'failed';
 }
 
+/// Result of `POST /v1/identities/telegram/link-init` (ADR 0015/0018): an opaque
+/// single-use code plus a ready `t.me/<bot>?start=<code>` deep link (empty when the
+/// bot username is not configured server-side).
+class TelegramLinkInit {
+  const TelegramLinkInit({required this.code, required this.deepLink});
+
+  factory TelegramLinkInit.fromJson(Map<String, Object?> json) => TelegramLinkInit(
+        code: json['code'] as String? ?? '',
+        deepLink: json['deep_link'] as String? ?? '',
+      );
+
+  final String code;
+  final String deepLink;
+}
+
 /// Thin client for the auth/me backend contract (ADR 0014 social login, ADR 0010).
 ///
 /// Endpoints (base = [backendBaseUrl]):
@@ -111,8 +126,9 @@ class AuthApi {
   /// email, the list of subscriptions, trial eligibility and device limit.
   ///
   /// An account with NO subscription is valid and returns a [Me] with an empty
-  /// subscriptions list (NOT an error). A 401 throws [AuthErrorKind.sessionExpired]
-  /// so the caller can drop to guest mode / log out.
+  /// subscriptions list (NOT an error). A 401 (token rejected) or 404 (the account
+  /// no longer exists) throws [AuthErrorKind.sessionExpired] so the caller drops to
+  /// guest mode / logs out — the stored token can no longer be used either way.
   Future<Me> getMe(String token) async {
     final Response<dynamic> response;
     try {
@@ -121,6 +137,43 @@ class AuthApi {
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.unauthorized || status == HttpStatus.notFound) {
+      throw AuthException(
+        AuthErrorKind.sessionExpired,
+        appLocalizations.authErrorSessionExpired,
+      );
+    }
+    if (status != HttpStatus.ok) {
+      throw _mapStatus(status);
+    }
+
+    final data = response.data;
+    if (data is! Map) {
+      throw AuthException(
+        AuthErrorKind.server,
+        appLocalizations.authErrorServer,
+      );
+    }
+    return Me.fromJson(Map<String, Object?>.from(data));
+  }
+
+  /// Starts linking a Telegram account to THIS account (ADR 0015/0018):
+  /// `POST /v1/identities/telegram/link-init` (Bearer) -> `{code, deep_link}`.
+  /// The user opens the deep link in the bot to attach Telegram; the backend then
+  /// reflects what they bought via the bot in `/v1/me` (adopt-on-/me). A 401 throws
+  /// [AuthErrorKind.sessionExpired].
+  Future<TelegramLinkInit> linkInitTelegram(String token) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/identities/telegram/link-init',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
     } on DioException catch (e) {
       throw _mapDioException(e);
@@ -139,12 +192,9 @@ class AuthApi {
 
     final data = response.data;
     if (data is! Map) {
-      throw AuthException(
-        AuthErrorKind.server,
-        appLocalizations.authErrorServer,
-      );
+      throw AuthException(AuthErrorKind.server, appLocalizations.authErrorServer);
     }
-    return Me.fromJson(Map<String, Object?>.from(data));
+    return TelegramLinkInit.fromJson(Map<String, Object?>.from(data));
   }
 
   String? _extractToken(dynamic data) {

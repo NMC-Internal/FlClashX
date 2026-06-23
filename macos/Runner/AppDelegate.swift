@@ -6,7 +6,8 @@ import LaunchAtLogin
 @main
 class AppDelegate: FlutterAppDelegate {
     var statusBarController: StatusBarController?
-    
+    var statusBarChannel: FlutterMethodChannel?
+
     var flutterUIPopover = NSPopover.init()
     
     override init() {
@@ -61,7 +62,15 @@ class AppDelegate: FlutterAppDelegate {
                 result(FlutterMethodNotImplemented)
             }
         }
-        
+
+        statusBarChannel = channel
+
+        // Tell Flutter each time the popover is shown so it can refetch /v1/me
+        // (macOS does not emit a reliable AppLifecycleState.resumed for the popover).
+        statusBarController?.onPopoverShown = { [weak self] in
+            self?.statusBarChannel?.invokeMethod("popoverDidShow", arguments: nil)
+        }
+
         NSLog("StatusBar channel set up successfully")
     }
     

@@ -81,11 +81,16 @@ class Me with _$Me {
     @Default(<Subscription>[]) List<Subscription> subscriptions,
     @JsonKey(name: 'trial_eligible') @Default(false) bool trialEligible,
     @JsonKey(name: 'device_limit') @Default(0) int deviceLimit,
+    @Default(<String>[]) List<String> providers,
   }) = _Me;
 
   const Me._();
 
   factory Me.fromJson(Map<String, Object?> json) => _$MeFromJson(json);
+
+  /// Whether a Telegram identity is linked to this account — the client hides
+  /// the "Link Telegram" action once present (ADR 0018).
+  bool get telegramLinked => providers.contains('telegram');
 
   /// The current subscription (the one marked active), or null when the account
   /// has none (valid — the client shows the claim-trial / no-subscription state).

@@ -38,27 +38,29 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(label) => "現在の${label}は既に存在しています";
 
-  static String m9(label) => "現在${label}はありません";
+  static String m9(code) => "ボットを開いてこのコードを送信してください: ${code}";
 
-  static String m10(label) => "${label}は数字でなければなりません";
+  static String m10(label) => "現在${label}はありません";
 
-  static String m11(days) => "${days} 日間アクセス";
+  static String m11(label) => "${label}は数字でなければなりません";
 
-  static String m12(count) => "${count} 台のデバイス";
+  static String m12(days) => "${days} 日間アクセス";
 
   static String m13(count) => "${count} 台のデバイス";
 
-  static String m14(name) => "${name} プラン";
+  static String m14(count) => "${count} 台のデバイス";
 
-  static String m15(size) => "${size} トラフィック";
+  static String m15(name) => "${name} プラン";
 
-  static String m16(label) => "${label} は 1024 から 49151 の間でなければなりません";
+  static String m16(size) => "${size} トラフィック";
 
-  static String m17(count) => "${count} 項目が選択されています";
+  static String m17(label) => "${label} は 1024 から 49151 の間でなければなりません";
 
-  static String m18(days) => "サブスクリプションは${days}日後に期限切れになります";
+  static String m18(count) => "${count} 項目が選択されています";
 
-  static String m19(label) => "${label}はURLである必要があります";
+  static String m19(days) => "サブスクリプションは${days}日後に期限切れになります";
+
+  static String m20(label) => "${label}はURLである必要があります";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -399,6 +401,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "launchAtStartup": MessageLookupByLibrary.simpleMessage("起動時に開く"),
     "layout": MessageLookupByLibrary.simpleMessage("レイアウト"),
     "light": MessageLookupByLibrary.simpleMessage("ライト"),
+    "linkTelegram": MessageLookupByLibrary.simpleMessage("Telegram をリンク"),
+    "linkTelegramCode": m9,
     "list": MessageLookupByLibrary.simpleMessage("リスト"),
     "listen": MessageLookupByLibrary.simpleMessage("リスン"),
     "local": MessageLookupByLibrary.simpleMessage("ローカル"),
@@ -483,8 +487,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "プロファイルがありません。追加してください",
     ),
     "nullScriptTip": MessageLookupByLibrary.simpleMessage("スクリプトはありません"),
-    "nullTip": m9,
-    "numberTip": m10,
+    "nullTip": m10,
+    "numberTip": m11,
     "oneColumn": MessageLookupByLibrary.simpleMessage("1列"),
     "oneline": MessageLookupByLibrary.simpleMessage("オンライン"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("アイコンのみ"),
@@ -517,17 +521,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "paste": MessageLookupByLibrary.simpleMessage("貼り付け"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("お得"),
     "planChoose": MessageLookupByLibrary.simpleMessage("選択"),
-    "planDaysAccess": m11,
-    "planDevice": m12,
-    "planDevices": m13,
+    "planDaysAccess": m12,
+    "planDevice": m13,
+    "planDevices": m14,
     "planFree": MessageLookupByLibrary.simpleMessage("無料"),
     "planGeneric": MessageLookupByLibrary.simpleMessage("サブスクリプション"),
     "planMonthly": MessageLookupByLibrary.simpleMessage("月額プラン"),
-    "planNamed": m14,
+    "planNamed": m15,
     "planOneTime": MessageLookupByLibrary.simpleMessage("一回限り"),
     "planPerMonth": MessageLookupByLibrary.simpleMessage("/月"),
     "planPerYear": MessageLookupByLibrary.simpleMessage("/年"),
-    "planTrafficAmount": m15,
+    "planTrafficAmount": m16,
     "planTrial": MessageLookupByLibrary.simpleMessage("トライアルプラン"),
     "planUnlimitedTraffic": MessageLookupByLibrary.simpleMessage("無制限トラフィック"),
     "planYearly": MessageLookupByLibrary.simpleMessage("年額プラン"),
@@ -557,7 +561,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "port": MessageLookupByLibrary.simpleMessage("ポート"),
     "portConflictTip": MessageLookupByLibrary.simpleMessage("別のポートを入力してください"),
-    "portTip": m16,
+    "portTip": m17,
     "preferH3Desc": MessageLookupByLibrary.simpleMessage("DOHのHTTP/3を優先使用"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage("キーボードを押してください"),
     "preview": MessageLookupByLibrary.simpleMessage("プレビュー"),
@@ -662,7 +666,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("秒"),
     "selectAll": MessageLookupByLibrary.simpleMessage("すべて選択"),
     "selected": MessageLookupByLibrary.simpleMessage("選択済み"),
-    "selectedCountTitle": m17,
+    "selectedCountTitle": m18,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("タイムアウト"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションを取得してサーバーを読み込みます。",
@@ -709,7 +713,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションが期限切れになりました",
     ),
-    "subscriptionExpiresInDays": m18,
+    "subscriptionExpiresInDays": m19,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションがまもなく期限切れ",
     ),
@@ -738,6 +742,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tabAnimationDesc": MessageLookupByLibrary.simpleMessage("モバイル表示でのみ有効"),
     "tcpConcurrent": MessageLookupByLibrary.simpleMessage("TCP並列処理"),
     "tcpConcurrentDesc": MessageLookupByLibrary.simpleMessage("TCP並列処理を許可"),
+    "telegramLinked": MessageLookupByLibrary.simpleMessage("Telegram リンク済み"),
     "testUrl": MessageLookupByLibrary.simpleMessage("URLテスト"),
     "textScale": MessageLookupByLibrary.simpleMessage("テキストスケーリング"),
     "thanks": MessageLookupByLibrary.simpleMessage("貢献に感謝"),
@@ -779,7 +784,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("アップロード"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("URL経由でプロファイルを取得"),
-    "urlTip": m19,
+    "urlTip": m20,
     "useHosts": MessageLookupByLibrary.simpleMessage("ホストを使用"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("システムホストを使用"),
     "value": MessageLookupByLibrary.simpleMessage("値"),

@@ -8,11 +8,46 @@ import 'package:flclashx/views/redesign/plans_view.dart';
 import 'package:flclashx/views/redesign/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Account: identity, the active subscription (traffic donut + expiry),
-/// subscription history, and logout. Backed by [meProvider] (`/v1/me` v2).
+/// subscription history, link Telegram, and logout. Backed by [meProvider]
+/// (`/v1/me` v2).
 class RAccountView extends ConsumerWidget {
   const RAccountView({super.key});
+
+  /// Starts Telegram linking (ADR 0018): asks the backend for a one-time code +
+  /// deep link, then opens the bot so the user attaches Telegram. After linking,
+  /// what they buy via the bot shows up here (adopt-on-/me, on the next refresh).
+  Future<void> _linkTelegram(WidgetRef ref) async {
+    final token = ref.read(authTokenProvider);
+    if (token == null || token.isEmpty) return;
+    try {
+      final init = await authApi.linkInitTelegram(token);
+      if (init.deepLink.isNotEmpty) {
+        await launchUrl(Uri.parse(init.deepLink), mode: LaunchMode.externalApplication);
+        return;
+      }
+      if (init.code.isNotEmpty) {
+        await globalState.showMessage(
+          title: appLocalizations.linkTelegram,
+          message: TextSpan(text: appLocalizations.linkTelegramCode(init.code)),
+        );
+      }
+    } on AuthException catch (e) {
+      await globalState.showMessage(
+        title: appLocalizations.linkTelegram,
+        message: TextSpan(text: e.message),
+      );
+    }
+  }
+
+  /// Pull-to-refresh / lifecycle refetch of `/v1/me`: drop the cached value and
+  /// await the fresh fetch so the spinner stays until new data arrives.
+  Future<void> _refreshMe(WidgetRef ref) async {
+    ref.invalidate(meProvider);
+    await ref.read(meProvider.future);
+  }
 
   Future<void> _logout(WidgetRef ref) async {
     final res = await globalState.showMessage(
@@ -39,7 +74,12 @@ class RAccountView extends ConsumerWidget {
       content = meAsync.when(
         loading: () => const Center(child: CircularProgressIndicator(color: AppTokens.accent)),
         error: (_, __) => const _AccountError(),
-        data: (me) => _AccountBody(me: me ?? const Me(), onLogout: () => _logout(ref)),
+        data: (me) => _AccountBody(
+          me: me ?? const Me(),
+          onLinkTelegram: () => _linkTelegram(ref),
+          onLogout: () => _logout(ref),
+          onRefresh: () => _refreshMe(ref),
+        ),
       );
     }
 
@@ -53,31 +93,76 @@ class RAccountView extends ConsumerWidget {
 }
 
 class _AccountBody extends StatelessWidget {
-  const _AccountBody({required this.me, required this.onLogout});
+  const _AccountBody({
+    required this.me,
+    required this.onLinkTelegram,
+    required this.onLogout,
+    required this.onRefresh,
+  });
 
   final Me me;
+  final VoidCallback onLinkTelegram;
   final VoidCallback onLogout;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
     final sub = me.activeSubscription;
     final history = me.subscriptions.where((s) => !s.active).toList();
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-      children: [
-        _Identity(email: me.email),
-        const SizedBox(height: 16),
-        if (sub != null) _SubCard(sub: sub) else const _NoSubCard(),
-        if (history.isNotEmpty) ...[
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      color: AppTokens.accent,
+      backgroundColor: AppTokens.surface,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          _Identity(email: me.email),
+          const SizedBox(height: 16),
+          if (sub != null) _SubCard(sub: sub) else const _NoSubCard(),
+          if (history.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            RSectionLabel(appLocalizations.subscriptionHistory),
+            for (final s in history) _HistoryRow(sub: s),
+          ],
           const SizedBox(height: 20),
-          RSectionLabel(appLocalizations.subscriptionHistory),
-          for (final s in history) _HistoryRow(sub: s),
+          if (me.telegramLinked)
+            const _TelegramLinked()
+          else
+            RSecondaryButton(label: appLocalizations.linkTelegram, onPressed: onLinkTelegram),
+          const SizedBox(height: 12),
+          RSecondaryButton(label: appLocalizations.logout, onPressed: onLogout, destructive: true),
         ],
-        const SizedBox(height: 20),
-        RSecondaryButton(label: appLocalizations.logout, onPressed: onLogout, destructive: true),
-      ],
+      ),
     );
   }
+}
+
+/// Replaces the "Link Telegram" button once a Telegram identity is attached
+/// (ADR 0018): a non-interactive confirmation row.
+class _TelegramLinked extends StatelessWidget {
+  const _TelegramLinked();
+
+  @override
+  Widget build(BuildContext context) => Container(
+        height: 48,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppTokens.accent.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(AppTokens.rPill),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle, color: AppTokens.accent, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              appLocalizations.telegramLinked,
+              style: const TextStyle(color: AppTokens.accent, fontSize: 14, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      );
 }
 
 class _Identity extends StatelessWidget {

@@ -39,27 +39,29 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(label) => "Текущий ${label} уже существует";
 
-  static String m9(label) => "Сейчас ${label} нет";
+  static String m9(code) => "Откройте бота и отправьте этот код: ${code}";
 
-  static String m10(label) => "${label} должно быть числом";
+  static String m10(label) => "Сейчас ${label} нет";
 
-  static String m11(days) => "${days} дн. доступа";
+  static String m11(label) => "${label} должно быть числом";
 
-  static String m12(count) => "Устройство: ${count}";
+  static String m12(days) => "${days} дн. доступа";
 
-  static String m13(count) => "Устройств: ${count}";
+  static String m13(count) => "Устройство: ${count}";
 
-  static String m14(name) => "Тариф ${name}";
+  static String m14(count) => "Устройств: ${count}";
 
-  static String m15(size) => "${size} трафика";
+  static String m15(name) => "Тариф ${name}";
 
-  static String m16(label) => "${label} должен быть числом от 1024 до 49151";
+  static String m16(size) => "${size} трафика";
 
-  static String m17(count) => "Выбрано ${count} элементов";
+  static String m17(label) => "${label} должен быть числом от 1024 до 49151";
 
-  static String m18(days) => "Ваша подписка истекает через ${days} дн.";
+  static String m18(count) => "Выбрано ${count} элементов";
 
-  static String m19(label) => "${label} должен быть URL";
+  static String m19(days) => "Ваша подписка истекает через ${days} дн.";
+
+  static String m20(label) => "${label} должен быть URL";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -518,6 +520,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "layout": MessageLookupByLibrary.simpleMessage("Макет"),
     "light": MessageLookupByLibrary.simpleMessage("Светлый"),
+    "linkTelegram": MessageLookupByLibrary.simpleMessage("Привязать Telegram"),
+    "linkTelegramCode": m9,
     "list": MessageLookupByLibrary.simpleMessage("Список"),
     "listen": MessageLookupByLibrary.simpleMessage("Слушать"),
     "local": MessageLookupByLibrary.simpleMessage("Локальный"),
@@ -624,8 +628,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "nullScriptTip": MessageLookupByLibrary.simpleMessage(
       "Скрипты отсутствуют",
     ),
-    "nullTip": m9,
-    "numberTip": m10,
+    "nullTip": m10,
+    "numberTip": m11,
     "oneColumn": MessageLookupByLibrary.simpleMessage("Один столбец"),
     "oneline": MessageLookupByLibrary.simpleMessage("Линия"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("Только иконка"),
@@ -674,17 +678,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "paste": MessageLookupByLibrary.simpleMessage("Вставить"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("Выгодно"),
     "planChoose": MessageLookupByLibrary.simpleMessage("Выбрать"),
-    "planDaysAccess": m11,
-    "planDevice": m12,
-    "planDevices": m13,
+    "planDaysAccess": m12,
+    "planDevice": m13,
+    "planDevices": m14,
     "planFree": MessageLookupByLibrary.simpleMessage("Бесплатно"),
     "planGeneric": MessageLookupByLibrary.simpleMessage("Подписка"),
     "planMonthly": MessageLookupByLibrary.simpleMessage("Месячный тариф"),
-    "planNamed": m14,
+    "planNamed": m15,
     "planOneTime": MessageLookupByLibrary.simpleMessage("Разово"),
     "planPerMonth": MessageLookupByLibrary.simpleMessage("/мес"),
     "planPerYear": MessageLookupByLibrary.simpleMessage("/год"),
-    "planTrafficAmount": m15,
+    "planTrafficAmount": m16,
     "planTrial": MessageLookupByLibrary.simpleMessage("Пробный тариф"),
     "planUnlimitedTraffic": MessageLookupByLibrary.simpleMessage(
       "Безлимитный трафик",
@@ -718,7 +722,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "portConflictTip": MessageLookupByLibrary.simpleMessage(
       "Введите другой порт",
     ),
-    "portTip": m16,
+    "portTip": m17,
     "preferH3Desc": MessageLookupByLibrary.simpleMessage(
       "Использовать HTTP/3 для DOH (если доступно)",
     ),
@@ -855,7 +859,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("Секунд"),
     "selectAll": MessageLookupByLibrary.simpleMessage("Выбрать все"),
     "selected": MessageLookupByLibrary.simpleMessage("Выбрано"),
-    "selectedCountTitle": m17,
+    "selectedCountTitle": m18,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("таймаут"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage(
       "Оформите подписку, чтобы загрузить серверы.",
@@ -912,7 +916,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "Ваша подписка истекла",
     ),
-    "subscriptionExpiresInDays": m18,
+    "subscriptionExpiresInDays": m19,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "Подписка скоро истекает",
     ),
@@ -947,6 +951,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tcpConcurrentDesc": MessageLookupByLibrary.simpleMessage(
       "Использовать параллельные TCP-соединения",
     ),
+    "telegramLinked": MessageLookupByLibrary.simpleMessage("Telegram привязан"),
     "testUrl": MessageLookupByLibrary.simpleMessage("Тест URL"),
     "textScale": MessageLookupByLibrary.simpleMessage("Масштабирование текста"),
     "thanks": MessageLookupByLibrary.simpleMessage("Спасибо за вклад"),
@@ -1000,7 +1005,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("Отправка"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("Загрузить профиль по URL"),
-    "urlTip": m19,
+    "urlTip": m20,
     "useHosts": MessageLookupByLibrary.simpleMessage("Использовать hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage(
       "Использовать системные hosts",
