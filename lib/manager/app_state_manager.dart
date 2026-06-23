@@ -24,14 +24,19 @@ class AppStateManager extends ConsumerStatefulWidget {
 
 class _AppStateManagerState extends ConsumerState<AppStateManager>
     with WidgetsBindingObserver {
-  // Last lifecycle state seen, used to detect background→foreground transitions
-  // (macOS popover reopen never emits `resumed`; see didChangeAppLifecycleState).
-  AppLifecycleState? _lastLifecycleState;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // macOS: refetch /v1/me each time the status-bar popover is shown. This is the
+    // reliable "app became visible" signal there — the popover does not emit a
+    // dependable AppLifecycleState.resumed and churns hidden↔inactive, so we cannot
+    // key off the lifecycle. No-op on other platforms (they use `resumed` below).
+    StatusBarManager.setPopoverShownHandler(() async {
+      if (mounted) {
+        ref.invalidate(meProvider);
+      }
+    });
     ref.listenManual(layoutChangeProvider, (prev, next) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (prev != next) {
@@ -111,6 +116,7 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
 
   @override
   void dispose() async {
+    StatusBarManager.setPopoverShownHandler(null);
     await system.setMacOSDns(true);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -119,40 +125,23 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     commonPrint.log("$state");
-    final previous = _lastLifecycleState;
-    _lastLifecycleState = state;
-
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       globalState.appController.savePreferences();
     } else {
       render?.resume();
-    }
-
-    // Refetch /v1/me whenever the app returns to the foreground so subscriptions
-    // bought via the bot (adopted on the backend) and a freshly linked Telegram show
-    // up without a manual refresh (ADR 0018). Works on every platform (alt-tab /
-    // app-switch return included), but is required on macOS: there the app is a
-    // status-bar popover — windowManager is disabled, so onWindowFocus never fires,
-    // and reopening the popover does NOT emit `resumed`. The popover rests at `hidden`
-    // when closed and flips to `inactive` when shown, so we refetch on any
-    // background→foreground edge rather than on `resumed` alone. The closing churn
-    // (hidden→inactive→hidden) can fire one extra benign GET; meProvider is autoDispose
-    // and the request is a cheap idempotent read, so that's acceptable.
-    final cameToForeground =
-        previous != null && !_isForeground(previous) && _isForeground(state);
-    if (cameToForeground && mounted) {
-      ref.invalidate(meProvider);
+      if (state == AppLifecycleState.resumed && mounted) {
+        // Refetch /v1/me on a real OS foreground resume so subscriptions bought via
+        // the bot (adopted on the backend) and a freshly linked Telegram show up
+        // without a manual refresh (ADR 0018). Covers Windows/Linux/Android (and
+        // macOS when it does emit `resumed`). We key only on `resumed` — NOT
+        // `inactive` — because the macOS popover churns hidden↔inactive constantly,
+        // which would otherwise storm /me; macOS's reliable trigger is the native
+        // popover-shown signal registered in initState.
+        ref.invalidate(meProvider);
+      }
     }
   }
-
-  /// The app is "in the foreground" (visible to the user) when [state] is
-  /// `resumed` or `inactive`. A shown macOS popover is typically `inactive` (it
-  /// rarely reaches `resumed`), so both count as foreground; `hidden`/`paused`/
-  /// `detached` mean the popover is closed / the app is backgrounded. Note a
-  /// `paused`→`resumed`/`inactive` transition (mobile/desktop) still counts.
-  static bool _isForeground(AppLifecycleState state) =>
-      state == AppLifecycleState.resumed || state == AppLifecycleState.inactive;
 
   @override
   void didChangePlatformBrightness() {

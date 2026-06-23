@@ -126,8 +126,9 @@ class AuthApi {
   /// email, the list of subscriptions, trial eligibility and device limit.
   ///
   /// An account with NO subscription is valid and returns a [Me] with an empty
-  /// subscriptions list (NOT an error). A 401 throws [AuthErrorKind.sessionExpired]
-  /// so the caller can drop to guest mode / log out.
+  /// subscriptions list (NOT an error). A 401 (token rejected) or 404 (the account
+  /// no longer exists) throws [AuthErrorKind.sessionExpired] so the caller drops to
+  /// guest mode / logs out — the stored token can no longer be used either way.
   Future<Me> getMe(String token) async {
     final Response<dynamic> response;
     try {
@@ -142,7 +143,7 @@ class AuthApi {
     }
 
     final status = response.statusCode ?? 0;
-    if (status == HttpStatus.unauthorized) {
+    if (status == HttpStatus.unauthorized || status == HttpStatus.notFound) {
       throw AuthException(
         AuthErrorKind.sessionExpired,
         appLocalizations.authErrorSessionExpired,

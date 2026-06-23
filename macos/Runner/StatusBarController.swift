@@ -29,6 +29,11 @@ class StatusBarController {
     private var statusItem: NSStatusItem
     private var popover: NSPopover
     private var contextMenu: NSMenu?
+
+    /// Called on the main thread whenever the popover is shown (status-bar click or
+    /// dock reopen). Used to refetch /v1/me on the Flutter side, since macOS does
+    /// not emit a reliable AppLifecycleState.resumed for the popover.
+    var onPopoverShown: (() -> Void)?
     
     init(_ popover: NSPopover) {
         self.popover = popover
@@ -106,6 +111,7 @@ class StatusBarController {
         if let statusBarButton = statusItem.button {
             popover.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
             popover.contentViewController?.view.window?.makeKey()
+            onPopoverShown?()
         }
     }
     
