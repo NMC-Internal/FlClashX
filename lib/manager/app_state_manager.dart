@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flclashx/common/common.dart';
 import 'package:flclashx/enum/enum.dart';
+import 'package:flclashx/pages/auth/auth_state.dart';
 import 'package:flclashx/plugins/tile.dart';
 import 'package:flclashx/providers/providers.dart';
 import 'package:flclashx/state.dart';
@@ -119,6 +120,11 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
       globalState.appController.savePreferences();
     } else {
       render?.resume();
+      if (state == AppLifecycleState.resumed && mounted) {
+        // Refetch /v1/me on resume so bot purchases adopted on the backend and a
+        // freshly linked Telegram surface without a manual refresh (ADR 0018).
+        ref.invalidate(meProvider);
+      }
     }
   }
 

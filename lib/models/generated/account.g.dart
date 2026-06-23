@@ -69,6 +69,10 @@ _$MeImpl _$$MeImplFromJson(Map<String, dynamic> json) => _$MeImpl(
           const <Subscription>[],
       trialEligible: json['trial_eligible'] as bool? ?? false,
       deviceLimit: (json['device_limit'] as num?)?.toInt() ?? 0,
+      providers: (json['providers'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
     );
 
 Map<String, dynamic> _$$MeImplToJson(_$MeImpl instance) => <String, dynamic>{
@@ -76,4 +80,5 @@ Map<String, dynamic> _$$MeImplToJson(_$MeImpl instance) => <String, dynamic>{
       'subscriptions': instance.subscriptions,
       'trial_eligible': instance.trialEligible,
       'device_limit': instance.deviceLimit,
+      'providers': instance.providers,
     };

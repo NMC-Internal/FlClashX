@@ -646,6 +646,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tabAnimationDesc": MessageLookupByLibrary.simpleMessage("仅在移动视图中有效"),
     "tcpConcurrent": MessageLookupByLibrary.simpleMessage("TCP并发"),
     "tcpConcurrentDesc": MessageLookupByLibrary.simpleMessage("开启后允许TCP并发"),
+    "telegramLinked": MessageLookupByLibrary.simpleMessage("已绑定 Telegram"),
     "testUrl": MessageLookupByLibrary.simpleMessage("测速链接"),
     "textScale": MessageLookupByLibrary.simpleMessage("文本缩放"),
     "thanks": MessageLookupByLibrary.simpleMessage("感谢贡献"),

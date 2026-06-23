@@ -459,6 +459,8 @@
   "logout": "Log out",
   "linkTelegram": "Link Telegram",
   "@linkTelegram": {},
+  "telegramLinked": "Telegram linked",
+  "@telegramLinked": {},
   "linkTelegramCode": "Open the bot and send this code: {code}",
   "@linkTelegramCode": {
     "description": "Fallback shown when the Telegram deep link is unavailable",

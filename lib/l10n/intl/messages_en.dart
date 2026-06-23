@@ -920,6 +920,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tcpConcurrentDesc": MessageLookupByLibrary.simpleMessage(
       "Enabling it will allow TCP concurrency",
     ),
+    "telegramLinked": MessageLookupByLibrary.simpleMessage("Telegram linked"),
     "testUrl": MessageLookupByLibrary.simpleMessage("Test url"),
     "textScale": MessageLookupByLibrary.simpleMessage("Text Scaling"),
     "thanks": MessageLookupByLibrary.simpleMessage("Thanks for contribution"),

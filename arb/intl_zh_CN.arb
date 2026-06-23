@@ -443,6 +443,8 @@
   "logout": "Log out",
   "linkTelegram": "绑定 Telegram",
   "@linkTelegram": {},
+  "telegramLinked": "已绑定 Telegram",
+  "@telegramLinked": {},
   "linkTelegramCode": "打开机器人并发送此代码：{code}",
   "@linkTelegramCode": {
     "description": "Fallback shown when the Telegram deep link is unavailable",

@@ -3559,6 +3559,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Telegram linked`
+  String get telegramLinked {
+    return Intl.message(
+      'Telegram linked',
+      name: 'telegramLinked',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Open the bot and send this code: {code}`
   String linkTelegramCode(Object code) {
     return Intl.message(

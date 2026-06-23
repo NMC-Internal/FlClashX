@@ -770,6 +770,7 @@ mixin _$Me {
   bool get trialEligible => throw _privateConstructorUsedError;
   @JsonKey(name: 'device_limit')
   int get deviceLimit => throw _privateConstructorUsedError;
+  List<String> get providers => throw _privateConstructorUsedError;
 
   /// Serializes this Me to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -789,7 +790,8 @@ abstract class $MeCopyWith<$Res> {
       {String email,
       List<Subscription> subscriptions,
       @JsonKey(name: 'trial_eligible') bool trialEligible,
-      @JsonKey(name: 'device_limit') int deviceLimit});
+      @JsonKey(name: 'device_limit') int deviceLimit,
+      List<String> providers});
 }
 
 /// @nodoc
@@ -810,6 +812,7 @@ class _$MeCopyWithImpl<$Res, $Val extends Me> implements $MeCopyWith<$Res> {
     Object? subscriptions = null,
     Object? trialEligible = null,
     Object? deviceLimit = null,
+    Object? providers = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -828,6 +831,10 @@ class _$MeCopyWithImpl<$Res, $Val extends Me> implements $MeCopyWith<$Res> {
           ? _value.deviceLimit
           : deviceLimit // ignore: cast_nullable_to_non_nullable
               as int,
+      providers: null == providers
+          ? _value.providers
+          : providers // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -842,7 +849,8 @@ abstract class _$$MeImplCopyWith<$Res> implements $MeCopyWith<$Res> {
       {String email,
       List<Subscription> subscriptions,
       @JsonKey(name: 'trial_eligible') bool trialEligible,
-      @JsonKey(name: 'device_limit') int deviceLimit});
+      @JsonKey(name: 'device_limit') int deviceLimit,
+      List<String> providers});
 }
 
 /// @nodoc
@@ -860,6 +868,7 @@ class __$$MeImplCopyWithImpl<$Res> extends _$MeCopyWithImpl<$Res, _$MeImpl>
     Object? subscriptions = null,
     Object? trialEligible = null,
     Object? deviceLimit = null,
+    Object? providers = null,
   }) {
     return _then(_$MeImpl(
       email: null == email
@@ -878,6 +887,10 @@ class __$$MeImplCopyWithImpl<$Res> extends _$MeCopyWithImpl<$Res, _$MeImpl>
           ? _value.deviceLimit
           : deviceLimit // ignore: cast_nullable_to_non_nullable
               as int,
+      providers: null == providers
+          ? _value._providers
+          : providers // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -889,8 +902,10 @@ class _$MeImpl extends _Me {
       {this.email = '',
       final List<Subscription> subscriptions = const <Subscription>[],
       @JsonKey(name: 'trial_eligible') this.trialEligible = false,
-      @JsonKey(name: 'device_limit') this.deviceLimit = 0})
+      @JsonKey(name: 'device_limit') this.deviceLimit = 0,
+      final List<String> providers = const <String>[]})
       : _subscriptions = subscriptions,
+        _providers = providers,
         super._();
 
   factory _$MeImpl.fromJson(Map<String, dynamic> json) =>
@@ -914,10 +929,18 @@ class _$MeImpl extends _Me {
   @override
   @JsonKey(name: 'device_limit')
   final int deviceLimit;
+  final List<String> _providers;
+  @override
+  @JsonKey()
+  List<String> get providers {
+    if (_providers is EqualUnmodifiableListView) return _providers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_providers);
+  }
 
   @override
   String toString() {
-    return 'Me(email: $email, subscriptions: $subscriptions, trialEligible: $trialEligible, deviceLimit: $deviceLimit)';
+    return 'Me(email: $email, subscriptions: $subscriptions, trialEligible: $trialEligible, deviceLimit: $deviceLimit, providers: $providers)';
   }
 
   @override
@@ -931,7 +954,9 @@ class _$MeImpl extends _Me {
             (identical(other.trialEligible, trialEligible) ||
                 other.trialEligible == trialEligible) &&
             (identical(other.deviceLimit, deviceLimit) ||
-                other.deviceLimit == deviceLimit));
+                other.deviceLimit == deviceLimit) &&
+            const DeepCollectionEquality()
+                .equals(other._providers, _providers));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -941,7 +966,8 @@ class _$MeImpl extends _Me {
       email,
       const DeepCollectionEquality().hash(_subscriptions),
       trialEligible,
-      deviceLimit);
+      deviceLimit,
+      const DeepCollectionEquality().hash(_providers));
 
   /// Create a copy of Me
   /// with the given fields replaced by the non-null parameter values.
@@ -964,7 +990,8 @@ abstract class _Me extends Me {
       {final String email,
       final List<Subscription> subscriptions,
       @JsonKey(name: 'trial_eligible') final bool trialEligible,
-      @JsonKey(name: 'device_limit') final int deviceLimit}) = _$MeImpl;
+      @JsonKey(name: 'device_limit') final int deviceLimit,
+      final List<String> providers}) = _$MeImpl;
   const _Me._() : super._();
 
   factory _Me.fromJson(Map<String, dynamic> json) = _$MeImpl.fromJson;
@@ -979,6 +1006,8 @@ abstract class _Me extends Me {
   @override
   @JsonKey(name: 'device_limit')
   int get deviceLimit;
+  @override
+  List<String> get providers;
 
   /// Create a copy of Me
   /// with the given fields replaced by the non-null parameter values.

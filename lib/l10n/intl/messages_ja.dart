@@ -742,6 +742,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tabAnimationDesc": MessageLookupByLibrary.simpleMessage("モバイル表示でのみ有効"),
     "tcpConcurrent": MessageLookupByLibrary.simpleMessage("TCP並列処理"),
     "tcpConcurrentDesc": MessageLookupByLibrary.simpleMessage("TCP並列処理を許可"),
+    "telegramLinked": MessageLookupByLibrary.simpleMessage("Telegram リンク済み"),
     "testUrl": MessageLookupByLibrary.simpleMessage("URLテスト"),
     "textScale": MessageLookupByLibrary.simpleMessage("テキストスケーリング"),
     "thanks": MessageLookupByLibrary.simpleMessage("貢献に感謝"),

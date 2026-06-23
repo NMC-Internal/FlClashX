@@ -443,6 +443,8 @@
   "logout": "Log out",
   "linkTelegram": "Telegram をリンク",
   "@linkTelegram": {},
+  "telegramLinked": "Telegram リンク済み",
+  "@telegramLinked": {},
   "linkTelegramCode": "ボットを開いてこのコードを送信してください: {code}",
   "@linkTelegramCode": {
     "description": "Fallback shown when the Telegram deep link is unavailable",

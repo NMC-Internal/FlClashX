@@ -459,6 +459,8 @@
   "logout": "Выйти",
   "linkTelegram": "Привязать Telegram",
   "@linkTelegram": {},
+  "telegramLinked": "Telegram привязан",
+  "@telegramLinked": {},
   "linkTelegramCode": "Откройте бота и отправьте этот код: {code}",
   "@linkTelegramCode": {
     "description": "Fallback shown when the Telegram deep link is unavailable",
