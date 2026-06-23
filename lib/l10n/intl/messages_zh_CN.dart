@@ -38,27 +38,29 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(label) => "${label}当前已存在";
 
-  static String m9(label) => "暂无${label}";
+  static String m9(code) => "打开机器人并发送此代码：${code}";
 
-  static String m10(label) => "${label}必须为数字";
+  static String m10(label) => "暂无${label}";
 
-  static String m11(days) => "${days} 天访问权";
+  static String m11(label) => "${label}必须为数字";
 
-  static String m12(count) => "${count} 台设备";
+  static String m12(days) => "${days} 天访问权";
 
   static String m13(count) => "${count} 台设备";
 
-  static String m14(name) => "${name} 套餐";
+  static String m14(count) => "${count} 台设备";
 
-  static String m15(size) => "${size} 流量";
+  static String m15(name) => "${name} 套餐";
 
-  static String m16(label) => "${label} 必须在 1024 到 49151 之间";
+  static String m16(size) => "${size} 流量";
 
-  static String m17(count) => "已选择 ${count} 项";
+  static String m17(label) => "${label} 必须在 1024 到 49151 之间";
 
-  static String m18(days) => "您的订阅将在${days}天后到期";
+  static String m18(count) => "已选择 ${count} 项";
 
-  static String m19(label) => "${label}必须为URL";
+  static String m19(days) => "您的订阅将在${days}天后到期";
+
+  static String m20(label) => "${label}必须为URL";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -357,6 +359,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "launchAtStartup": MessageLookupByLibrary.simpleMessage("开机自启"),
     "layout": MessageLookupByLibrary.simpleMessage("布局"),
     "light": MessageLookupByLibrary.simpleMessage("浅色"),
+    "linkTelegram": MessageLookupByLibrary.simpleMessage("绑定 Telegram"),
+    "linkTelegramCode": m9,
     "list": MessageLookupByLibrary.simpleMessage("列表"),
     "listen": MessageLookupByLibrary.simpleMessage("监听"),
     "local": MessageLookupByLibrary.simpleMessage("本地"),
@@ -427,8 +431,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "notifications": MessageLookupByLibrary.simpleMessage("通知"),
     "nullProfileDesc": MessageLookupByLibrary.simpleMessage("没有配置文件,请先添加配置文件"),
     "nullScriptTip": MessageLookupByLibrary.simpleMessage("暂无脚本"),
-    "nullTip": m9,
-    "numberTip": m10,
+    "nullTip": m10,
+    "numberTip": m11,
     "oneColumn": MessageLookupByLibrary.simpleMessage("一列"),
     "oneline": MessageLookupByLibrary.simpleMessage("单行"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("仅图标"),
@@ -457,17 +461,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "paste": MessageLookupByLibrary.simpleMessage("粘贴"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("超值"),
     "planChoose": MessageLookupByLibrary.simpleMessage("选择"),
-    "planDaysAccess": m11,
-    "planDevice": m12,
-    "planDevices": m13,
+    "planDaysAccess": m12,
+    "planDevice": m13,
+    "planDevices": m14,
     "planFree": MessageLookupByLibrary.simpleMessage("免费"),
     "planGeneric": MessageLookupByLibrary.simpleMessage("订阅"),
     "planMonthly": MessageLookupByLibrary.simpleMessage("月度套餐"),
-    "planNamed": m14,
+    "planNamed": m15,
     "planOneTime": MessageLookupByLibrary.simpleMessage("一次性"),
     "planPerMonth": MessageLookupByLibrary.simpleMessage("/月"),
     "planPerYear": MessageLookupByLibrary.simpleMessage("/年"),
-    "planTrafficAmount": m15,
+    "planTrafficAmount": m16,
     "planTrial": MessageLookupByLibrary.simpleMessage("试用套餐"),
     "planUnlimitedTraffic": MessageLookupByLibrary.simpleMessage("无限流量"),
     "planYearly": MessageLookupByLibrary.simpleMessage("年度套餐"),
@@ -487,7 +491,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "port": MessageLookupByLibrary.simpleMessage("端口"),
     "portConflictTip": MessageLookupByLibrary.simpleMessage("请输入不同的端口"),
-    "portTip": m16,
+    "portTip": m17,
     "preferH3Desc": MessageLookupByLibrary.simpleMessage("优先使用DOH的http/3"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage("请按下按键"),
     "preview": MessageLookupByLibrary.simpleMessage("预览"),
@@ -578,7 +582,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("秒"),
     "selectAll": MessageLookupByLibrary.simpleMessage("全选"),
     "selected": MessageLookupByLibrary.simpleMessage("已选择"),
-    "selectedCountTitle": m17,
+    "selectedCountTitle": m18,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("超时"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage("获取订阅以加载您的服务器。"),
     "serversEmptyTitle": MessageLookupByLibrary.simpleMessage("暂无服务器"),
@@ -619,7 +623,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
     "subscriptionEternal": MessageLookupByLibrary.simpleMessage("终身订阅"),
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage("您的订阅已过期"),
-    "subscriptionExpiresInDays": m18,
+    "subscriptionExpiresInDays": m19,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage("订阅即将到期"),
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "您的订阅今天到期",
@@ -679,7 +683,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("上传"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("通过URL获取配置文件"),
-    "urlTip": m19,
+    "urlTip": m20,
     "useHosts": MessageLookupByLibrary.simpleMessage("使用Hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("使用系统Hosts"),
     "value": MessageLookupByLibrary.simpleMessage("值"),

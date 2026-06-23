@@ -40,27 +40,29 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(label) => "Current ${label} already exists";
 
-  static String m9(label) => "No ${label} at the moment";
+  static String m9(code) => "Open the bot and send this code: ${code}";
 
-  static String m10(label) => "${label} must be a number";
+  static String m10(label) => "No ${label} at the moment";
 
-  static String m11(days) => "${days} days access";
+  static String m11(label) => "${label} must be a number";
 
-  static String m12(count) => "${count} device";
+  static String m12(days) => "${days} days access";
 
-  static String m13(count) => "${count} devices";
+  static String m13(count) => "${count} device";
 
-  static String m14(name) => "${name} plan";
+  static String m14(count) => "${count} devices";
 
-  static String m15(size) => "${size} traffic";
+  static String m15(name) => "${name} plan";
 
-  static String m16(label) => "${label} must be between 1024 and 49151";
+  static String m16(size) => "${size} traffic";
 
-  static String m17(count) => "${count} items have been selected";
+  static String m17(label) => "${label} must be between 1024 and 49151";
 
-  static String m18(days) => "Your subscription expires in ${days} day(s)";
+  static String m18(count) => "${count} items have been selected";
 
-  static String m19(label) => "${label} must be a url";
+  static String m19(days) => "Your subscription expires in ${days} day(s)";
+
+  static String m20(label) => "${label} must be a url";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -505,6 +507,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "layout": MessageLookupByLibrary.simpleMessage("Layout"),
     "light": MessageLookupByLibrary.simpleMessage("Light"),
+    "linkTelegram": MessageLookupByLibrary.simpleMessage("Link Telegram"),
+    "linkTelegramCode": m9,
     "list": MessageLookupByLibrary.simpleMessage("List"),
     "listen": MessageLookupByLibrary.simpleMessage("Listen"),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
@@ -605,8 +609,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "No profile, Please add a profile",
     ),
     "nullScriptTip": MessageLookupByLibrary.simpleMessage("No scripts"),
-    "nullTip": m9,
-    "numberTip": m10,
+    "nullTip": m10,
+    "numberTip": m11,
     "oneColumn": MessageLookupByLibrary.simpleMessage("One column"),
     "oneline": MessageLookupByLibrary.simpleMessage("Oneline"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("Icon"),
@@ -651,17 +655,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "paste": MessageLookupByLibrary.simpleMessage("Paste"),
     "planBestValue": MessageLookupByLibrary.simpleMessage("Best value"),
     "planChoose": MessageLookupByLibrary.simpleMessage("Choose"),
-    "planDaysAccess": m11,
-    "planDevice": m12,
-    "planDevices": m13,
+    "planDaysAccess": m12,
+    "planDevice": m13,
+    "planDevices": m14,
     "planFree": MessageLookupByLibrary.simpleMessage("Free"),
     "planGeneric": MessageLookupByLibrary.simpleMessage("Subscription"),
     "planMonthly": MessageLookupByLibrary.simpleMessage("Monthly plan"),
-    "planNamed": m14,
+    "planNamed": m15,
     "planOneTime": MessageLookupByLibrary.simpleMessage("One-time"),
     "planPerMonth": MessageLookupByLibrary.simpleMessage("/month"),
     "planPerYear": MessageLookupByLibrary.simpleMessage("/year"),
-    "planTrafficAmount": m15,
+    "planTrafficAmount": m16,
     "planTrial": MessageLookupByLibrary.simpleMessage("Trial plan"),
     "planUnlimitedTraffic": MessageLookupByLibrary.simpleMessage(
       "Unlimited traffic",
@@ -695,7 +699,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "portConflictTip": MessageLookupByLibrary.simpleMessage(
       "Please enter a different port",
     ),
-    "portTip": m16,
+    "portTip": m17,
     "preferH3Desc": MessageLookupByLibrary.simpleMessage(
       "Prioritize the use of DOH\'s http/3",
     ),
@@ -828,7 +832,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("Seconds"),
     "selectAll": MessageLookupByLibrary.simpleMessage("Select all"),
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "selectedCountTitle": m17,
+    "selectedCountTitle": m18,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("timeout"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage(
       "Claim a subscription to load your servers.",
@@ -881,7 +885,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "Your subscription has expired",
     ),
-    "subscriptionExpiresInDays": m18,
+    "subscriptionExpiresInDays": m19,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "Subscription expires soon",
     ),
@@ -967,7 +971,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain profile through URL",
     ),
-    "urlTip": m19,
+    "urlTip": m20,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),

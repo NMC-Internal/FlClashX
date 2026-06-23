@@ -457,6 +457,15 @@
   "authErrorSessionExpired": "Session expired. Please sign in again",
   "subscription": "Subscription",
   "logout": "Log out",
+  "linkTelegram": "Link Telegram",
+  "@linkTelegram": {},
+  "linkTelegramCode": "Open the bot and send this code: {code}",
+  "@linkTelegramCode": {
+    "description": "Fallback shown when the Telegram deep link is unavailable",
+    "placeholders": {
+      "code": {}
+    }
+  },
   "logoutConfirm": "Log out of your account? The subscription will be removed from this device.",
   "accountEmailUnknown": "Unknown email",
   "accountNoSubscription": "No active subscription yet",

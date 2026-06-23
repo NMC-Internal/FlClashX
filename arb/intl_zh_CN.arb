@@ -441,6 +441,15 @@
   "authErrorSessionExpired": "Session expired. Please sign in again",
   "subscription": "Subscription",
   "logout": "Log out",
+  "linkTelegram": "绑定 Telegram",
+  "@linkTelegram": {},
+  "linkTelegramCode": "打开机器人并发送此代码：{code}",
+  "@linkTelegramCode": {
+    "description": "Fallback shown when the Telegram deep link is unavailable",
+    "placeholders": {
+      "code": {}
+    }
+  },
   "logoutConfirm": "Log out of your account? The subscription will be removed from this device.",
   "accountEmailUnknown": "Unknown email",
   "accountNoSubscription": "No active subscription yet",

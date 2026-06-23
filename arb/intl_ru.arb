@@ -457,6 +457,15 @@
   "authErrorSessionExpired": "Сессия истекла. Войдите снова",
   "subscription": "Подписка",
   "logout": "Выйти",
+  "linkTelegram": "Привязать Telegram",
+  "@linkTelegram": {},
+  "linkTelegramCode": "Откройте бота и отправьте этот код: {code}",
+  "@linkTelegramCode": {
+    "description": "Fallback shown when the Telegram deep link is unavailable",
+    "placeholders": {
+      "code": {}
+    }
+  },
   "logoutConfirm": "Выйти из аккаунта? Подписка будет удалена с этого устройства.",
   "accountEmailUnknown": "Email неизвестен",
   "accountNoSubscription": "Активная подписка пока отсутствует",

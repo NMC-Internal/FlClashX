@@ -3549,6 +3549,26 @@ class AppLocalizations {
     return Intl.message('Log out', name: 'logout', desc: '', args: []);
   }
 
+  /// `Link Telegram`
+  String get linkTelegram {
+    return Intl.message(
+      'Link Telegram',
+      name: 'linkTelegram',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open the bot and send this code: {code}`
+  String linkTelegramCode(Object code) {
+    return Intl.message(
+      'Open the bot and send this code: $code',
+      name: 'linkTelegramCode',
+      desc: 'Fallback shown when the Telegram deep link is unavailable',
+      args: [code],
+    );
+  }
+
   /// `Log out of your account? The subscription will be removed from this device.`
   String get logoutConfirm {
     return Intl.message(
