@@ -22,6 +22,35 @@ Future<bool> showAuthSheet(BuildContext context) async {
   return ok ?? false;
 }
 
+/// Claims the one-per-account trial (ADR 0017 §3) from any "Start free trial"
+/// CTA. A guest is prompted to sign in first; then [AuthApi.claimTrial] runs and
+/// `/v1/me` is refreshed so the new (provisioning→active) subscription appears.
+/// 204 and 409 both count as success (the account has its trial either way). A
+/// session expiry is handled globally by the shell listener; other failures show
+/// a message. Safe to call from the Connect CTA and the Plans trial card.
+Future<void> claimTrialFlow(BuildContext context, WidgetRef ref) async {
+  var token = ref.read(authTokenProvider);
+  if (token == null || token.isEmpty) {
+    final ok = await showAuthSheet(context);
+    if (!ok) return; // user dismissed sign-in
+    token = ref.read(authTokenProvider);
+    if (token == null || token.isEmpty) return;
+  }
+
+  try {
+    await authApi.claimTrial(token);
+    ref.invalidate(meProvider); // surface the new provisioning→active subscription
+  } on AuthException catch (e) {
+    ref.invalidate(meProvider); // a sessionExpired drops to guest via the shell listener
+    if (e.kind != AuthErrorKind.sessionExpired) {
+      await globalState.showMessage(
+        title: appLocalizations.startFreeTrial,
+        message: TextSpan(text: e.message),
+      );
+    }
+  }
+}
+
 class _AuthSheet extends ConsumerStatefulWidget {
   const _AuthSheet();
 
