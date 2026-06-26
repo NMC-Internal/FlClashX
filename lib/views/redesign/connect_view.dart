@@ -60,7 +60,7 @@ class RConnectView extends ConsumerWidget {
                   sub: sub,
                   trialEligible: me?.trialEligible ?? true,
                   onToggle: () => _toggle(!running),
-                  onClaimTrial: () => showAuthSheet(context),
+                  onClaimTrial: () => claimTrialFlow(context, ref),
                   onSignIn: () => showAuthSheet(context),
                   onViewPlans: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: (_) => const RPlansView()),

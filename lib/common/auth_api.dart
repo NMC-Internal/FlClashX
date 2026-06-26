@@ -163,6 +163,38 @@ class AuthApi {
     return Me.fromJson(Map<String, Object?>.from(data));
   }
 
+  /// Claims the account's single trial (ADR 0017 §3): `POST /v1/trial/claim`
+  /// (Bearer). The trial provisions asynchronously, so the caller refreshes
+  /// `/v1/me` afterwards to surface the new (provisioning→active) subscription.
+  ///
+  /// Idempotent from the UI's point of view: 204 (granted) and 409 (already
+  /// claimed) both return normally — either way the account now has its trial.
+  /// 401/404 (token rejected / account gone) throw [AuthErrorKind.sessionExpired]
+  /// so the caller drops to guest; other statuses throw a generic error.
+  Future<void> claimTrial(String token) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/trial/claim',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.noContent || status == HttpStatus.conflict) {
+      return; // granted, or already had it — both mean "trial exists now"
+    }
+    if (status == HttpStatus.unauthorized || status == HttpStatus.notFound) {
+      throw AuthException(
+        AuthErrorKind.sessionExpired,
+        appLocalizations.authErrorSessionExpired,
+      );
+    }
+    throw _mapStatus(status);
+  }
+
   /// Starts linking a Telegram account to THIS account (ADR 0015/0018):
   /// `POST /v1/identities/telegram/link-init` (Bearer) -> `{code, deep_link}`.
   /// The user opens the deep link in the bot to attach Telegram; the backend then
