@@ -1,4 +1,5 @@
 import 'package:flclashx/common/common.dart';
+import 'package:flclashx/common/social_auth.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/pages/auth/auth_state.dart';
@@ -55,6 +56,10 @@ class RAccountView extends ConsumerWidget {
       message: TextSpan(text: appLocalizations.logoutConfirm),
     );
     if (res != true) return;
+    // Drop the native Google session too — clearing only the backend token
+    // leaves google_sign_in's cached account in the keychain, which it would
+    // silently replay on the next sign-in (stale `aud` → backend 401). ADR 0014.
+    await googleAuth.signOut();
     await globalState.appController.clearProfiles();
     await preferences.clearAuthToken();
     await preferences.clearUserEmail();

@@ -47,6 +47,10 @@ class AuthCodeCredential extends SocialCredential {
 abstract interface class SocialAuthProvider {
   SocialProvider get provider;
   Future<SocialCredential?> obtainCredential();
+
+  /// Tears down any persisted native session for this provider (called on
+  /// logout). Must be a safe no-op when nothing is signed in.
+  Future<void> signOut();
 }
 
 /// Google sign-in. Native `google_sign_in` on Android/iOS/macOS; a maintained
@@ -75,26 +79,23 @@ class GoogleAuthProvider implements SocialAuthProvider {
 
   // ── Android / iOS / macOS: native plugin (no secret) ───────────────────────
   Future<SocialCredential?> _nativeIdToken() async {
-    // On iOS/macOS the GoogleSignIn SDK needs a client ID to build its
-    // configuration; without one it throws an uncatchable native NSException
-    // ("No active configuration"). Fail with a readable error instead of
-    // crashing. Android resolves its client from google-services.json + SHA,
-    // so it does not take a runtime clientId.
-    final isApple = Platform.isIOS || Platform.isMacOS;
-    if (isApple && googleIosClientId.isEmpty) {
+    final signIn = _nativeClient();
+    if (signIn == null) {
       throw const SocialAuthException(
         'Google iOS/macOS client ID is not configured (GOOGLE_IOS_CLIENT_ID)',
       );
     }
-    final signIn = GoogleSignIn(
-      // clientId = the iOS/macOS OAuth client (Apple only). Becomes the
-      // GIDConfiguration's client identifier the native SDK requires.
-      clientId: isApple ? googleIosClientId : null,
-      // serverClientId = the Web OAuth client; makes the issued ID token's
-      // audience match what the backend validates.
-      serverClientId: googleServerClientId.isEmpty ? null : googleServerClientId,
-      scopes: const ['openid', 'email', 'profile'],
-    );
+    // Clear any persisted session BEFORE signing in. google_sign_in caches the
+    // Google account (refresh token) in the platform keychain and silently
+    // replays it, so a session minted under a previous OAuth client survives
+    // app logout/reinstall and yields an ID token whose `aud` the backend
+    // rejects. Signing out first forces a fresh account pick and a token minted
+    // under the CURRENT client, and lets the user switch Google accounts.
+    try {
+      await signIn.signOut();
+    } catch (_) {
+      // No cached session (or offline) — nothing to clear; sign in interactively.
+    }
     try {
       final account = await signIn.signIn();
       if (account == null) return null; // cancelled
@@ -109,6 +110,41 @@ class GoogleAuthProvider implements SocialAuthProvider {
     } catch (e) {
       throw SocialAuthException('Google sign-in failed: $e');
     }
+  }
+
+  /// Clears the cached native Google session (Android/iOS/macOS); safe to call
+  /// when nothing is signed in, and a no-op on Windows/Linux (the browser flow
+  /// keeps no client-side session — the backend exchanges the auth code).
+  @override
+  Future<void> signOut() async {
+    final signIn = _nativeClient();
+    if (signIn == null) return;
+    try {
+      await signIn.signOut();
+    } catch (_) {
+      // Nothing signed in (or offline) — there is nothing to tear down.
+    }
+  }
+
+  /// Builds the configured native client, or `null` on Apple platforms when the
+  /// client ID is missing — constructing GoogleSignIn there triggers an
+  /// uncatchable native "No active configuration" crash, so callers must guard.
+  /// Also `null` off the native platforms (Windows/Linux use the browser flow).
+  /// Android resolves its client from google-services.json + the signing SHA, so
+  /// it takes no runtime clientId.
+  GoogleSignIn? _nativeClient() {
+    if (!(Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) return null;
+    final isApple = Platform.isIOS || Platform.isMacOS;
+    if (isApple && googleIosClientId.isEmpty) return null;
+    return GoogleSignIn(
+      // clientId = the iOS/macOS OAuth client (Apple only). Becomes the
+      // GIDConfiguration's client identifier the native SDK requires.
+      clientId: isApple ? googleIosClientId : null,
+      // serverClientId = the Web OAuth client; makes the issued ID token's
+      // audience match what the backend validates.
+      serverClientId: googleServerClientId.isEmpty ? null : googleServerClientId,
+      scopes: const ['openid', 'email', 'profile'],
+    );
   }
 
   // ── Windows / Linux: browser PKCE → auth code (backend exchanges it) ────────
