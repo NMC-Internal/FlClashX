@@ -58,11 +58,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m17(label) => "${label} must be between 1024 and 49151";
 
-  static String m18(count) => "${count} items have been selected";
+  static String m18(days) => "Welcome bonus applied: +${days} days";
 
-  static String m19(days) => "Your subscription expires in ${days} day(s)";
+  static String m19(percent) => "Commission: ${percent}%";
 
-  static String m20(label) => "${label} must be a url";
+  static String m20(days) => "Earned: ${days} days";
+
+  static String m21(count) => "Invited: ${count}";
+
+  static String m22(count) => "${count} items have been selected";
+
+  static String m23(days) => "Your subscription expires in ${days} day(s)";
+
+  static String m24(label) => "${label} must be a url";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -487,6 +495,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "internet": MessageLookupByLibrary.simpleMessage("Internet"),
     "interval": MessageLookupByLibrary.simpleMessage("Interval"),
     "intranetIP": MessageLookupByLibrary.simpleMessage("Intranet IP"),
+    "inviteFriends": MessageLookupByLibrary.simpleMessage("Invite friends"),
     "ipcidr": MessageLookupByLibrary.simpleMessage("Ipcidr"),
     "ipv6Desc": MessageLookupByLibrary.simpleMessage(
       "When turned on it will be able to receive IPv6 traffic",
@@ -780,6 +789,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "redeemPromo": MessageLookupByLibrary.simpleMessage("Promo code"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir Port"),
     "redo": MessageLookupByLibrary.simpleMessage("redo"),
+    "referralApplied": MessageLookupByLibrary.simpleMessage("Referral applied"),
+    "referralApply": MessageLookupByLibrary.simpleMessage("Apply"),
+    "referralAttributed": m18,
+    "referralCodeHint": MessageLookupByLibrary.simpleMessage(
+      "Enter referral code",
+    ),
+    "referralCodeHintOptional": MessageLookupByLibrary.simpleMessage(
+      "Referral code (optional)",
+    ),
+    "referralCommission": m19,
+    "referralCopied": MessageLookupByLibrary.simpleMessage(
+      "Copied to clipboard",
+    ),
+    "referralCopyLink": MessageLookupByLibrary.simpleMessage("Copy link"),
+    "referralEarnedDays": m20,
+    "referralEnterCode": MessageLookupByLibrary.simpleMessage(
+      "Have a referral code?",
+    ),
+    "referralInvalid": MessageLookupByLibrary.simpleMessage(
+      "The referral code is invalid or can\'t be used",
+    ),
+    "referralInvitedCount": m21,
+    "referralShare": MessageLookupByLibrary.simpleMessage("Share"),
+    "referralYourCode": MessageLookupByLibrary.simpleMessage("Your code"),
     "regExp": MessageLookupByLibrary.simpleMessage("RegExp"),
     "register": MessageLookupByLibrary.simpleMessage("Sign up"),
     "remaining": MessageLookupByLibrary.simpleMessage("Remaining"),
@@ -842,7 +875,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("Seconds"),
     "selectAll": MessageLookupByLibrary.simpleMessage("Select all"),
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "selectedCountTitle": m18,
+    "selectedCountTitle": m22,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("timeout"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage(
       "Claim a subscription to load your servers.",
@@ -895,7 +928,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "Your subscription has expired",
     ),
-    "subscriptionExpiresInDays": m19,
+    "subscriptionExpiresInDays": m23,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "Subscription expires soon",
     ),
@@ -982,7 +1015,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain profile through URL",
     ),
-    "urlTip": m20,
+    "urlTip": m24,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),

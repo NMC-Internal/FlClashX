@@ -28,6 +28,16 @@ final meProvider = FutureProvider.autoDispose<Me?>((ref) async {
   return authApi.getMe(token);
 });
 
+/// The account's own referral code/link + stats (`GET /v1/referral/info`, ADR 0020).
+/// `null` for a guest. Re-fetches when the token changes; invalidate it after an
+/// attribute so freshly-earned stats appear.
+final referralInfoProvider =
+    FutureProvider.autoDispose<ReferralInfo?>((ref) async {
+  final token = ref.watch(authTokenProvider);
+  if (token == null || token.isEmpty) return null;
+  return authApi.fetchReferralInfo(token);
+});
+
 /// The public plan catalog (`GET /v1/plans`). Available to guests; the trial
 /// card is gated on [Me.trialEligible] at the screen level.
 final plansProvider = FutureProvider.autoDispose<List<Plan>>(

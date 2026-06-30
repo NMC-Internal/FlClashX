@@ -56,11 +56,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m17(label) => "${label} 必须在 1024 到 49151 之间";
 
-  static String m18(count) => "已选择 ${count} 项";
+  static String m18(days) => "欢迎奖励已发放：+${days} 天";
 
-  static String m19(days) => "您的订阅将在${days}天后到期";
+  static String m19(percent) => "佣金：${percent}%";
 
-  static String m20(label) => "${label}必须为URL";
+  static String m20(days) => "已获得：${days} 天";
+
+  static String m21(count) => "已邀请：${count}";
+
+  static String m22(count) => "已选择 ${count} 项";
+
+  static String m23(days) => "您的订阅将在${days}天后到期";
+
+  static String m24(label) => "${label}必须为URL";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -347,6 +355,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "internet": MessageLookupByLibrary.simpleMessage("互联网"),
     "interval": MessageLookupByLibrary.simpleMessage("间隔"),
     "intranetIP": MessageLookupByLibrary.simpleMessage("内网 IP"),
+    "inviteFriends": MessageLookupByLibrary.simpleMessage("邀请好友"),
     "ipcidr": MessageLookupByLibrary.simpleMessage("IP/掩码"),
     "ipv6Desc": MessageLookupByLibrary.simpleMessage("开启后将可以接收IPv6流量"),
     "ipv6InboundDesc": MessageLookupByLibrary.simpleMessage("允许IPv6入站"),
@@ -546,6 +555,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "redeemPromo": MessageLookupByLibrary.simpleMessage("优惠码"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir端口"),
     "redo": MessageLookupByLibrary.simpleMessage("重做"),
+    "referralApplied": MessageLookupByLibrary.simpleMessage("推荐码已应用"),
+    "referralApply": MessageLookupByLibrary.simpleMessage("应用"),
+    "referralAttributed": m18,
+    "referralCodeHint": MessageLookupByLibrary.simpleMessage("输入推荐码"),
+    "referralCodeHintOptional": MessageLookupByLibrary.simpleMessage("推荐码（可选）"),
+    "referralCommission": m19,
+    "referralCopied": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
+    "referralCopyLink": MessageLookupByLibrary.simpleMessage("复制链接"),
+    "referralEarnedDays": m20,
+    "referralEnterCode": MessageLookupByLibrary.simpleMessage("有推荐码？"),
+    "referralInvalid": MessageLookupByLibrary.simpleMessage("推荐码无效或无法使用"),
+    "referralInvitedCount": m21,
+    "referralShare": MessageLookupByLibrary.simpleMessage("分享"),
+    "referralYourCode": MessageLookupByLibrary.simpleMessage("你的推荐码"),
     "regExp": MessageLookupByLibrary.simpleMessage("正则"),
     "register": MessageLookupByLibrary.simpleMessage("Sign up"),
     "remaining": MessageLookupByLibrary.simpleMessage("剩余"),
@@ -590,7 +613,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("秒"),
     "selectAll": MessageLookupByLibrary.simpleMessage("全选"),
     "selected": MessageLookupByLibrary.simpleMessage("已选择"),
-    "selectedCountTitle": m18,
+    "selectedCountTitle": m22,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("超时"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage("获取订阅以加载您的服务器。"),
     "serversEmptyTitle": MessageLookupByLibrary.simpleMessage("暂无服务器"),
@@ -631,7 +654,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
     "subscriptionEternal": MessageLookupByLibrary.simpleMessage("终身订阅"),
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage("您的订阅已过期"),
-    "subscriptionExpiresInDays": m19,
+    "subscriptionExpiresInDays": m23,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage("订阅即将到期"),
     "subscriptionExpiresToday": MessageLookupByLibrary.simpleMessage(
       "您的订阅今天到期",
@@ -692,7 +715,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("上传"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("通过URL获取配置文件"),
-    "urlTip": m20,
+    "urlTip": m24,
     "useHosts": MessageLookupByLibrary.simpleMessage("使用Hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("使用系统Hosts"),
     "value": MessageLookupByLibrary.simpleMessage("值"),

@@ -56,11 +56,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m17(label) => "${label} は 1024 から 49151 の間でなければなりません";
 
-  static String m18(count) => "${count} 項目が選択されています";
+  static String m18(days) => "ウェルカムボーナスを付与：+${days} 日";
 
-  static String m19(days) => "サブスクリプションは${days}日後に期限切れになります";
+  static String m19(percent) => "コミッション：${percent}%";
 
-  static String m20(label) => "${label}はURLである必要があります";
+  static String m20(days) => "獲得：${days} 日";
+
+  static String m21(count) => "招待人数：${count}";
+
+  static String m22(count) => "${count} 項目が選択されています";
+
+  static String m23(days) => "サブスクリプションは${days}日後に期限切れになります";
+
+  static String m24(label) => "${label}はURLである必要があります";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -387,6 +395,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "internet": MessageLookupByLibrary.simpleMessage("インターネット"),
     "interval": MessageLookupByLibrary.simpleMessage("インターバル"),
     "intranetIP": MessageLookupByLibrary.simpleMessage("イントラネットIP"),
+    "inviteFriends": MessageLookupByLibrary.simpleMessage("友達を招待"),
     "ipcidr": MessageLookupByLibrary.simpleMessage("IPCIDR"),
     "ipv6Desc": MessageLookupByLibrary.simpleMessage("有効化するとIPv6トラフィックを受信可能"),
     "ipv6InboundDesc": MessageLookupByLibrary.simpleMessage("IPv6インバウンドを許可"),
@@ -624,6 +633,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "redeemPromo": MessageLookupByLibrary.simpleMessage("プロモコード"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redirポート"),
     "redo": MessageLookupByLibrary.simpleMessage("やり直す"),
+    "referralApplied": MessageLookupByLibrary.simpleMessage("紹介コードを適用しました"),
+    "referralApply": MessageLookupByLibrary.simpleMessage("適用"),
+    "referralAttributed": m18,
+    "referralCodeHint": MessageLookupByLibrary.simpleMessage("紹介コードを入力"),
+    "referralCodeHintOptional": MessageLookupByLibrary.simpleMessage(
+      "紹介コード（任意）",
+    ),
+    "referralCommission": m19,
+    "referralCopied": MessageLookupByLibrary.simpleMessage("クリップボードにコピーしました"),
+    "referralCopyLink": MessageLookupByLibrary.simpleMessage("リンクをコピー"),
+    "referralEarnedDays": m20,
+    "referralEnterCode": MessageLookupByLibrary.simpleMessage("紹介コードをお持ちですか？"),
+    "referralInvalid": MessageLookupByLibrary.simpleMessage("紹介コードが無効か使用できません"),
+    "referralInvitedCount": m21,
+    "referralShare": MessageLookupByLibrary.simpleMessage("共有"),
+    "referralYourCode": MessageLookupByLibrary.simpleMessage("あなたのコード"),
     "regExp": MessageLookupByLibrary.simpleMessage("正規表現"),
     "register": MessageLookupByLibrary.simpleMessage("Sign up"),
     "remaining": MessageLookupByLibrary.simpleMessage("残り"),
@@ -676,7 +701,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("秒"),
     "selectAll": MessageLookupByLibrary.simpleMessage("すべて選択"),
     "selected": MessageLookupByLibrary.simpleMessage("選択済み"),
-    "selectedCountTitle": m18,
+    "selectedCountTitle": m22,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("タイムアウト"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションを取得してサーバーを読み込みます。",
@@ -723,7 +748,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションが期限切れになりました",
     ),
-    "subscriptionExpiresInDays": m19,
+    "subscriptionExpiresInDays": m23,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションがまもなく期限切れ",
     ),
@@ -794,7 +819,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("アップロード"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("URL経由でプロファイルを取得"),
-    "urlTip": m20,
+    "urlTip": m24,
     "useHosts": MessageLookupByLibrary.simpleMessage("ホストを使用"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("システムホストを使用"),
     "value": MessageLookupByLibrary.simpleMessage("値"),

@@ -57,11 +57,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m17(label) => "${label} должен быть числом от 1024 до 49151";
 
-  static String m18(count) => "Выбрано ${count} элементов";
+  static String m18(days) => "Приветственный бонус начислён: +${days} дн.";
 
-  static String m19(days) => "Ваша подписка истекает через ${days} дн.";
+  static String m19(percent) => "Комиссия: ${percent}%";
 
-  static String m20(label) => "${label} должен быть URL";
+  static String m20(days) => "Начислено: ${days} дн.";
+
+  static String m21(count) => "Приглашено: ${count}";
+
+  static String m22(count) => "Выбрано ${count} элементов";
+
+  static String m23(days) => "Ваша подписка истекает через ${days} дн.";
+
+  static String m24(label) => "${label} должен быть URL";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -500,6 +508,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "internet": MessageLookupByLibrary.simpleMessage("Интернет"),
     "interval": MessageLookupByLibrary.simpleMessage("Интервал"),
     "intranetIP": MessageLookupByLibrary.simpleMessage("Внутренний IP"),
+    "inviteFriends": MessageLookupByLibrary.simpleMessage("Пригласить друзей"),
     "ipcidr": MessageLookupByLibrary.simpleMessage("IPCIDR"),
     "ipv6Desc": MessageLookupByLibrary.simpleMessage(
       "При включении будет возможно получать IPv6 трафик",
@@ -807,6 +816,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "redeemPromo": MessageLookupByLibrary.simpleMessage("Промокод"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir-порт"),
     "redo": MessageLookupByLibrary.simpleMessage("Повторить"),
+    "referralApplied": MessageLookupByLibrary.simpleMessage(
+      "Реферальный код применён",
+    ),
+    "referralApply": MessageLookupByLibrary.simpleMessage("Применить"),
+    "referralAttributed": m18,
+    "referralCodeHint": MessageLookupByLibrary.simpleMessage(
+      "Введите реферальный код",
+    ),
+    "referralCodeHintOptional": MessageLookupByLibrary.simpleMessage(
+      "Реферальный код (необязательно)",
+    ),
+    "referralCommission": m19,
+    "referralCopied": MessageLookupByLibrary.simpleMessage(
+      "Скопировано в буфер обмена",
+    ),
+    "referralCopyLink": MessageLookupByLibrary.simpleMessage(
+      "Скопировать ссылку",
+    ),
+    "referralEarnedDays": m20,
+    "referralEnterCode": MessageLookupByLibrary.simpleMessage(
+      "Есть реферальный код?",
+    ),
+    "referralInvalid": MessageLookupByLibrary.simpleMessage(
+      "Реферальный код недействителен или не может быть использован",
+    ),
+    "referralInvitedCount": m21,
+    "referralShare": MessageLookupByLibrary.simpleMessage("Поделиться"),
+    "referralYourCode": MessageLookupByLibrary.simpleMessage("Ваш код"),
     "regExp": MessageLookupByLibrary.simpleMessage("Регулярное выражение"),
     "register": MessageLookupByLibrary.simpleMessage("Регистрация"),
     "remaining": MessageLookupByLibrary.simpleMessage("Осталось"),
@@ -869,7 +906,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "seconds": MessageLookupByLibrary.simpleMessage("Секунд"),
     "selectAll": MessageLookupByLibrary.simpleMessage("Выбрать все"),
     "selected": MessageLookupByLibrary.simpleMessage("Выбрано"),
-    "selectedCountTitle": m18,
+    "selectedCountTitle": m22,
     "serverTimeout": MessageLookupByLibrary.simpleMessage("таймаут"),
     "serversEmptyHint": MessageLookupByLibrary.simpleMessage(
       "Оформите подписку, чтобы загрузить серверы.",
@@ -926,7 +963,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpired": MessageLookupByLibrary.simpleMessage(
       "Ваша подписка истекла",
     ),
-    "subscriptionExpiresInDays": m19,
+    "subscriptionExpiresInDays": m23,
     "subscriptionExpiresSoon": MessageLookupByLibrary.simpleMessage(
       "Подписка скоро истекает",
     ),
@@ -1015,7 +1052,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("Отправка"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("Загрузить профиль по URL"),
-    "urlTip": m20,
+    "urlTip": m24,
     "useHosts": MessageLookupByLibrary.simpleMessage("Использовать hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage(
       "Использовать системные hosts",

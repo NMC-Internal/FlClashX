@@ -558,6 +558,41 @@
   "promoApplied": "Промокод применён",
   "promoInvalid": "Код недействителен, истёк или уже использован",
   "promoDiscountBotOnly": "Этот промокод действует только в Telegram-боте",
+  "inviteFriends": "Пригласить друзей",
+  "referralEnterCode": "Есть реферальный код?",
+  "referralCodeHint": "Введите реферальный код",
+  "referralCodeHintOptional": "Реферальный код (необязательно)",
+  "referralApply": "Применить",
+  "referralCopyLink": "Скопировать ссылку",
+  "referralShare": "Поделиться",
+  "referralCopied": "Скопировано в буфер обмена",
+  "referralInvalid": "Реферальный код недействителен или не может быть использован",
+  "referralApplied": "Реферальный код применён",
+  "referralYourCode": "Ваш код",
+  "referralInvitedCount": "Приглашено: {count}",
+  "@referralInvitedCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "referralEarnedDays": "Начислено: {days} дн.",
+  "@referralEarnedDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "referralCommission": "Комиссия: {percent}%",
+  "@referralCommission": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "referralAttributed": "Приветственный бонус начислён: +{days} дн.",
+  "@referralAttributed": {
+    "placeholders": {
+      "days": {}
+    }
+  },
   "authLegal": "Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.",
   "notifications": "Уведомления",
   "markAllRead": "Прочитать все",

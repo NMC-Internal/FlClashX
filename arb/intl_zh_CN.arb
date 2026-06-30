@@ -542,6 +542,41 @@
   "promoApplied": "优惠码已应用",
   "promoInvalid": "代码无效、已过期或已使用",
   "promoDiscountBotOnly": "此优惠码仅在 Telegram 机器人中有效",
+  "inviteFriends": "邀请好友",
+  "referralEnterCode": "有推荐码？",
+  "referralCodeHint": "输入推荐码",
+  "referralCodeHintOptional": "推荐码（可选）",
+  "referralApply": "应用",
+  "referralCopyLink": "复制链接",
+  "referralShare": "分享",
+  "referralCopied": "已复制到剪贴板",
+  "referralInvalid": "推荐码无效或无法使用",
+  "referralApplied": "推荐码已应用",
+  "referralYourCode": "你的推荐码",
+  "referralInvitedCount": "已邀请：{count}",
+  "@referralInvitedCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "referralEarnedDays": "已获得：{days} 天",
+  "@referralEarnedDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "referralCommission": "佣金：{percent}%",
+  "@referralCommission": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "referralAttributed": "欢迎奖励已发放：+{days} 天",
+  "@referralAttributed": {
+    "placeholders": {
+      "days": {}
+    }
+  },
   "authLegal": "继续即表示您同意我们的服务条款和隐私政策。",
   "notifications": "通知",
   "markAllRead": "全部标为已读",

@@ -613,6 +613,41 @@
   "promoApplied": "Promo code applied",
   "promoInvalid": "The code is invalid, expired, or already used",
   "promoDiscountBotOnly": "This promo code works only in the Telegram bot",
+  "inviteFriends": "Invite friends",
+  "referralEnterCode": "Have a referral code?",
+  "referralCodeHint": "Enter referral code",
+  "referralCodeHintOptional": "Referral code (optional)",
+  "referralApply": "Apply",
+  "referralCopyLink": "Copy link",
+  "referralShare": "Share",
+  "referralCopied": "Copied to clipboard",
+  "referralInvalid": "The referral code is invalid or can't be used",
+  "referralApplied": "Referral applied",
+  "referralYourCode": "Your code",
+  "referralInvitedCount": "Invited: {count}",
+  "@referralInvitedCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "referralEarnedDays": "Earned: {days} days",
+  "@referralEarnedDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "referralCommission": "Commission: {percent}%",
+  "@referralCommission": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "referralAttributed": "Welcome bonus applied: +{days} days",
+  "@referralAttributed": {
+    "placeholders": {
+      "days": {}
+    }
+  },
   "authLegal": "By continuing you agree to our Terms of Service and Privacy Policy.",
   "notifications": "Notifications",
   "markAllRead": "Mark all read",

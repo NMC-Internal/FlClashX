@@ -39,9 +39,11 @@ Future<void> claimTrialFlow(BuildContext context, WidgetRef ref) async {
 
   try {
     await authApi.claimTrial(token);
-    ref.invalidate(meProvider); // surface the new provisioning→active subscription
+    ref.invalidate(
+        meProvider); // surface the new provisioning→active subscription
   } on AuthException catch (e) {
-    ref.invalidate(meProvider); // a sessionExpired drops to guest via the shell listener
+    ref.invalidate(
+        meProvider); // a sessionExpired drops to guest via the shell listener
     if (e.kind != AuthErrorKind.sessionExpired) {
       await globalState.showMessage(
         title: appLocalizations.startFreeTrial,
@@ -61,6 +63,13 @@ class _AuthSheet extends ConsumerStatefulWidget {
 class _AuthSheetState extends ConsumerState<_AuthSheet> {
   bool _loading = false;
   String? _error;
+  final _referralController = TextEditingController();
+
+  @override
+  void dispose() {
+    _referralController.dispose();
+    super.dispose();
+  }
 
   Future<void> _signInWithGoogle() async {
     setState(() {
@@ -93,8 +102,23 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
         // best-effort; the reconciler / next /me will heal it
       }
 
+      // Best-effort referral attribution (ADR 0020): runs while `token` is in scope,
+      // BEFORE the meProvider invalidate below, so the welcome bonus shows on the
+      // first /v1/me. A bad/absent code must NEVER block sign-in.
+      final referral = _referralController.text.trim().toUpperCase();
+      if (referral.isNotEmpty) {
+        try {
+          await authApi.applyReferral(token, referral);
+        } on AuthException {
+          // ignore — a referral failure never breaks sign-in
+        } catch (_) {
+          // ignore — same
+        }
+      }
+
       if (!mounted) return;
-      ref.read(authTokenProvider.notifier).state = token; // refreshes meProvider
+      ref.read(authTokenProvider.notifier).state =
+          token; // refreshes meProvider
       if (url != null && url.isNotEmpty) {
         unawaited(globalState.appController.provisionSubscription(url));
       }
@@ -105,7 +129,9 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
     } on SocialAuthException catch (e) {
       if (mounted) setState(() => _showError(e.message));
     } catch (_) {
-      if (mounted) setState(() => _showError(appLocalizations.authErrorUnknown));
+      if (mounted) {
+        setState(() => _showError(appLocalizations.authErrorUnknown));
+      }
     }
   }
 
@@ -150,17 +176,42 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
               Text(
                 appLocalizations.authSignInTitle,
                 style: const TextStyle(
-                    color: AppTokens.text, fontSize: 22, fontWeight: FontWeight.w600),
+                    color: AppTokens.text,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 6),
               Text(
                 appLocalizations.authSignInSubtitle,
                 style: const TextStyle(color: AppTokens.muted, fontSize: 14),
               ),
+              const SizedBox(height: 16),
+              // Optional referral code (ADR 0020) — applied after sign-in, best-effort.
+              TextField(
+                controller: _referralController,
+                textCapitalization: TextCapitalization.characters,
+                textInputAction: TextInputAction.done,
+                style: const TextStyle(color: AppTokens.text),
+                decoration: InputDecoration(
+                  hintText: appLocalizations.referralCodeHintOptional,
+                  hintStyle: const TextStyle(color: AppTokens.muted),
+                  filled: true,
+                  fillColor: AppTokens.surface,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppTokens.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppTokens.accent),
+                  ),
+                ),
+              ),
               if (_error != null) ...[
                 const SizedBox(height: 14),
                 Text(_error!,
-                    style: const TextStyle(color: AppTokens.amber, fontSize: 13)),
+                    style:
+                        const TextStyle(color: AppTokens.amber, fontSize: 13)),
               ],
               const SizedBox(height: 24),
               RPrimaryButton(

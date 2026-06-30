@@ -4349,6 +4349,146 @@ class AppLocalizations {
     );
   }
 
+  /// `Invite friends`
+  String get inviteFriends {
+    return Intl.message(
+      'Invite friends',
+      name: 'inviteFriends',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Have a referral code?`
+  String get referralEnterCode {
+    return Intl.message(
+      'Have a referral code?',
+      name: 'referralEnterCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter referral code`
+  String get referralCodeHint {
+    return Intl.message(
+      'Enter referral code',
+      name: 'referralCodeHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Referral code (optional)`
+  String get referralCodeHintOptional {
+    return Intl.message(
+      'Referral code (optional)',
+      name: 'referralCodeHintOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply`
+  String get referralApply {
+    return Intl.message('Apply', name: 'referralApply', desc: '', args: []);
+  }
+
+  /// `Copy link`
+  String get referralCopyLink {
+    return Intl.message(
+      'Copy link',
+      name: 'referralCopyLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share`
+  String get referralShare {
+    return Intl.message('Share', name: 'referralShare', desc: '', args: []);
+  }
+
+  /// `Copied to clipboard`
+  String get referralCopied {
+    return Intl.message(
+      'Copied to clipboard',
+      name: 'referralCopied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The referral code is invalid or can't be used`
+  String get referralInvalid {
+    return Intl.message(
+      'The referral code is invalid or can\'t be used',
+      name: 'referralInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Referral applied`
+  String get referralApplied {
+    return Intl.message(
+      'Referral applied',
+      name: 'referralApplied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your code`
+  String get referralYourCode {
+    return Intl.message(
+      'Your code',
+      name: 'referralYourCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invited: {count}`
+  String referralInvitedCount(Object count) {
+    return Intl.message(
+      'Invited: $count',
+      name: 'referralInvitedCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Earned: {days} days`
+  String referralEarnedDays(Object days) {
+    return Intl.message(
+      'Earned: $days days',
+      name: 'referralEarnedDays',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Commission: {percent}%`
+  String referralCommission(Object percent) {
+    return Intl.message(
+      'Commission: $percent%',
+      name: 'referralCommission',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `Welcome bonus applied: +{days} days`
+  String referralAttributed(Object days) {
+    return Intl.message(
+      'Welcome bonus applied: +$days days',
+      name: 'referralAttributed',
+      desc: '',
+      args: [days],
+    );
+  }
+
   /// `By continuing you agree to our Terms of Service and Privacy Policy.`
   String get authLegal {
     return Intl.message(

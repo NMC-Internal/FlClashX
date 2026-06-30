@@ -542,6 +542,41 @@
   "promoApplied": "プロモコードを適用しました",
   "promoInvalid": "コードが無効、期限切れ、または使用済みです",
   "promoDiscountBotOnly": "このプロモコードは Telegram ボットでのみ有効です",
+  "inviteFriends": "友達を招待",
+  "referralEnterCode": "紹介コードをお持ちですか？",
+  "referralCodeHint": "紹介コードを入力",
+  "referralCodeHintOptional": "紹介コード（任意）",
+  "referralApply": "適用",
+  "referralCopyLink": "リンクをコピー",
+  "referralShare": "共有",
+  "referralCopied": "クリップボードにコピーしました",
+  "referralInvalid": "紹介コードが無効か使用できません",
+  "referralApplied": "紹介コードを適用しました",
+  "referralYourCode": "あなたのコード",
+  "referralInvitedCount": "招待人数：{count}",
+  "@referralInvitedCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "referralEarnedDays": "獲得：{days} 日",
+  "@referralEarnedDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "referralCommission": "コミッション：{percent}%",
+  "@referralCommission": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "referralAttributed": "ウェルカムボーナスを付与：+{days} 日",
+  "@referralAttributed": {
+    "placeholders": {
+      "days": {}
+    }
+  },
   "authLegal": "続行すると、利用規約とプライバシーポリシーに同意したものとみなされます。",
   "notifications": "通知",
   "markAllRead": "すべて既読にする",

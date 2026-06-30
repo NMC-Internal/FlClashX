@@ -11,6 +11,7 @@ enum AuthErrorKind {
   emailTaken,
   network,
   server,
+
   /// 401 on an authenticated request: the session expired / token is no longer
   /// valid. The new UI drops to guest mode + a "session expired" toast; the old
   /// UI logs out. Distinct from [invalidCredentials] (a failed login attempt).
@@ -45,7 +46,8 @@ abstract final class SubscriptionStatus {
 class TelegramLinkInit {
   const TelegramLinkInit({required this.code, required this.deepLink});
 
-  factory TelegramLinkInit.fromJson(Map<String, Object?> json) => TelegramLinkInit(
+  factory TelegramLinkInit.fromJson(Map<String, Object?> json) =>
+      TelegramLinkInit(
         code: json['code'] as String? ?? '',
         deepLink: json['deep_link'] as String? ?? '',
       );
@@ -67,7 +69,8 @@ class PromoPreview {
 
   factory PromoPreview.fromJson(Map<String, Object?> json) => PromoPreview(
         rewardDays: (json['reward_days'] as num?)?.toInt() ?? 0,
-        rewardTrafficBytes: (json['reward_traffic_bytes'] as num?)?.toInt() ?? 0,
+        rewardTrafficBytes:
+            (json['reward_traffic_bytes'] as num?)?.toInt() ?? 0,
         discountPercent: (json['discount_percent'] as num?)?.toInt() ?? 0,
         discountFixedRub: (json['discount_fixed_rub'] as num?)?.toInt() ?? 0,
       );
@@ -80,6 +83,76 @@ class PromoPreview {
   /// A reward code grants +days/+traffic (applied to Remnawave); only these are
   /// redeemable from the client. A code with only a discount is bot/payment-only.
   bool get isReward => rewardDays > 0 || rewardTrafficBytes > 0;
+}
+
+/// Result of `POST /v1/referral/attribute` (ADR 0020): the welcome bonus granted to
+/// a NEW account that entered a referrer's code. Attribution is best-effort at
+/// sign-in; the bonus surfaces on the next `/v1/me`. [attributed] is false when
+/// nothing applied.
+class ReferralResult {
+  const ReferralResult({
+    required this.attributed,
+    required this.welcomeDays,
+    required this.welcomeTrafficBytes,
+    required this.welcomeDiscountPercent,
+  });
+
+  factory ReferralResult.fromJson(Map<String, Object?> json) => ReferralResult(
+        attributed: json['attributed'] as bool? ?? false,
+        welcomeDays: (json['welcome_days'] as num?)?.toInt() ?? 0,
+        welcomeTrafficBytes:
+            (json['welcome_traffic_bytes'] as num?)?.toInt() ?? 0,
+        welcomeDiscountPercent:
+            (json['welcome_discount_percent'] as num?)?.toInt() ?? 0,
+      );
+
+  final bool attributed;
+  final int welcomeDays;
+  final int welcomeTrafficBytes;
+  final int welcomeDiscountPercent;
+}
+
+/// Result of `GET /v1/referral/info` (ADR 0020): the account's own referral code +
+/// share link plus headline stats. [link] is a `t.me/<bot>?start=ref_<code>` deep
+/// link and is EMPTY when the bot username is not configured server-side (the share
+/// action then falls back to copying [code] alone) — same `omitempty` shape as
+/// [TelegramLinkInit].
+class ReferralInfo {
+  const ReferralInfo({
+    required this.code,
+    required this.link,
+    required this.invitedCount,
+    required this.earnedDays,
+    required this.commissionPercent,
+    required this.signupBonusDays,
+    required this.welcomeDays,
+    required this.welcomeTrafficBytes,
+    required this.welcomeDiscountPercent,
+  });
+
+  factory ReferralInfo.fromJson(Map<String, Object?> json) => ReferralInfo(
+        code: json['code'] as String? ?? '',
+        link: json['link'] as String? ?? '',
+        invitedCount: (json['invited_count'] as num?)?.toInt() ?? 0,
+        earnedDays: (json['earned_days'] as num?)?.toInt() ?? 0,
+        commissionPercent: (json['commission_percent'] as num?)?.toInt() ?? 0,
+        signupBonusDays: (json['signup_bonus_days'] as num?)?.toInt() ?? 0,
+        welcomeDays: (json['welcome_days'] as num?)?.toInt() ?? 0,
+        welcomeTrafficBytes:
+            (json['welcome_traffic_bytes'] as num?)?.toInt() ?? 0,
+        welcomeDiscountPercent:
+            (json['welcome_discount_percent'] as num?)?.toInt() ?? 0,
+      );
+
+  final String code;
+  final String link;
+  final int invitedCount;
+  final int earnedDays;
+  final int commissionPercent;
+  final int signupBonusDays;
+  final int welcomeDays;
+  final int welcomeTrafficBytes;
+  final int welcomeDiscountPercent;
 }
 
 /// Thin client for the auth/me backend contract (ADR 0014 social login, ADR 0010).
@@ -113,7 +186,8 @@ class AuthApi {
 
   /// Desktop (Windows/Linux): sends the browser PKCE authorization code for the
   /// backend to exchange (the OAuth secret stays server-side).
-  Future<String> googleDesktop(String code, String codeVerifier, String redirectUri) =>
+  Future<String> googleDesktop(
+          String code, String codeVerifier, String redirectUri) =>
       _googleAuth('/v1/auth/google/desktop', {
         'code': code,
         'code_verifier': codeVerifier,
@@ -235,7 +309,8 @@ class AuthApi {
   ///
   /// [receipt] is reserved for the future real store-IAP path (Google Play / App
   /// Store) and is ignored by the backend in test mode.
-  Future<void> purchasePlan(String token, String planCode, {String? receipt}) async {
+  Future<void> purchasePlan(String token, String planCode,
+      {String? receipt}) async {
     final Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(
@@ -283,17 +358,20 @@ class AuthApi {
     if (status == HttpStatus.ok) {
       final data = response.data;
       if (data is! Map) {
-        throw AuthException(AuthErrorKind.server, appLocalizations.authErrorServer);
+        throw AuthException(
+            AuthErrorKind.server, appLocalizations.authErrorServer);
       }
       return PromoPreview.fromJson(Map<String, Object?>.from(data));
     }
     if (status == HttpStatus.unauthorized) {
-      throw AuthException(AuthErrorKind.sessionExpired, appLocalizations.authErrorSessionExpired);
+      throw AuthException(AuthErrorKind.sessionExpired,
+          appLocalizations.authErrorSessionExpired);
     }
     if (status == HttpStatus.notFound ||
         status == HttpStatus.badRequest ||
         status == HttpStatus.conflict) {
-      throw AuthException(AuthErrorKind.invalidCredentials, appLocalizations.promoInvalid);
+      throw AuthException(
+          AuthErrorKind.invalidCredentials, appLocalizations.promoInvalid);
     }
     throw _mapStatus(status);
   }
@@ -320,12 +398,14 @@ class AuthApi {
       return; // reward applied; a /v1/me refresh surfaces the new expiry/traffic
     }
     if (status == HttpStatus.unauthorized) {
-      throw AuthException(AuthErrorKind.sessionExpired, appLocalizations.authErrorSessionExpired);
+      throw AuthException(AuthErrorKind.sessionExpired,
+          appLocalizations.authErrorSessionExpired);
     }
     if (status == HttpStatus.notFound ||
         status == HttpStatus.badRequest ||
         status == HttpStatus.conflict) {
-      throw AuthException(AuthErrorKind.invalidCredentials, appLocalizations.promoInvalid);
+      throw AuthException(
+          AuthErrorKind.invalidCredentials, appLocalizations.promoInvalid);
     }
     throw _mapStatus(status);
   }
@@ -359,9 +439,80 @@ class AuthApi {
 
     final data = response.data;
     if (data is! Map) {
-      throw AuthException(AuthErrorKind.server, appLocalizations.authErrorServer);
+      throw AuthException(
+          AuthErrorKind.server, appLocalizations.authErrorServer);
     }
     return TelegramLinkInit.fromJson(Map<String, Object?>.from(data));
+  }
+
+  /// Attributes a referrer's code to THIS account (ADR 0020):
+  /// `POST /v1/referral/attribute {code}` (Bearer) -> [ReferralResult]. 404 (unknown
+  /// code) / 400 (bad request) / 409 (own code OR already has a referrer) collapse to
+  /// a localized "invalid code" error (the two 409s differ only by the backend's
+  /// untranslated message, as [applyPromo] does). 401 -> sessionExpired.
+  Future<ReferralResult> applyReferral(String token, String code) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/referral/attribute',
+        data: {'code': code},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.ok) {
+      final data = response.data;
+      if (data is! Map) {
+        throw AuthException(
+            AuthErrorKind.server, appLocalizations.authErrorServer);
+      }
+      return ReferralResult.fromJson(Map<String, Object?>.from(data));
+    }
+    if (status == HttpStatus.unauthorized) {
+      throw AuthException(AuthErrorKind.sessionExpired,
+          appLocalizations.authErrorSessionExpired);
+    }
+    if (status == HttpStatus.notFound ||
+        status == HttpStatus.badRequest ||
+        status == HttpStatus.conflict) {
+      throw AuthException(
+          AuthErrorKind.invalidCredentials, appLocalizations.referralInvalid);
+    }
+    throw _mapStatus(status);
+  }
+
+  /// Fetches the account's own referral code/link + stats (ADR 0020):
+  /// `GET /v1/referral/info` (Bearer) -> [ReferralInfo]. 401 -> sessionExpired.
+  /// Same shape as [linkInitTelegram].
+  Future<ReferralInfo> fetchReferralInfo(String token) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.get<dynamic>(
+        '/v1/referral/info',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.unauthorized) {
+      throw AuthException(AuthErrorKind.sessionExpired,
+          appLocalizations.authErrorSessionExpired);
+    }
+    if (status != HttpStatus.ok) {
+      throw _mapStatus(status);
+    }
+
+    final data = response.data;
+    if (data is! Map) {
+      throw AuthException(
+          AuthErrorKind.server, appLocalizations.authErrorServer);
+    }
+    return ReferralInfo.fromJson(Map<String, Object?>.from(data));
   }
 
   String? _extractToken(dynamic data) {

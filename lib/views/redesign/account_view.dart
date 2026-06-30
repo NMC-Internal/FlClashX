@@ -7,6 +7,7 @@ import 'package:flclashx/state.dart';
 import 'package:flclashx/views/redesign/auth_sheet.dart';
 import 'package:flclashx/views/redesign/plans_view.dart';
 import 'package:flclashx/views/redesign/promo_sheet.dart';
+import 'package:flclashx/views/redesign/referral_sheet.dart';
 import 'package:flclashx/views/redesign/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,8 @@ class RAccountView extends ConsumerWidget {
     try {
       final init = await authApi.linkInitTelegram(token);
       if (init.deepLink.isNotEmpty) {
-        await launchUrl(Uri.parse(init.deepLink), mode: LaunchMode.externalApplication);
+        await launchUrl(Uri.parse(init.deepLink),
+            mode: LaunchMode.externalApplication);
         return;
       }
       if (init.code.isNotEmpty) {
@@ -78,11 +80,13 @@ class RAccountView extends ConsumerWidget {
       content = const _GuestAccount();
     } else {
       content = meAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: AppTokens.accent)),
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AppTokens.accent)),
         error: (_, __) => const _AccountError(),
         data: (me) => _AccountBody(
           me: me ?? const Me(),
           onRedeemPromo: (ctx) => redeemPromoFlow(ctx, ref),
+          onInviteFriends: (ctx) => referralInviteFlow(ctx, ref),
           onLinkTelegram: () => _linkTelegram(ref),
           onLogout: () => _logout(ref),
           onRefresh: () => _refreshMe(ref),
@@ -103,6 +107,7 @@ class _AccountBody extends StatelessWidget {
   const _AccountBody({
     required this.me,
     required this.onRedeemPromo,
+    required this.onInviteFriends,
     required this.onLinkTelegram,
     required this.onLogout,
     required this.onRefresh,
@@ -110,6 +115,7 @@ class _AccountBody extends StatelessWidget {
 
   final Me me;
   final void Function(BuildContext context) onRedeemPromo;
+  final void Function(BuildContext context) onInviteFriends;
   final VoidCallback onLinkTelegram;
   final VoidCallback onLogout;
   final Future<void> Function() onRefresh;
@@ -140,12 +146,22 @@ class _AccountBody extends StatelessWidget {
             onPressed: () => onRedeemPromo(context),
           ),
           const SizedBox(height: 12),
+          RSecondaryButton(
+            label: appLocalizations.inviteFriends,
+            onPressed: () => onInviteFriends(context),
+          ),
+          const SizedBox(height: 12),
           if (me.telegramLinked)
             const _TelegramLinked()
           else
-            RSecondaryButton(label: appLocalizations.linkTelegram, onPressed: onLinkTelegram),
+            RSecondaryButton(
+                label: appLocalizations.linkTelegram,
+                onPressed: onLinkTelegram),
           const SizedBox(height: 12),
-          RSecondaryButton(label: appLocalizations.logout, onPressed: onLogout, destructive: true),
+          RSecondaryButton(
+              label: appLocalizations.logout,
+              onPressed: onLogout,
+              destructive: true),
         ],
       ),
     );
@@ -172,7 +188,10 @@ class _TelegramLinked extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               appLocalizations.telegramLinked,
-              style: const TextStyle(color: AppTokens.accent, fontSize: 14, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                  color: AppTokens.accent,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -186,7 +205,9 @@ class _Identity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initials = email.isNotEmpty ? email.substring(0, email.length >= 2 ? 2 : 1).toUpperCase() : '?';
+    final initials = email.isNotEmpty
+        ? email.substring(0, email.length >= 2 ? 2 : 1).toUpperCase()
+        : '?';
     return Row(
       children: [
         Container(
@@ -198,16 +219,21 @@ class _Identity extends StatelessWidget {
             border: Border.all(color: AppTokens.border),
           ),
           alignment: Alignment.center,
-          child: Text(initials, style: const TextStyle(color: AppTokens.accent, fontWeight: FontWeight.w600)),
+          child: Text(initials,
+              style: const TextStyle(
+                  color: AppTokens.accent, fontWeight: FontWeight.w600)),
         ),
         const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(email, style: const TextStyle(color: AppTokens.text, fontSize: 15), overflow: TextOverflow.ellipsis),
+              Text(email,
+                  style: const TextStyle(color: AppTokens.text, fontSize: 15),
+                  overflow: TextOverflow.ellipsis),
               const SizedBox(height: 2),
-              Text(appLocalizations.accountSignedIn, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
+              Text(appLocalizations.accountSignedIn,
+                  style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
             ],
           ),
         ),
@@ -224,14 +250,16 @@ class _SubCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final limit = sub.trafficLimitBytes;
-    final ratio = (limit > 0) ? (sub.usedTrafficBytes / limit).clamp(0.0, 1.0) : 0.0;
+    final ratio =
+        (limit > 0) ? (sub.usedTrafficBytes / limit).clamp(0.0, 1.0) : 0.0;
     final used = formatBytes(sub.usedTrafficBytes);
     final limitStr = sub.isUnlimited ? '∞' : formatBytes(limit);
     final expires = sub.expiresAt;
     final expiresStr = expires == null
         ? '—'
         : appLocalizations.accountExpiresInDays(
-            expires.difference(DateTime.now()).inDays, formatShortDate(expires));
+            expires.difference(DateTime.now()).inDays,
+            formatShortDate(expires));
     return RCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +269,10 @@ class _SubCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   _planTitle(sub.plan, sub.planName),
-                  style: const TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      color: AppTokens.text,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
               _StatusBadge(status: sub.status),
@@ -270,8 +301,14 @@ class _SubCard extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(used, style: const TextStyle(color: AppTokens.text, fontSize: 22, fontWeight: FontWeight.w600)),
-                      Text(appLocalizations.accountOfLimit(limitStr), style: const TextStyle(color: AppTokens.muted, fontSize: 12)),
+                      Text(used,
+                          style: const TextStyle(
+                              color: AppTokens.text,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600)),
+                      Text(appLocalizations.accountOfLimit(limitStr),
+                          style: const TextStyle(
+                              color: AppTokens.muted, fontSize: 12)),
                     ],
                   ),
                 ],
@@ -279,7 +316,8 @@ class _SubCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          Text(expiresStr, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
+          Text(expiresStr,
+              style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
           const SizedBox(height: 16),
           RPrimaryButton(
             label: appLocalizations.upgradePlan,
@@ -291,7 +329,6 @@ class _SubCard extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Human title for a subscription's plan: localized names for the canonical codes,
@@ -305,7 +342,8 @@ String _planTitle(String code, String planName) => switch (code) {
           ? planName
           : (code.isEmpty
               ? appLocalizations.planGeneric
-              : appLocalizations.planNamed('${code[0].toUpperCase()}${code.substring(1)}')),
+              : appLocalizations
+                  .planNamed('${code[0].toUpperCase()}${code.substring(1)}')),
     };
 
 class _StatusBadge extends StatelessWidget {
@@ -327,7 +365,9 @@ class _StatusBadge extends StatelessWidget {
         color: color.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(AppTokens.rPill),
       ),
-      child: Text(label, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600)),
+      child: Text(label,
+          style: TextStyle(
+              color: color, fontSize: 12, fontWeight: FontWeight.w600)),
     );
   }
 }
@@ -339,7 +379,8 @@ class _HistoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final created = sub.createdAt.isEmpty ? null : DateTime.tryParse(sub.createdAt);
+    final created =
+        sub.createdAt.isEmpty ? null : DateTime.tryParse(sub.createdAt);
     final ended = sub.expiresAt;
     final range = (created != null && ended != null)
         ? '${formatShortDate(created)} – ${formatShortDate(ended)}'
@@ -365,12 +406,15 @@ class _HistoryRow extends StatelessWidget {
                   ),
                   if (range.isNotEmpty) ...[
                     const SizedBox(height: 2),
-                    Text(range, style: const TextStyle(color: AppTokens.muted, fontSize: 12)),
+                    Text(range,
+                        style: const TextStyle(
+                            color: AppTokens.muted, fontSize: 12)),
                   ],
                 ],
               ),
             ),
-            Text(status, style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
+            Text(status,
+                style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
           ],
         ),
       ),
@@ -387,7 +431,10 @@ class _NoSubCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(appLocalizations.noActiveSubscription,
-                style: const TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600)),
+                style: const TextStyle(
+                    color: AppTokens.text,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600)),
             const SizedBox(height: 6),
             Text(appLocalizations.noSubHint,
                 style: const TextStyle(color: AppTokens.muted, fontSize: 13)),
@@ -406,13 +453,18 @@ class _GuestAccount extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.person_outline, color: AppTokens.muted, size: 56),
+              const Icon(Icons.person_outline,
+                  color: AppTokens.muted, size: 56),
               const SizedBox(height: 16),
               Text(appLocalizations.notSignedIn,
-                  style: const TextStyle(color: AppTokens.text, fontSize: 18, fontWeight: FontWeight.w600)),
+                  style: const TextStyle(
+                      color: AppTokens.text,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600)),
               const SizedBox(height: 6),
               Text(appLocalizations.signInToManage,
-                  textAlign: TextAlign.center, style: const TextStyle(color: AppTokens.muted, fontSize: 14)),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppTokens.muted, fontSize: 14)),
               const SizedBox(height: 24),
               RPrimaryButton(
                 label: appLocalizations.signIn,
@@ -429,6 +481,7 @@ class _AccountError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Center(
-        child: Text(appLocalizations.accountLoadError, style: const TextStyle(color: AppTokens.muted)),
+        child: Text(appLocalizations.accountLoadError,
+            style: const TextStyle(color: AppTokens.muted)),
       );
 }
