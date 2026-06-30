@@ -6,6 +6,7 @@ import 'package:flclashx/pages/auth/auth_state.dart';
 import 'package:flclashx/state.dart';
 import 'package:flclashx/views/redesign/auth_sheet.dart';
 import 'package:flclashx/views/redesign/plans_view.dart';
+import 'package:flclashx/views/redesign/promo_sheet.dart';
 import 'package:flclashx/views/redesign/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,6 +82,7 @@ class RAccountView extends ConsumerWidget {
         error: (_, __) => const _AccountError(),
         data: (me) => _AccountBody(
           me: me ?? const Me(),
+          onRedeemPromo: (ctx) => redeemPromoFlow(ctx, ref),
           onLinkTelegram: () => _linkTelegram(ref),
           onLogout: () => _logout(ref),
           onRefresh: () => _refreshMe(ref),
@@ -100,12 +102,14 @@ class RAccountView extends ConsumerWidget {
 class _AccountBody extends StatelessWidget {
   const _AccountBody({
     required this.me,
+    required this.onRedeemPromo,
     required this.onLinkTelegram,
     required this.onLogout,
     required this.onRefresh,
   });
 
   final Me me;
+  final void Function(BuildContext context) onRedeemPromo;
   final VoidCallback onLinkTelegram;
   final VoidCallback onLogout;
   final Future<void> Function() onRefresh;
@@ -131,6 +135,11 @@ class _AccountBody extends StatelessWidget {
             for (final s in history) _HistoryRow(sub: s),
           ],
           const SizedBox(height: 20),
+          RSecondaryButton(
+            label: appLocalizations.redeemPromo,
+            onPressed: () => onRedeemPromo(context),
+          ),
+          const SizedBox(height: 12),
           if (me.telegramLinked)
             const _TelegramLinked()
           else

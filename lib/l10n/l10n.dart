@@ -4299,6 +4299,56 @@ class AppLocalizations {
     );
   }
 
+  /// `Promo code`
+  String get redeemPromo {
+    return Intl.message('Promo code', name: 'redeemPromo', desc: '', args: []);
+  }
+
+  /// `Enter promo code`
+  String get promoCodeHint {
+    return Intl.message(
+      'Enter promo code',
+      name: 'promoCodeHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply`
+  String get promoApply {
+    return Intl.message('Apply', name: 'promoApply', desc: '', args: []);
+  }
+
+  /// `Promo code applied`
+  String get promoApplied {
+    return Intl.message(
+      'Promo code applied',
+      name: 'promoApplied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The code is invalid, expired, or already used`
+  String get promoInvalid {
+    return Intl.message(
+      'The code is invalid, expired, or already used',
+      name: 'promoInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This promo code works only in the Telegram bot`
+  String get promoDiscountBotOnly {
+    return Intl.message(
+      'This promo code works only in the Telegram bot',
+      name: 'promoDiscountBotOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `By continuing you agree to our Terms of Service and Privacy Policy.`
   String get authLegal {
     return Intl.message(
