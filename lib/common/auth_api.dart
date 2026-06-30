@@ -54,6 +54,34 @@ class TelegramLinkInit {
   final String deepLink;
 }
 
+/// Result of `POST /v1/promo/validate` (ADR 0016): a code's reward (+days/+traffic)
+/// and/or discount. On the client only REWARD codes are redeemable — a discount code
+/// applies to a bot/Telegram-Payments invoice, which the client has no checkout for.
+class PromoPreview {
+  const PromoPreview({
+    required this.rewardDays,
+    required this.rewardTrafficBytes,
+    required this.discountPercent,
+    required this.discountFixedRub,
+  });
+
+  factory PromoPreview.fromJson(Map<String, Object?> json) => PromoPreview(
+        rewardDays: (json['reward_days'] as num?)?.toInt() ?? 0,
+        rewardTrafficBytes: (json['reward_traffic_bytes'] as num?)?.toInt() ?? 0,
+        discountPercent: (json['discount_percent'] as num?)?.toInt() ?? 0,
+        discountFixedRub: (json['discount_fixed_rub'] as num?)?.toInt() ?? 0,
+      );
+
+  final int rewardDays;
+  final int rewardTrafficBytes;
+  final int discountPercent;
+  final int discountFixedRub;
+
+  /// A reward code grants +days/+traffic (applied to Remnawave); only these are
+  /// redeemable from the client. A code with only a discount is bot/payment-only.
+  bool get isReward => rewardDays > 0 || rewardTrafficBytes > 0;
+}
+
 /// Thin client for the auth/me backend contract (ADR 0014 social login, ADR 0010).
 ///
 /// Endpoints (base = [backendBaseUrl]):
@@ -231,6 +259,73 @@ class AuthApi {
         AuthErrorKind.sessionExpired,
         appLocalizations.authErrorSessionExpired,
       );
+    }
+    throw _mapStatus(status);
+  }
+
+  /// Validates a promo code (ADR 0016): `POST /v1/promo/validate` (Bearer) ->
+  /// [PromoPreview]. Lets the caller tell a reward code (redeemable here) from a
+  /// discount code (bot-only) before applying. 404/400/409 -> a localized
+  /// "invalid/unusable" error; 401 -> sessionExpired.
+  Future<PromoPreview> validatePromo(String token, String code) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/promo/validate',
+        data: {'code': code},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.ok) {
+      final data = response.data;
+      if (data is! Map) {
+        throw AuthException(AuthErrorKind.server, appLocalizations.authErrorServer);
+      }
+      return PromoPreview.fromJson(Map<String, Object?>.from(data));
+    }
+    if (status == HttpStatus.unauthorized) {
+      throw AuthException(AuthErrorKind.sessionExpired, appLocalizations.authErrorSessionExpired);
+    }
+    if (status == HttpStatus.notFound ||
+        status == HttpStatus.badRequest ||
+        status == HttpStatus.conflict) {
+      throw AuthException(AuthErrorKind.invalidCredentials, appLocalizations.promoInvalid);
+    }
+    throw _mapStatus(status);
+  }
+
+  /// Redeems a REWARD promo code (ADR 0016): `POST /v1/promo/apply` (Bearer). On 200
+  /// the reward (+days/+traffic) is applied to the account's subscription in
+  /// Remnawave; the caller refreshes `/v1/me` to surface it. 404/400/409 (unknown /
+  /// unusable / already used / no active subscription) -> a localized error; 401 ->
+  /// sessionExpired.
+  Future<void> applyPromo(String token, String code) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/promo/apply',
+        data: {'code': code},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.ok) {
+      return; // reward applied; a /v1/me refresh surfaces the new expiry/traffic
+    }
+    if (status == HttpStatus.unauthorized) {
+      throw AuthException(AuthErrorKind.sessionExpired, appLocalizations.authErrorSessionExpired);
+    }
+    if (status == HttpStatus.notFound ||
+        status == HttpStatus.badRequest ||
+        status == HttpStatus.conflict) {
+      throw AuthException(AuthErrorKind.invalidCredentials, appLocalizations.promoInvalid);
     }
     throw _mapStatus(status);
   }

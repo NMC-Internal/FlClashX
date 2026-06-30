@@ -588,6 +588,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "profiles": MessageLookupByLibrary.simpleMessage("プロファイル一覧"),
     "profilesSort": MessageLookupByLibrary.simpleMessage("プロファイルの並び替え"),
     "project": MessageLookupByLibrary.simpleMessage("プロジェクト"),
+    "promoApplied": MessageLookupByLibrary.simpleMessage("プロモコードを適用しました"),
+    "promoApply": MessageLookupByLibrary.simpleMessage("適用"),
+    "promoCodeHint": MessageLookupByLibrary.simpleMessage("プロモコードを入力"),
+    "promoDiscountBotOnly": MessageLookupByLibrary.simpleMessage(
+      "このプロモコードは Telegram ボットでのみ有効です",
+    ),
+    "promoInvalid": MessageLookupByLibrary.simpleMessage(
+      "コードが無効、期限切れ、または使用済みです",
+    ),
     "providers": MessageLookupByLibrary.simpleMessage("プロバイダー"),
     "proxies": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "proxiesSetting": MessageLookupByLibrary.simpleMessage("プロキシ設定"),
@@ -612,6 +621,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "オーバーライド",
     ),
     "recoverySuccess": MessageLookupByLibrary.simpleMessage("復元成功"),
+    "redeemPromo": MessageLookupByLibrary.simpleMessage("プロモコード"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redirポート"),
     "redo": MessageLookupByLibrary.simpleMessage("やり直す"),
     "regExp": MessageLookupByLibrary.simpleMessage("正規表現"),

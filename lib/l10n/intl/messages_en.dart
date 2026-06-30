@@ -734,6 +734,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "profiles": MessageLookupByLibrary.simpleMessage("Profiles"),
     "profilesSort": MessageLookupByLibrary.simpleMessage("Profiles sort"),
     "project": MessageLookupByLibrary.simpleMessage("Project"),
+    "promoApplied": MessageLookupByLibrary.simpleMessage("Promo code applied"),
+    "promoApply": MessageLookupByLibrary.simpleMessage("Apply"),
+    "promoCodeHint": MessageLookupByLibrary.simpleMessage("Enter promo code"),
+    "promoDiscountBotOnly": MessageLookupByLibrary.simpleMessage(
+      "This promo code works only in the Telegram bot",
+    ),
+    "promoInvalid": MessageLookupByLibrary.simpleMessage(
+      "The code is invalid, expired, or already used",
+    ),
     "providers": MessageLookupByLibrary.simpleMessage("Providers"),
     "proxies": MessageLookupByLibrary.simpleMessage("Proxies"),
     "proxiesSetting": MessageLookupByLibrary.simpleMessage("Proxies setting"),
@@ -768,6 +777,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Override",
     ),
     "recoverySuccess": MessageLookupByLibrary.simpleMessage("Recovery success"),
+    "redeemPromo": MessageLookupByLibrary.simpleMessage("Promo code"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir Port"),
     "redo": MessageLookupByLibrary.simpleMessage("redo"),
     "regExp": MessageLookupByLibrary.simpleMessage("RegExp"),

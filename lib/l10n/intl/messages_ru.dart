@@ -755,6 +755,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "profiles": MessageLookupByLibrary.simpleMessage("Профили"),
     "profilesSort": MessageLookupByLibrary.simpleMessage("Сортировка профилей"),
     "project": MessageLookupByLibrary.simpleMessage("Проект"),
+    "promoApplied": MessageLookupByLibrary.simpleMessage("Промокод применён"),
+    "promoApply": MessageLookupByLibrary.simpleMessage("Применить"),
+    "promoCodeHint": MessageLookupByLibrary.simpleMessage("Введите промокод"),
+    "promoDiscountBotOnly": MessageLookupByLibrary.simpleMessage(
+      "Этот промокод действует только в Telegram-боте",
+    ),
+    "promoInvalid": MessageLookupByLibrary.simpleMessage(
+      "Код недействителен, истёк или уже использован",
+    ),
     "providers": MessageLookupByLibrary.simpleMessage("Провайдеры"),
     "proxies": MessageLookupByLibrary.simpleMessage("Прокси"),
     "proxiesSetting": MessageLookupByLibrary.simpleMessage("Настройка прокси"),
@@ -795,6 +804,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "recoverySuccess": MessageLookupByLibrary.simpleMessage(
       "Восстановление успешно",
     ),
+    "redeemPromo": MessageLookupByLibrary.simpleMessage("Промокод"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir-порт"),
     "redo": MessageLookupByLibrary.simpleMessage("Повторить"),
     "regExp": MessageLookupByLibrary.simpleMessage("Регулярное выражение"),
