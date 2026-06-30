@@ -195,6 +195,46 @@ class AuthApi {
     throw _mapStatus(status);
   }
 
+  /// Buys a plan via the env-gated TEST checkout (ADR 0019): `POST /v1/checkout`
+  /// (Bearer) with `{plan_code, receipt?}`. In the backend's test mode this
+  /// provisions the subscription WITHOUT any charge; the subscription provisions
+  /// asynchronously, so the caller refreshes `/v1/me` afterwards to surface it.
+  ///
+  /// 204 (provisioned) returns normally. 401 (token rejected) throws
+  /// [AuthErrorKind.sessionExpired] so the caller drops to guest. Other statuses
+  /// throw a generic error — notably 501 when the backend has payments disabled
+  /// (PAYMENTS_TEST_MODE off), and 403/404 for a non-purchasable/unknown plan.
+  ///
+  /// [receipt] is reserved for the future real store-IAP path (Google Play / App
+  /// Store) and is ignored by the backend in test mode.
+  Future<void> purchasePlan(String token, String planCode, {String? receipt}) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/checkout',
+        data: {
+          'plan_code': planCode,
+          if (receipt != null) 'receipt': receipt,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+
+    final status = response.statusCode ?? 0;
+    if (status == HttpStatus.noContent) {
+      return; // provisioned (test mode); /v1/me will surface the subscription
+    }
+    if (status == HttpStatus.unauthorized) {
+      throw AuthException(
+        AuthErrorKind.sessionExpired,
+        appLocalizations.authErrorSessionExpired,
+      );
+    }
+    throw _mapStatus(status);
+  }
+
   /// Starts linking a Telegram account to THIS account (ADR 0015/0018):
   /// `POST /v1/identities/telegram/link-init` (Bearer) -> `{code, deep_link}`.
   /// The user opens the deep link in the bot to attach Telegram; the backend then

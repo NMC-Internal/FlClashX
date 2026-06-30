@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flclashx/common/app_localizations.dart';
+import 'package:flclashx/common/auth_api.dart';
+import 'package:flclashx/common/constant.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/pages/auth/auth_state.dart';
@@ -11,9 +13,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 
 /// The public plan catalog (`/v1/plans`). A pushed screen reached from the
-/// Connect/Account CTAs. The trial card is gated on [Me.trialEligible]; paid
-/// checkout is out of scope (ADR 0013 decision) — the cards inform, billing is
-/// not active.
+/// Connect/Account CTAs. The trial card is gated on [Me.trialEligible]. Paid
+/// checkout is not active in normal builds (the CTA shows a "billing not active"
+/// notice); with `--dart-define=CHECKOUT_TEST=true` the CTA drives the env-gated
+/// TEST checkout (ADR 0019) — no real charge, the backend must run PAYMENTS_TEST_MODE.
 class RPlansView extends ConsumerWidget {
   const RPlansView({super.key});
 
@@ -86,6 +89,37 @@ class RPlansView extends ConsumerWidget {
   }
 }
 
+/// Buys [planCode] via the env-gated TEST checkout (ADR 0019), wired to the Plans
+/// CTA only when `--dart-define=CHECKOUT_TEST=true`. A guest signs in first; then
+/// [AuthApi.purchasePlan] runs (no real charge — the backend must run with
+/// PAYMENTS_TEST_MODE on) and `/v1/me` is refreshed so the new (provisioning→active)
+/// subscription appears. A session expiry drops to guest via the shell listener;
+/// other failures (e.g. 501 when payments are disabled) show a toast. Mirrors
+/// [claimTrialFlow].
+Future<void> purchasePlanFlow(
+  BuildContext context,
+  WidgetRef ref,
+  String planCode,
+) async {
+  var token = ref.read(authTokenProvider);
+  if (token == null || token.isEmpty) {
+    final ok = await showAuthSheet(context);
+    if (!ok) return; // user dismissed sign-in
+    token = ref.read(authTokenProvider);
+    if (token == null || token.isEmpty) return;
+  }
+
+  try {
+    await authApi.purchasePlan(token, planCode);
+    ref.invalidate(meProvider); // surface the new provisioning→active subscription
+  } on AuthException catch (e) {
+    ref.invalidate(meProvider); // a sessionExpired drops to guest via the shell listener
+    if (context.mounted && e.kind != AuthErrorKind.sessionExpired) {
+      showFToast(context: context, title: Text(e.message));
+    }
+  }
+}
+
 class _PlanCard extends ConsumerWidget {
   const _PlanCard({required this.plan});
 
@@ -93,9 +127,14 @@ class _PlanCard extends ConsumerWidget {
 
   String get _price {
     if (plan.priceCents == 0) return appLocalizations.planFree;
-    final dollars = plan.priceCents / 100;
-    final str = dollars == dollars.roundToDouble() ? dollars.toStringAsFixed(0) : dollars.toStringAsFixed(2);
-    return '\$$str';
+    final major = plan.priceCents / 100;
+    final str = major == major.roundToDouble() ? major.toStringAsFixed(0) : major.toStringAsFixed(2);
+    return switch (plan.currency) {
+      'USD' => '\$$str',
+      'EUR' => '€$str',
+      'RUB' => '$str ₽',
+      _ => '$str ${plan.currency}',
+    };
   }
 
   String get _period => switch (plan.durationDays) {
@@ -118,6 +157,11 @@ class _PlanCard extends ConsumerWidget {
   Future<void> _onCta(BuildContext context, WidgetRef ref) async {
     if (plan.isTrial) {
       await claimTrialFlow(context, ref);
+      if (context.mounted) unawaited(Navigator.of(context).maybePop());
+      return;
+    }
+    if (checkoutTestMode) {
+      await purchasePlanFlow(context, ref, plan.code);
       if (context.mounted) unawaited(Navigator.of(context).maybePop());
       return;
     }

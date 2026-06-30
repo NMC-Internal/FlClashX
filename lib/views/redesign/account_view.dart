@@ -231,7 +231,7 @@ class _SubCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  _planTitle(sub.plan),
+                  _planTitle(sub.plan, sub.planName),
                   style: const TextStyle(color: AppTokens.text, fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -283,15 +283,21 @@ class _SubCard extends StatelessWidget {
     );
   }
 
-  String _planTitle(String code) => switch (code) {
-        'trial' => appLocalizations.planTrial,
-        'monthly' => appLocalizations.planMonthly,
-        'yearly' => appLocalizations.planYearly,
-        _ => code.isEmpty
-            ? appLocalizations.planGeneric
-            : appLocalizations.planNamed('${code[0].toUpperCase()}${code.substring(1)}'),
-      };
 }
+
+/// Human title for a subscription's plan: localized names for the canonical codes,
+/// the backend-provided [planName] for catalog plans (e.g. app_*), and a prettified
+/// code only as a last resort.
+String _planTitle(String code, String planName) => switch (code) {
+      'trial' => appLocalizations.planTrial,
+      'monthly' => appLocalizations.planMonthly,
+      'yearly' => appLocalizations.planYearly,
+      _ => planName.isNotEmpty
+          ? planName
+          : (code.isEmpty
+              ? appLocalizations.planGeneric
+              : appLocalizations.planNamed('${code[0].toUpperCase()}${code.substring(1)}')),
+    };
 
 class _StatusBadge extends StatelessWidget {
   const _StatusBadge({required this.status});
@@ -345,7 +351,7 @@ class _HistoryRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    sub.plan.isEmpty ? appLocalizations.planGeneric : sub.plan,
+                    _planTitle(sub.plan, sub.planName),
                     style: const TextStyle(color: AppTokens.text, fontSize: 14),
                   ),
                   if (range.isNotEmpty) ...[

@@ -21,6 +21,12 @@ const backendBaseUrl = String.fromEnvironment(
   defaultValue: 'http://127.0.0.1:8080',
 );
 
+// Env-gated TEST checkout (ADR 0019): when built with
+// `--dart-define=CHECKOUT_TEST=true`, the Plans "buy" CTA calls POST /v1/checkout
+// (the backend must run with PAYMENTS_TEST_MODE on — no real charge). Off by
+// default, so normal builds keep showing the "billing not active" notice.
+const checkoutTestMode = bool.fromEnvironment('CHECKOUT_TEST');
+
 // Google OAuth (ADR 0014), injected at build time via --dart-define. No client
 // secret is needed here — Android/iOS/macOS use native clients (no secret), and
 // the Windows/Linux desktop flow only builds the auth URL with the desktop
