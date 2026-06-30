@@ -38,6 +38,7 @@ class Plan with _$Plan {
 class Subscription with _$Subscription {
   const factory Subscription({
     @Default('') String plan,
+    @JsonKey(name: 'plan_name') @Default('') String planName,
     @Default('') String status,
     @Default(false) bool active,
     @JsonKey(name: 'subscription_url') @Default('') String subscriptionUrl,

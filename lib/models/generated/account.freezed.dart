@@ -389,6 +389,8 @@ Subscription _$SubscriptionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Subscription {
   String get plan => throw _privateConstructorUsedError;
+  @JsonKey(name: 'plan_name')
+  String get planName => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   bool get active => throw _privateConstructorUsedError;
   @JsonKey(name: 'subscription_url')
@@ -423,6 +425,7 @@ abstract class $SubscriptionCopyWith<$Res> {
   @useResult
   $Res call(
       {String plan,
+      @JsonKey(name: 'plan_name') String planName,
       String status,
       bool active,
       @JsonKey(name: 'subscription_url') String subscriptionUrl,
@@ -450,6 +453,7 @@ class _$SubscriptionCopyWithImpl<$Res, $Val extends Subscription>
   @override
   $Res call({
     Object? plan = null,
+    Object? planName = null,
     Object? status = null,
     Object? active = null,
     Object? subscriptionUrl = null,
@@ -464,6 +468,10 @@ class _$SubscriptionCopyWithImpl<$Res, $Val extends Subscription>
       plan: null == plan
           ? _value.plan
           : plan // ignore: cast_nullable_to_non_nullable
+              as String,
+      planName: null == planName
+          ? _value.planName
+          : planName // ignore: cast_nullable_to_non_nullable
               as String,
       status: null == status
           ? _value.status
@@ -515,6 +523,7 @@ abstract class _$$SubscriptionImplCopyWith<$Res>
   @useResult
   $Res call(
       {String plan,
+      @JsonKey(name: 'plan_name') String planName,
       String status,
       bool active,
       @JsonKey(name: 'subscription_url') String subscriptionUrl,
@@ -540,6 +549,7 @@ class __$$SubscriptionImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? plan = null,
+    Object? planName = null,
     Object? status = null,
     Object? active = null,
     Object? subscriptionUrl = null,
@@ -554,6 +564,10 @@ class __$$SubscriptionImplCopyWithImpl<$Res>
       plan: null == plan
           ? _value.plan
           : plan // ignore: cast_nullable_to_non_nullable
+              as String,
+      planName: null == planName
+          ? _value.planName
+          : planName // ignore: cast_nullable_to_non_nullable
               as String,
       status: null == status
           ? _value.status
@@ -600,6 +614,7 @@ class __$$SubscriptionImplCopyWithImpl<$Res>
 class _$SubscriptionImpl extends _Subscription {
   const _$SubscriptionImpl(
       {this.plan = '',
+      @JsonKey(name: 'plan_name') this.planName = '',
       this.status = '',
       this.active = false,
       @JsonKey(name: 'subscription_url') this.subscriptionUrl = '',
@@ -617,6 +632,9 @@ class _$SubscriptionImpl extends _Subscription {
   @override
   @JsonKey()
   final String plan;
+  @override
+  @JsonKey(name: 'plan_name')
+  final String planName;
   @override
   @JsonKey()
   final String status;
@@ -647,7 +665,7 @@ class _$SubscriptionImpl extends _Subscription {
 
   @override
   String toString() {
-    return 'Subscription(plan: $plan, status: $status, active: $active, subscriptionUrl: $subscriptionUrl, deviceLimit: $deviceLimit, enriched: $enriched, expireAt: $expireAt, usedTrafficBytes: $usedTrafficBytes, trafficLimitBytes: $trafficLimitBytes, createdAt: $createdAt)';
+    return 'Subscription(plan: $plan, planName: $planName, status: $status, active: $active, subscriptionUrl: $subscriptionUrl, deviceLimit: $deviceLimit, enriched: $enriched, expireAt: $expireAt, usedTrafficBytes: $usedTrafficBytes, trafficLimitBytes: $trafficLimitBytes, createdAt: $createdAt)';
   }
 
   @override
@@ -656,6 +674,8 @@ class _$SubscriptionImpl extends _Subscription {
         (other.runtimeType == runtimeType &&
             other is _$SubscriptionImpl &&
             (identical(other.plan, plan) || other.plan == plan) &&
+            (identical(other.planName, planName) ||
+                other.planName == planName) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.subscriptionUrl, subscriptionUrl) ||
@@ -679,6 +699,7 @@ class _$SubscriptionImpl extends _Subscription {
   int get hashCode => Object.hash(
       runtimeType,
       plan,
+      planName,
       status,
       active,
       subscriptionUrl,
@@ -708,6 +729,7 @@ class _$SubscriptionImpl extends _Subscription {
 abstract class _Subscription extends Subscription {
   const factory _Subscription(
           {final String plan,
+          @JsonKey(name: 'plan_name') final String planName,
           final String status,
           final bool active,
           @JsonKey(name: 'subscription_url') final String subscriptionUrl,
@@ -725,6 +747,9 @@ abstract class _Subscription extends Subscription {
 
   @override
   String get plan;
+  @override
+  @JsonKey(name: 'plan_name')
+  String get planName;
   @override
   String get status;
   @override

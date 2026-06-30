@@ -127,9 +127,14 @@ class _PlanCard extends ConsumerWidget {
 
   String get _price {
     if (plan.priceCents == 0) return appLocalizations.planFree;
-    final dollars = plan.priceCents / 100;
-    final str = dollars == dollars.roundToDouble() ? dollars.toStringAsFixed(0) : dollars.toStringAsFixed(2);
-    return '\$$str';
+    final major = plan.priceCents / 100;
+    final str = major == major.roundToDouble() ? major.toStringAsFixed(0) : major.toStringAsFixed(2);
+    return switch (plan.currency) {
+      'USD' => '\$$str',
+      'EUR' => '€$str',
+      'RUB' => '$str ₽',
+      _ => '$str ${plan.currency}',
+    };
   }
 
   String get _period => switch (plan.durationDays) {
