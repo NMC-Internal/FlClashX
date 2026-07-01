@@ -59,12 +59,19 @@ class RAccountView extends ConsumerWidget {
       message: TextSpan(text: appLocalizations.logoutConfirm),
     );
     if (res != true) return;
+    // Best-effort server-side revoke (ADR 0021): kill the refresh token so the
+    // session can't be resumed. Failure must NOT block logout, and it runs
+    // BEFORE we clear local state (we still need the token to send).
+    final refreshToken = await preferences.getRefreshToken();
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      await authApi.logout(refreshToken);
+    }
     // Drop the native Google session too — clearing only the backend token
     // leaves google_sign_in's cached account in the keychain, which it would
     // silently replay on the next sign-in (stale `aud` → backend 401). ADR 0014.
     await googleAuth.signOut();
     await globalState.appController.clearProfiles();
-    await preferences.clearAuthToken();
+    await preferences.clearAuthTokens();
     await preferences.clearUserEmail();
     ref.read(pendingSubscriptionUrlProvider.notifier).state = null;
     ref.read(authTokenProvider.notifier).state = null;

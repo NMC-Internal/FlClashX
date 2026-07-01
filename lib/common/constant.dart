@@ -74,6 +74,9 @@ const localhost = "127.0.0.1";
 const clashConfigKey = "clash_config";
 const configKey = "config";
 const authTokenKey = "auth_token";
+// Long-lived opaque refresh token (ADR 0021). Stored, like the access token, in
+// flutter_secure_storage (Keychain/Keystore) — never plaintext.
+const refreshTokenKey = "refresh_token";
 const userEmailKey = "user_email";
 const double dialogCommonWidth = 300;
 const repository = "pluralplay/FlClashX";

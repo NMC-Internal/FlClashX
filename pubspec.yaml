@@ -15,6 +15,8 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.1
   shared_preferences: ^2.3.5
+  # Keychain/Keystore-backed storage for the auth + refresh tokens (ADR 0021).
+  flutter_secure_storage: ^9.2.4
   window_manager: ^0.5.1
   dynamic_color: ^1.8.1
   proxy:
