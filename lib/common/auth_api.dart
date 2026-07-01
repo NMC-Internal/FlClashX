@@ -475,6 +475,14 @@ class AuthApi {
         appLocalizations.authErrorSessionExpired,
       );
     }
+    if (status == HttpStatus.notImplemented) {
+      // Backend payments are disabled (ADR 0019: PAYMENTS_TEST_MODE off, no real
+      // IAP yet) -> a clear "billing not active" notice, not a generic 5xx error.
+      throw AuthException(
+        AuthErrorKind.server,
+        appLocalizations.billingNotActive,
+      );
+    }
     throw _mapStatus(status);
   }
 

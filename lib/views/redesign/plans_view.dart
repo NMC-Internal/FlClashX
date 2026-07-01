@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/common/auth_api.dart';
-import 'package:flclashx/common/constant.dart';
 import 'package:flclashx/design/tokens.dart';
 import 'package:flclashx/models/models.dart';
 import 'package:flclashx/pages/auth/auth_state.dart';
@@ -14,9 +13,8 @@ import 'package:forui/forui.dart';
 
 /// The public plan catalog (`/v1/plans`). A pushed screen reached from the
 /// Connect/Account CTAs. The trial card is gated on [Me.trialEligible]. Paid
-/// checkout is not active in normal builds (the CTA shows a "billing not active"
-/// notice); with `--dart-define=CHECKOUT_TEST=true` the CTA drives the env-gated
-/// TEST checkout (ADR 0019) — no real charge, the backend must run PAYMENTS_TEST_MODE.
+/// checkout always attempts POST /v1/checkout (ADR 0019); if the backend has
+/// payments disabled it returns 501 and the CTA shows a "billing not active" notice.
 class RPlansView extends ConsumerWidget {
   const RPlansView({super.key});
 
@@ -89,13 +87,11 @@ class RPlansView extends ConsumerWidget {
   }
 }
 
-/// Buys [planCode] via the env-gated TEST checkout (ADR 0019), wired to the Plans
-/// CTA only when `--dart-define=CHECKOUT_TEST=true`. A guest signs in first; then
-/// [AuthApi.purchasePlan] runs (no real charge — the backend must run with
-/// PAYMENTS_TEST_MODE on) and `/v1/me` is refreshed so the new (provisioning→active)
-/// subscription appears. A session expiry drops to guest via the shell listener;
-/// other failures (e.g. 501 when payments are disabled) show a toast. Mirrors
-/// [claimTrialFlow].
+/// Buys [planCode] via checkout (ADR 0019). A guest signs in first; then
+/// [AuthApi.purchasePlan] runs and `/v1/me` is refreshed so the new
+/// (provisioning→active) subscription appears. A session expiry drops to guest via
+/// the shell listener; other failures — including 501 when the backend has payments
+/// disabled — show a "billing not active" toast. Mirrors [claimTrialFlow].
 Future<void> purchasePlanFlow(
   BuildContext context,
   WidgetRef ref,
@@ -157,15 +153,12 @@ class _PlanCard extends ConsumerWidget {
   Future<void> _onCta(BuildContext context, WidgetRef ref) async {
     if (plan.isTrial) {
       await claimTrialFlow(context, ref);
-      if (context.mounted) unawaited(Navigator.of(context).maybePop());
-      return;
-    }
-    if (checkoutTestMode) {
+    } else {
+      // Always attempt checkout; if the backend has payments disabled it returns
+      // 501 and purchasePlanFlow surfaces a "billing not active" toast.
       await purchasePlanFlow(context, ref, plan.code);
-      if (context.mounted) unawaited(Navigator.of(context).maybePop());
-      return;
     }
-    showFToast(context: context, title: Text(appLocalizations.billingNotActive));
+    if (context.mounted) unawaited(Navigator.of(context).maybePop());
   }
 
   @override
