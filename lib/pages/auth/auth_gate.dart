@@ -25,6 +25,16 @@ class _AuthGateState extends ConsumerState<AuthGate> {
   }
 
   Future<void> _hydrate() async {
+    // Keep the in-memory access token in sync with the interceptor's transparent
+    // refresh (ADR 0021): when a 401 triggers a rotation, follow the new token so
+    // subsequent requests (and meProvider) use it. Set before hydration so an
+    // early refresh isn't missed.
+    authApi.onTokensRefreshed = (tokens) {
+      if (!mounted) return;
+      ref.read(authTokenProvider.notifier).state = tokens.accessToken;
+    };
+    // Reading the access token also performs the one-time SharedPreferences →
+    // secure-storage migration (ADR 0021), so existing users stay signed in.
     final token = await preferences.getAuthToken();
     if (!mounted) return;
     if (token != null && token.isNotEmpty) {

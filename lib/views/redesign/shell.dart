@@ -59,7 +59,9 @@ class _RedesignShellState extends ConsumerState<RedesignShell> {
   Future<void> _handleSessionExpired() async {
     if (ref.read(authTokenProvider) == null) return; // already guest
     await globalState.appController.clearProfiles();
-    await preferences.clearAuthToken();
+    // Clear BOTH the access and refresh token (ADR 0021): the refresh failed /
+    // was revoked, so neither credential is usable.
+    await preferences.clearAuthTokens();
     await preferences.clearUserEmail();
     ref.read(pendingSubscriptionUrlProvider.notifier).state = null;
     ref.read(authTokenProvider.notifier).state = null;

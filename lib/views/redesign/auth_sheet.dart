@@ -84,12 +84,14 @@ class _AuthSheetState extends ConsumerState<_AuthSheet> {
         return;
       }
 
-      final token = switch (cred) {
+      final tokens = switch (cred) {
         IdTokenCredential c => await authApi.google(c.idToken),
         AuthCodeCredential c =>
           await authApi.googleDesktop(c.code, c.codeVerifier, c.redirectUri),
       };
-      await preferences.setAuthToken(token);
+      final token = tokens.accessToken;
+      // Persist BOTH the access and refresh token (ADR 0021).
+      await preferences.setAuthTokens(token, tokens.refreshToken);
 
       // Fetch the account; provision the active subscription's profile so the
       // tunnel is ready (Application.initState only provisions once, at boot).

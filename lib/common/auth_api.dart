@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flclashx/common/app_localizations.dart';
 import 'package:flclashx/common/constant.dart';
+import 'package:flclashx/common/preferences.dart';
 import 'package:flclashx/models/models.dart';
 
 /// Kinds of auth failures, used to pick a localized message in the UI.
@@ -29,6 +30,17 @@ class AuthException implements Exception {
 
   @override
   String toString() => 'AuthException($kind): $message';
+}
+
+/// A short-lived access token + long-lived opaque refresh token (ADR 0021).
+/// Returned by the Google sign-in endpoints and by `POST /v1/auth/refresh`.
+/// [refreshToken] may be empty when talking to a backend that predates the
+/// refresh contract (the access token then just runs to its short TTL).
+class AuthTokens {
+  const AuthTokens({required this.accessToken, required this.refreshToken});
+
+  final String accessToken;
+  final String refreshToken;
 }
 
 /// Subscription provisioning lifecycle as reported by `GET /v1/me`
@@ -174,19 +186,131 @@ class AuthApi {
                 // Don't throw on non-2xx; we map status codes ourselves below.
                 validateStatus: (_) => true,
               ),
-            );
+            ) {
+    // NOTE: BaseOptions.validateStatus is `(_) => true`, so a 401 arrives as a
+    // normal Response (not a DioException) — the refresh hook therefore lives in
+    // onResponse, not onError. A custom Dio passed in by a test may not carry
+    // that validateStatus; guarding both is unnecessary since our sole caller
+    // uses the default.
+    _dio.interceptors.add(
+      InterceptorsWrapper(onResponse: _onResponse),
+    );
+  }
 
   final Dio _dio;
 
-  /// Exchanges a verified Google ID token for our JWT (ADR 0014). The first
-  /// sign-in for an identity creates the account + trial server-side.
+  /// Invoked after a transparent token refresh with the new (access, refresh)
+  /// pair. Wired up at app start so the in-memory `authTokenProvider` follows the
+  /// rotated access token (see `auth_state.dart` / app bootstrap). Optional so
+  /// the api works headless (tests) without Riverpod.
+  void Function(AuthTokens tokens)? onTokensRefreshed;
+
+  /// Guards against concurrent refreshes: many in-flight requests can 401 at
+  /// once when the access token expires; they all await the same refresh.
+  Future<AuthTokens?>? _inFlightRefresh;
+
+  /// Extra options key flagging a request that has already been retried after a
+  /// refresh, so a second 401 propagates instead of looping.
+  static const _retriedFlag = 'auth_retried';
+
+  /// Dio 401 hook (ADR 0021): transparently refresh the access token once and
+  /// replay the original request. Runs in onResponse because validateStatus lets
+  /// every status through as a Response. On any failure it passes the original
+  /// 401 response along so per-call code maps it to [AuthErrorKind.sessionExpired].
+  Future<void> _onResponse(
+      Response<dynamic> response, ResponseInterceptorHandler handler) async {
+    final request = response.requestOptions;
+
+    final isUnauthorized = response.statusCode == HttpStatus.unauthorized;
+    final alreadyRetried = request.extra[_retriedFlag] == true;
+    // Never try to refresh the auth endpoints themselves (login/refresh/logout):
+    // a 401 there is a real credential failure, and refreshing the refresh call
+    // would recurse.
+    final isAuthEndpoint = request.path.startsWith('/v1/auth/');
+
+    if (!isUnauthorized || alreadyRetried || isAuthEndpoint) {
+      handler.next(response);
+      return;
+    }
+
+    final refreshToken = await preferences.getRefreshToken();
+    if (refreshToken == null || refreshToken.isEmpty) {
+      handler.next(response);
+      return;
+    }
+
+    final AuthTokens? tokens;
+    try {
+      tokens = await _refreshOnce(refreshToken);
+    } catch (_) {
+      handler.next(response);
+      return;
+    }
+    if (tokens == null) {
+      handler.next(response); // refresh token dead → fall through to 401
+      return;
+    }
+
+    // Persist + notify, then replay the original request with the new token.
+    await preferences.setAuthTokens(tokens.accessToken, tokens.refreshToken);
+    onTokensRefreshed?.call(tokens);
+
+    request.extra[_retriedFlag] = true;
+    if (request.headers.containsKey('Authorization')) {
+      request.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
+    }
+    try {
+      final retried = await _dio.fetch<dynamic>(request);
+      handler.resolve(retried);
+    } on DioException catch (e) {
+      // Replay failed at the transport level — surface the original 401 so the
+      // caller's sessionExpired mapping still applies.
+      if (e.response != null) {
+        handler.resolve(e.response!);
+      } else {
+        handler.next(response);
+      }
+    }
+  }
+
+  /// Coalesces concurrent refreshes into a single `/v1/auth/refresh` round-trip.
+  /// Returns the new pair, or null if the refresh token is no longer valid
+  /// (backend 401 → the caller falls through to sessionExpired).
+  Future<AuthTokens?> _refreshOnce(String refreshToken) =>
+      _inFlightRefresh ??= () async {
+        try {
+          return await _postRefresh(refreshToken);
+        } finally {
+          _inFlightRefresh = null;
+        }
+      }();
+
+  Future<AuthTokens?> _postRefresh(String refreshToken) async {
+    final Response<dynamic> response;
+    try {
+      response = await _dio.post<dynamic>(
+        '/v1/auth/refresh',
+        data: {'refresh_token': refreshToken},
+      );
+    } on DioException {
+      return null; // network error — treat as "couldn't refresh"
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      final tokens = _extractTokens(response.data);
+      if (tokens != null && tokens.accessToken.isNotEmpty) return tokens;
+    }
+    return null; // 401/invalid → refresh token dead
+  }
+
+  /// Exchanges a verified Google ID token for our token pair (ADR 0014/0021).
+  /// The first sign-in for an identity creates the account + trial server-side.
   /// Used on Android/iOS/macOS (native sign-in).
-  Future<String> google(String idToken) =>
+  Future<AuthTokens> google(String idToken) =>
       _googleAuth('/v1/auth/google', {'id_token': idToken});
 
   /// Desktop (Windows/Linux): sends the browser PKCE authorization code for the
   /// backend to exchange (the OAuth secret stays server-side).
-  Future<String> googleDesktop(
+  Future<AuthTokens> googleDesktop(
           String code, String codeVerifier, String redirectUri) =>
       _googleAuth('/v1/auth/google/desktop', {
         'code': code,
@@ -194,7 +318,7 @@ class AuthApi {
         'redirect_uri': redirectUri,
       });
 
-  Future<String> _googleAuth(String path, Map<String, Object?> data) async {
+  Future<AuthTokens> _googleAuth(String path, Map<String, Object?> data) async {
     final Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(path, data: data);
@@ -204,14 +328,14 @@ class AuthApi {
 
     final status = response.statusCode ?? 0;
     if (status == HttpStatus.ok || status == HttpStatus.created) {
-      final token = _extractToken(response.data);
-      if (token == null || token.isEmpty) {
+      final tokens = _extractTokens(response.data);
+      if (tokens == null || tokens.accessToken.isEmpty) {
         throw AuthException(
           AuthErrorKind.server,
           appLocalizations.authErrorServer,
         );
       }
-      return token;
+      return tokens;
     }
 
     // 401/400 = the backend rejected the Google credential (bad/expired/wrong audience).
@@ -222,6 +346,22 @@ class AuthApi {
       );
     }
     throw _mapStatus(status);
+  }
+
+  /// Best-effort logout (ADR 0021): `POST /v1/auth/logout {refresh_token}` so the
+  /// backend revokes the refresh token immediately (the short-lived access token
+  /// then dies on its own). Idempotent server-side; any failure is swallowed so
+  /// logout never blocks on the network. Callers still clear local state after.
+  Future<void> logout(String refreshToken) async {
+    if (refreshToken.isEmpty) return;
+    try {
+      await _dio.post<dynamic>(
+        '/v1/auth/logout',
+        data: {'refresh_token': refreshToken},
+      );
+    } on DioException {
+      // best-effort — a failed revoke must not block local logout
+    }
   }
 
   /// Fetches the authenticated account view (`GET /v1/me` v2, ADR 0010):
@@ -515,10 +655,19 @@ class AuthApi {
     return ReferralInfo.fromJson(Map<String, Object?>.from(data));
   }
 
-  String? _extractToken(dynamic data) {
+  /// Parses `{token, refresh_token}` (ADR 0021). `refresh_token` is optional —
+  /// a backend that predates the contract returns only `token`, in which case
+  /// the pair carries an empty refresh token (short sessions, no auto-refresh).
+  AuthTokens? _extractTokens(dynamic data) {
     if (data is Map) {
       final token = data['token'];
-      if (token is String) return token;
+      if (token is String) {
+        final refresh = data['refresh_token'];
+        return AuthTokens(
+          accessToken: token,
+          refreshToken: refresh is String ? refresh : '',
+        );
+      }
     }
     return null;
   }
