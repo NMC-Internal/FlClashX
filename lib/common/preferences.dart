@@ -24,8 +24,16 @@ class Preferences {
 
   // Auth credentials (access + refresh token, ADR 0021) live in the platform
   // Keychain/Keystore, not plaintext SharedPreferences.
+  //
+  // macOS: useDataProtectionKeyChain:false uses the legacy (login) keychain
+  // instead of the data-protection one. The data-protection keychain needs a
+  // `keychain-access-groups` entitlement, which in turn forces a provisioning
+  // profile — breaking team-less ad-hoc local/dev builds ("requires a
+  // provisioning profile"). The login keychain is still OS-encrypted and works
+  // with any signing, so we don't gate local dev on a paid team.
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    mOptions: MacOsOptions(useDataProtectionKeyChain: false),
   );
 
   Future<bool> get isInit async =>
@@ -120,9 +128,16 @@ class Preferences {
     final preferences = await sharedPreferencesCompleter.future;
     final legacy = preferences?.getString(authTokenKey);
     if (legacy == null || legacy.isEmpty) return null;
-    await _secureStorage.write(key: authTokenKey, value: legacy);
-    await preferences?.remove(authTokenKey);
-    return legacy;
+    try {
+      await _secureStorage.write(key: authTokenKey, value: legacy);
+      await preferences?.remove(authTokenKey);
+      return legacy;
+    } on Object {
+      // Best-effort one-time migration: if secure storage is unavailable (e.g. a
+      // Keychain hiccup), it must not brick app startup (this runs during hydrate).
+      // Leave the legacy token in place to retry next launch and fall back to guest.
+      return null;
+    }
   }
 
   Future<String?> getUserEmail() async {
