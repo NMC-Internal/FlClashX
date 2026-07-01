@@ -89,6 +89,7 @@ dev_dependencies:
   riverpod_lint: ^2.3.13
   custom_lint: ^0.7.3
   flutter_launcher_icons: ^0.14.4
+  http_mock_adapter: ^0.6.1
 
 # Load-bearing: removing this re-breaks `dart run build_runner` on any fresh resolve.
 # The custom_lint 0.7.3 stack (via riverpod_lint 2.x) splits across two analyzer eras:
